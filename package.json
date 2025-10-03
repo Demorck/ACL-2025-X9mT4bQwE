@@ -1,0 +1,24 @@
+{
+  "name": "acl-2025-x9mt4bqwe",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Demorck/ACL-2025-X9mT4bQwE.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Demorck/ACL-2025-X9mT4bQwE/issues"
+  },
+  "homepage": "https://github.com/Demorck/ACL-2025-X9mT4bQwE#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
