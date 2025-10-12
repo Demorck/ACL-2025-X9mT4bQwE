@@ -2,6 +2,7 @@ import express from "express";
 import { fileURLToPath } from "url";
 import { getMonthData } from "./models/calendar.js";
 import { routeCalendar } from "./routes/calendar.js";
+import { routeDaily } from "./routes/daily.js";
 export const app = express();
 
 // Chemin et initialisation des views (avec l'EJS)
@@ -25,6 +26,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/agendas", routeCalendar);
+
+app.get("/daily", routeDaily);
 
 app.use((error, req, res, next) => {
     console.error(error);
