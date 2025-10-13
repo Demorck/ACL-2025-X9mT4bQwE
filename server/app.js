@@ -1,7 +1,7 @@
 import express from "express";
 import { fileURLToPath } from "url";
-import { getMonthData } from "./models/calendar.js";
 import { routeCalendar } from "./routes/calendar.js";
+import { UserModel } from "./database/users.js";
 export const app = express();
 
 // Chemin et initialisation des views (avec l'EJS)
@@ -25,6 +25,17 @@ app.get("/", (req, res) => {
 });
 
 app.get("/agendas", routeCalendar);
+
+// Dans l'idée, quand vous ferez les users, faudra faire une route quand avec le POST pour créer un user, etc.
+app.get("/user", async (req, res) => {
+    await UserModel.create({
+        nom: "Antoine",
+        prenom: "Maximilien",
+        email: "mail@gmail.com",
+    });
+
+    res.status(201).json({ message: "User created successfully" });
+});
 
 app.use((error, req, res, next) => {
     console.error(error);
