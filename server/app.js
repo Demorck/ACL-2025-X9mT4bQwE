@@ -4,7 +4,6 @@ import { routeCalendar } from "./routes/calendar.js";
 import { routeRegister } from "./routes/register.js";
 import { routesCreateAccount } from "./routes/register.js";
 import { UserModel } from "./database/users.js";
-import { register } from "module";
 export const app = express();
 
 // Chemin et initialisation des views (avec l'EJS)

@@ -42,7 +42,7 @@ async function loginExists(userName) {
   }
 }
 
-export async function addUser(newUser) {
+async function addUser(newUser) {
   try {
     const data = await fs.readFile("./server/database/accounts.json", "utf-8");
     const users = JSON.parse(data);
@@ -55,7 +55,7 @@ export async function addUser(newUser) {
   }
 }
 
-export async function getNewID(){
+async function getNewID(){
     const data = await fs.readFile("./server/database/accounts.json", "utf-8");
     const users = JSON.parse(data);
     let nextId = 0;
@@ -65,7 +65,5 @@ export async function getNewID(){
         const lastId = Number(users[users.length - 1].id);
         nextId = String(lastId + 1);
     }
-    console.log("ID : " + nextId);
     return nextId;
-
 }
