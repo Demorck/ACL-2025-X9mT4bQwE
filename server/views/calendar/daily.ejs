@@ -1,0 +1,33 @@
+<% 
+    const date = new Date(year, month, day); 
+    let dayName = date.toLocaleDateString('fr-FR', { weekday: 'long' });   
+    dayName = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+%>
+
+<div class="flex justify-between items-center mb-6">
+  <a href="/agendas?month=<%= month %>&year=<%= year %>" class="px-3 py-2 bg-stone-800 rounded hover:bg-stone-600">Retour</a>
+  <h1 class="text-2xl font-bold"><%= dayName %> <%= day %> <%= monthName %> <%= year %></h1>
+  <a href="/appointment/new?day=<%= day %>&month=<%= month %>&year=<%= year %>"
+     class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-400">+ Ajouter</a>
+</div>
+
+<div class="divide-y border border-stone-800 rounded bg-stone-400 shadow-sm">
+  <% for (let h = 0; h < 24; h++) { %>
+    <div class="flex justify-between items-center border-stone-800 px-4 py-3 hover:bg-stone-500">
+      <div class="font-medium text-stone-50 w-20"><%= h.toString().padStart(2, "0") %>h</div>
+      <div class="flex-1">
+        <% if (hours[h].length > 0) { %>
+          <% hours[h].forEach(app => { %>
+            <div class="bg-yellow-700 border border-yellow-300 px-3 py-1 rounded mb-1 text-sm">
+              <strong><%= app.nom %></strong><br>
+              <%= new Date(app.date_Debut).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) %> -
+              <%= new Date(app.date_Fin).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) %>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="text-gray-50 text-sm italic">Aucun rendez-vous</div>
+        <% } %>
+      </div>
+    </div>
+  <% } %>
+</div>

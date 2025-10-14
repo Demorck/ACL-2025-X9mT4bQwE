@@ -13,8 +13,9 @@ export function routeCalendar(req, res) {
         "Janvier","Février","Mars","Avril","Mai","Juin",
         "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
     ];
+    ;
     
-    res.render("index", {
+    res.render("calendar/calendar", {
         month: month,
         year: year,
         monthName: monthNames[month],
