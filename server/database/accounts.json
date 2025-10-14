@@ -1,14 +1,14 @@
 [
     {
         "id": "",
-        "login": "",
-        "password": "",
+        "username": "anna",
+        "password": "aaaaaaaa",
         "token": ""
     },
     {
-        "id": "",
-        "login": "",
-        "password": "",
+        "id": "1",
+        "username": "anna2",
+        "password": "aaaaaaaaaa",
         "token": ""
     }
 ]

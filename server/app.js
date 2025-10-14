@@ -2,6 +2,7 @@ import express from "express";
 import { fileURLToPath } from "url";
 import { routeCalendar } from "./routes/calendar.js";
 import { routeRegister } from "./routes/register.js";
+import { routesCreateAccount } from "./routes/register.js";
 import { UserModel } from "./database/users.js";
 import { register } from "module";
 export const app = express();
@@ -29,9 +30,10 @@ app.get("/", (req, res) => {
 app.get("/agendas", routeCalendar);
 
 app.get("/account", routeRegister);
+app.post("/account", routesCreateAccount);
 
 // Dans l'idée, quand vous ferez les users, faudra faire une route quand avec le POST pour créer un user, etc.
-app.get("/user", async (req, res) => {
+/* app.get("/user", async (req, res) => {
     await UserModel.create({
         nom: "Antoine",
         prenom: "Maximilien",
@@ -39,7 +41,7 @@ app.get("/user", async (req, res) => {
     });
 
     res.status(201).json({ message: "User created successfully" });
-});
+}); */
 
 app.use((error, req, res, next) => {
     console.error(error);

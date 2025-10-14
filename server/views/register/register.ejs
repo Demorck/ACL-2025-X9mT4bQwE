@@ -14,11 +14,30 @@
     </table>
     <div><input type="submit" /></div>
 </form>
-<script src="../../routes/register.js"></script>
 <script>
     const accountForm = document.forms.accountCreation;
         accountForm.addEventListener("submit", (e) => {
         e.preventDefault();
         validateAccountCreation(accountForm);
     });
+
+    async function validateAccountCreation(accountForm){
+    console.log("passe bien ici");
+    const passwordMessage = document.getElementById("passwordMessage");
+    const passwordRepeated = document.getElementById("passwordRepeated");
+    const passwordRepeatedMessage = document.getElementById("passwordRepeatedMessage");
+    passwordMessage.textContent = "";
+    passwordRepeatedMessage.textContent = "";
+    if (accountForm.password.value.length < 8) {
+        passwordMessage.textContent = "Le mot de passe doit contenir au moins 8 caractères.";
+    } else if (accountForm.password.value != passwordRepeated.value) {
+        passwordRepeatedMessage.textContent = "Les mots de passe ne correspondent pas.";
+    } else {
+    //const rawValue = accountForm.password.value;
+    //accountForm.password.value = await hashSHA256(rawValue);
+    accountForm.submit();
+    //accountForm.password.value = rawValue;
+    }
+
+}
 </script>
