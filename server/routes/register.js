@@ -50,7 +50,6 @@ export async function addUser(newUser) {
     users.push(newUser);
 
     await fs.writeFile("./server/database/accounts.json", JSON.stringify(users, null, 4), "utf-8");
-    console.log("passe bien ici 3");
   } catch (error) {
     console.error("Erreur d’ajout :", error);
   }
