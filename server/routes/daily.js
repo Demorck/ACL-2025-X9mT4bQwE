@@ -7,8 +7,7 @@ export async function routeDaily(req, res) {
     
     if(isNaN(queryDay) || isNaN(queryMonth) || isNaN(queryYear))
     {
-        res.status(400).send("Il manque des paramètres pour afficher la page journalière. Veuillez fournir le jour, le mois et l'année.");
-        return;
+        return res.status(400).render("error", { error: "Il manque des paramètres pour afficher la page journalière. Veuillez fournir le jour, le mois et l'année." });
     }
     
     const monthNames = [
@@ -16,7 +15,7 @@ export async function routeDaily(req, res) {
         "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
     ];
     
-    res.render("daily", { 
+    res.render("calendar/daily", { 
         day: queryDay,
         month: queryMonth,
         year: queryYear,

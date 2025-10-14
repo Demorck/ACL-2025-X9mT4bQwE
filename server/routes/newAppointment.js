@@ -15,7 +15,7 @@ export function routeNewAppointment(req, res) {
         "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
     ];
     
-    res.render("newAppointment", {
+    res.render("calendar/newAppointment", {
         day: day,
         month: month,
         year: year,

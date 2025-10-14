@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+// TODO: Ajouter les dates en index pour accélérer les recherches.
 const appointmentSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: "User" }, // required: true a été temporairement enlevé en attendant qu'on puisse se connecter
     nom: { type: String, required: true },
@@ -30,5 +31,6 @@ export async function getAppointmentsForDay(day)
         date_Debut: { $lte: endOfDay }, // Le RDV commence avant ou pendant la journée
         date_Fin: { $gte: startOfDay }, // et se termine pendant ou après la journée
     });
+    
     return appointments;
 }

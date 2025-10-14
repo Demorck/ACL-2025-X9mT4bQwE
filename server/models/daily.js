@@ -22,14 +22,12 @@ export async function getDailyData(year, month, day)
     const startOfToday = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
     const endOfToday = new Date(Date.UTC(year, month, day, 23, 59, 59, 999));
 
-    appointments.forEach(appointment =>{
+    appointments.forEach(appointment => {
         // Si le RDV commence avant aujourd'hui, son heure de début pour l'affichage est 0h
-    //TODO: appointment.date_Debut < startOfToday renvoi toujours TRUE même si FALSE est attendu
-        const heure_debut = appointment.date_Debut < startOfToday ? 0 : appointment.date_Debut.getUTCHours();
+        const heure_debut = appointment.date_Debut.getUTCHours() < startOfToday.getUTCHours() ? 0 : appointment.date_Debut.getUTCHours();
         // Si le RDV se termine après aujourd'hui, son heure de fin pour l'affichage est 23h
-        const heure_fin = appointment.date_Fin > endOfToday ? 23 : (appointment.date_Fin.getMinutes() > 0 ? appointment.date_Fin.getUTCHours() : appointment.date_Fin.getUTCHours()-1); //Si les minutes sont à 00 alors on exclut la dernière heure
-        // console.log(heure_debut, heure_fin, appointment.date_Debut, appointment.date_Fin, appointment.date_Debut < startOfToday,appointment.date_Fin > endOfToday)
-
+        const heure_fin = appointment.date_Fin.getUTCHours() > endOfToday.getUTCHours() ? 23 : (appointment.date_Fin.getMinutes() > 0 ? appointment.date_Fin.getUTCHours() : appointment.date_Fin.getUTCHours()-1); //Si les minutes sont à 00 alors on exclut la dernière heure
+        
         for(let h = heure_debut; h <= heure_fin; h++)
         {
             hours[h].push(appointment);
@@ -38,5 +36,5 @@ export async function getDailyData(year, month, day)
 
     // console.log(hours);
 
-    return hours;
+  return hours;
 }

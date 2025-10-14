@@ -1,7 +1,7 @@
 
 /**
  * Génère les données d'un mois pour un calendrier pour savoir les jours. 
- *
+ * TODO: Ajouter un truc pour les jours du mois précédent et suivant.
  * @param {Number} year L'année (4 chiffres) 
  * @param {Number} month Le mois (0-11) 
  * @returns {Array} Un tableau contenant les jours du mois, avec des valeurs null pour les jours vides. Ca commence à un lundi.
