@@ -3,10 +3,17 @@
     <a href="/agendas" class="text-xl font-bold hover:text-amber-300">
       Mon SUPER Agenda (trop slaaay)
     </a>
-    <nav class="space-x-4">
+    <nav class="space-x-4 flex items-center">
       <a href="/agendas" class="hover:text-amber-300">Calendrier</a>
       <a href="/daily" class="hover:text-amber-300">Jour</a>
       <a href="/appointment/new" class="hover:text-amber-300">Nouveau RDV</a>
+
+      <% if (!locals.user) { %>
+        <a href="/login" class="ml-4 px-3 py-1 bg-amber-500 text-stone-900 rounded hover:bg-amber-600">Connexion</a>
+        <a href="/register" class="ml-2 px-3 py-1 bg-amber-400 text-stone-900 rounded hover:bg-amber-500">Inscription</a>
+      <% } else { %>
+        <a href="/logout" class="ml-2 px-3 py-1 bg-red-400 text-stone-900 rounded hover:bg-red-500">Déconnexion</a>
+      <% } %>
     </nav>
   </div>
 </header>

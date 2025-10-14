@@ -1,12 +1,18 @@
 import express from "express";
 import path from "path";
 import expressLayouts from "express-ejs-layouts";
-
 import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
+
 import { routeCalendar } from "./routes/calendar.js";
+import { routeRegister } from "./routes/register.js";
+import { routeLogin, login } from "./routes/login.js";
+import { routesCreateAccount } from "./routes/register.js";
 import { routeDaily } from "./routes/daily.js";
 import { UserModel } from "./database/users.js";
 import { routeNewAppointment, routeAddAppointmentToDatabase } from "./routes/newAppointment.js";
+import { authMiddleware } from "./middlewares/auth.js";
+import { routeLogOut } from "./routes/logout.js";
 
 
 export const app = express();
@@ -17,6 +23,7 @@ const publicPath = path.join(__dirname, "../public");
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(expressLayouts);
+app.use(cookieParser());
 app.set("layout", "template/layout");
 
 
@@ -28,6 +35,7 @@ app
     .use(express.urlencoded({ extended: false }));
 
 
+app.use(authMiddleware);
 // Routes    
 app.get("/hello", (req, res) => {
     res.json("Hello world, tout ça");
@@ -35,21 +43,18 @@ app.get("/hello", (req, res) => {
 
 app.get("/agendas", routeCalendar);
 
+app.get("/register", routeRegister);
+app.post("/register", routesCreateAccount);
+
+app.get("/login", routeLogin);
+app.post("/login", login);
+app.get("/logout", routeLogOut);
+
 app.get("/appointment/new", routeNewAppointment)
 
 app.post("/appointment/add", routeAddAppointmentToDatabase);
 
 app.get("/daily", routeDaily);
-// Dans l'idée, quand vous ferez les users, faudra faire une route quand avec le POST pour créer un user, etc.
-app.get("/user", async (req, res) => {
-    await UserModel.create({
-        nom: "Antoine",
-        prenom: "Maximilien",
-        email: "mail@gmail.com",
-    });
-
-    res.status(201).json({ message: "User created successfully" });
-});
 
 
 app.get("/", (req, res) => {
@@ -60,3 +65,4 @@ app.use((error, req, res, next) => {
     res.render("error", { error: error }); 
     next();
 });
+
