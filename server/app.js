@@ -1,8 +1,9 @@
 import express from "express";
 import path from "path";
 import expressLayouts from "express-ejs-layouts";
-
 import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
+
 import { routeCalendar } from "./routes/calendar.js";
 import { routeRegister } from "./routes/register.js";
 import { routeLogin, login } from "./routes/login.js";
@@ -10,6 +11,8 @@ import { routesCreateAccount } from "./routes/register.js";
 import { routeDaily } from "./routes/daily.js";
 import { UserModel } from "./database/users.js";
 import { routeNewAppointment, routeAddAppointmentToDatabase } from "./routes/newAppointment.js";
+import { authMiddleware } from "./middlewares/auth.js";
+import { routeLogOut } from "./routes/logout.js";
 
 
 export const app = express();
@@ -20,6 +23,7 @@ const publicPath = path.join(__dirname, "../public");
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(expressLayouts);
+app.use(cookieParser());
 app.set("layout", "template/layout");
 
 
@@ -31,6 +35,7 @@ app
     .use(express.urlencoded({ extended: false }));
 
 
+app.use(authMiddleware);
 // Routes    
 app.get("/hello", (req, res) => {
     res.json("Hello world, tout ça");
@@ -38,13 +43,12 @@ app.get("/hello", (req, res) => {
 
 app.get("/agendas", routeCalendar);
 
-app.get("/account", routeRegister);
-app.post("/account", routesCreateAccount);
+app.get("/register", routeRegister);
+app.post("/register", routesCreateAccount);
 
 app.get("/login", routeLogin);
-
-app.post('/login', login);
-
+app.post("/login", login);
+app.get("/logout", routeLogOut);
 
 app.get("/appointment/new", routeNewAppointment)
 
