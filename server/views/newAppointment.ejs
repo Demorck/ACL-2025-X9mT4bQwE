@@ -1,0 +1,53 @@
+<%- include("template/header") -%>
+<body>
+    <div class="container m-auto w-3/5">
+        <% const date=new Date(year,month, day);%>
+        <% const dayName = date.toLocaleDateString('fr-FR', { weekday: 'long' }).toUpperCase(); 
+           const formattedMonth = (month + 1).toString().padStart(2, '0');
+           const formattedDay = (day).toString().padStart(2, '0');
+           const formattedDate = `${year}-${formattedMonth}-${formattedDay}`;
+        %>
+
+
+        <div class="flex items-center justify-between mb-6">
+            <% if(day && month && year){%>
+                <a href="/daily?day=<%= day %>&month=<%= month %>&year=<%= year %>" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">Retour</a>
+            <%}else{%>
+                <a href="/agendas" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">Retour</a>
+            <%}%>
+            <h1 class="text-2xl font-bold">Ajouter un Rendez-Vous</h1>
+        </div>
+
+        <div class="grid grid-row-6 gap-4 text-center font-semibold border-b pb-2 mb-2">
+            <form method="POST" action="/appointments">
+                <input type="hidden" name="day" value="<%= day %>">
+                <input type="hidden" name="month" value="<%= month %>">
+                <input type="hidden" name="year" value="<%= year %>">
+
+                <div class="flex items-center justify-between mb-6">
+                    Nom <input type="text" name="nom" placeholder="Nom" required="true">
+                </div>
+
+                <div class="flex items-center justify-between mb-6">
+                    Date début <input type="date" name="date_debut" value="<%= formattedDate %>" required="true">
+                </div>
+
+                <div class="flex items-center justify-between mb-6">
+                    Date fin <input type="date" name="date_fin" value="<%= formattedDate %>" required="true">
+                </div>
+
+                <div class="flex items-center justify-between mb-6">
+                    Heure début <input type="time" name="heure_debut" value="08:00" required="true">
+                </div>
+
+                <div class="flex items-center justify-between mb-6">
+                    Heure fin <input type="time" name="heure_fin" value="10:00" required="true">
+                </div>
+
+                <input type="submit" value="Ajouter" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>

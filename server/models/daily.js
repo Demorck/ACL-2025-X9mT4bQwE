@@ -11,6 +11,7 @@ export function getDailyData(year, month, day)
 {
     const hours = [];
 
+    //Récupère les appointments d'un user
     
     for(let h = 0; h < 24; h++)
     {
