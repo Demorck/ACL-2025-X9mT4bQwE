@@ -25,7 +25,7 @@
         <div class="grid grid-cols-7 gap-2">
         <% days.forEach((d) => { %>
             <% if (d) { %>
-            <div class="p-4 bg-white border rounded shadow-sm text-center hover:bg-gray-100"><%= d %></div>
+            <a href="/daily?day=<%= d %>&month=<%= month %>&year=<%= year %>" class="p-4 bg-white border rounded shadow-sm text-center hover:bg-gray-100"><%= d %></a>
             <% } else { %>
             <div></div>
             <% } %>
