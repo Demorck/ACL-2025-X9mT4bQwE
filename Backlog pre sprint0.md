@@ -2,11 +2,11 @@
 L'estimation est pour l'instant qu'à 1, le temps qu'on se mette tous d'accord.
 
 ## Utilisateurs
-| Item                    | Estimation |
-|--------------------------|-----------------|
-| Création de compte       | 1 |
-| Connexion utilisateur    | 1 |
-| Déconnexion utilisateur  | 1 |
+| Item                   | | Estimation |
+|-------------------------|-|-----------------|
+| Création de compte      | | 1 |
+| Connexion utilisateur    | | 1 |
+| Déconnexion utilisateur  | | 1 |
 
 ## Agendas
 | Item                                 | Estimation |
