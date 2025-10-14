@@ -2,6 +2,7 @@ import express from "express";
 import { fileURLToPath } from "url";
 import { routeCalendar } from "./routes/calendar.js";
 import { routeRegister } from "./routes/register.js";
+import { routeLogin, login } from "./routes/login.js";
 import { routesCreateAccount } from "./routes/register.js";
 import { UserModel } from "./database/users.js";
 export const app = express();
@@ -31,6 +32,17 @@ app.get("/agendas", routeCalendar);
 app.get("/account", routeRegister);
 app.post("/account", routesCreateAccount);
 
+app.get("/login", routeLogin);
+
+app.post('/login', login);
+
+// // Dans l'idée, quand vous ferez les users, faudra faire une route quand avec le POST pour créer un user, etc.
+// app.get("/user", async (req, res) => {
+//     await UserModel.create({
+//         nom: "Antoine",
+//         prenom: "Maximilien",
+//         email: "mail@gmail.com",
+//     });
 // Dans l'idée, quand vous ferez les users, faudra faire une route quand avec le POST pour créer un user, etc.
 /* app.get("/user", async (req, res) => {
     await UserModel.create({
@@ -39,6 +51,8 @@ app.post("/account", routesCreateAccount);
         email: "mail@gmail.com",
     });
 
+//     res.status(201).json({ message: "User created successfully" });
+// });
     res.status(201).json({ message: "User created successfully" });
 }); */
 
@@ -47,3 +61,4 @@ app.use((error, req, res, next) => {
     res.status(500).send("Erreur interne du serveur");
     next();
 });
+
