@@ -10,3 +10,25 @@ const appointmentSchema = new Schema({
 });
 
 export const AppointmentModel = mongoose.model("Appointment", appointmentSchema);
+
+/**
+ * Cette fonction renvoie un tableau des rendez-vous qui ont lieu durant une journée donnée.
+ * @param {Date} day - Un objet Date représentant le jour pour lequel on cherche les rendez-vous.
+ * @return {Promise<Array>} Une promesse qui se résout avec un tableau des rendez-vous trouvés.
+ */
+export async function getAppointmentsForDay(day)
+{
+    // Définir le début du jour
+    const startOfDay = new Date(day);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+
+    // Définir la fin du jour
+    const endOfDay = new Date(day);
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    const appointments = await AppointmentModel.find({
+        date_Debut: { $lte: endOfDay }, // Le RDV commence avant ou pendant la journée
+        date_Fin: { $gte: startOfDay }, // et se termine pendant ou après la journée
+    });
+    return appointments;
+}

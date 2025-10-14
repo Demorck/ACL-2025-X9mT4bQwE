@@ -1,6 +1,6 @@
 import { getDailyData } from "../models/daily.js";
 
-export function routeDaily(req, res) {
+export async function routeDaily(req, res) {
     const queryDay = parseInt(req.query.day);
     const queryMonth = parseInt(req.query.month);
     const queryYear = parseInt(req.query.year);
@@ -16,11 +16,11 @@ export function routeDaily(req, res) {
         "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
     ];
     
-    res.render("daily", {
+    res.render("daily", { 
         day: queryDay,
         month: queryMonth,
         year: queryYear,
         monthName: monthNames[queryMonth],
-        hours: getDailyData(queryYear, queryMonth, queryDay),
+        hours: await getDailyData(queryYear, queryMonth, queryDay+1),
     });
 }

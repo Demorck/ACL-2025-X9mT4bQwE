@@ -20,7 +20,7 @@
         </div>
 
         <div class="grid grid-row-24 text-center font-semibold border-b pb-2 mb-2">
-            <% hours.forEach((d) => { %>
+            <% for(let d = 0; d < 24; d++){ %>
             <% if (d>=0 && d<10) { %>
             <div class="grid grid-cols-2 gap-1">   
             <div class="p-4 bg-white border rounded shadow-sm text-left hover:bg-gray-100 ">0<%= d %>h00</div>
@@ -34,7 +34,7 @@
             <% } else { %>
             <div></div>
             <% } %>
-            <% }) %>
+            <% } %>
         </div>
 
 
