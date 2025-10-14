@@ -23,9 +23,7 @@ export async function routesCreateAccount(req, res){
             token: "",
         };
         await addUser(user);
-        res.render("register/register",  {
-            message: "Creation personnage",
-        });
+        res.redirect("/agendas");
     }
 }
 
