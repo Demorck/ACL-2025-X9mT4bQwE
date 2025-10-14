@@ -32,7 +32,7 @@ app.get("/agendas", routeCalendar);
 
 app.get("/newAppointment", routeNewAppointment)
 
-app.post("/appointments", routeAddAppointmentToDatabase);
+app.post("/addAppointmentToDatabase", routeAddAppointmentToDatabase);
 
 app.get("/daily", routeDaily);
 // Dans l'idée, quand vous ferez les users, faudra faire une route quand avec le POST pour créer un user, etc.
