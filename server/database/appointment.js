@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 // TODO: Ajouter les dates en index pour accélérer les recherches.
 const appointmentSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: "User" }, // required: true a été temporairement enlevé en attendant qu'on puisse se connecter
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // required: true a été temporairement enlevé en attendant qu'on puisse se connecter
     nom: { type: String, required: true },
     date_Debut: { type: Date, required: true },
     date_Fin: { type: Date, required: true },
@@ -17,8 +17,14 @@ export const AppointmentModel = mongoose.model("Appointment", appointmentSchema)
  * @param {Date} day - Un objet Date représentant le jour pour lequel on cherche les rendez-vous.
  * @return {Promise<Array>} Une promesse qui se résout avec un tableau des rendez-vous trouvés.
  */
-export async function getAppointmentsForDay(day)
+export async function getAppointmentsForDay(day,user)
 {
+    if(user === null)
+    {
+        //Si aucun user connecté alors renvoyer une liste vide
+        return [];
+    }
+
     // Définir le début du jour
     const startOfDay = new Date(day);
     startOfDay.setUTCHours(0, 0, 0, 0);
@@ -28,6 +34,7 @@ export async function getAppointmentsForDay(day)
     endOfDay.setUTCHours(23, 59, 59, 999);
 
     const appointments = await AppointmentModel.find({
+        user: user,
         date_Debut: { $lte: endOfDay }, // Le RDV commence avant ou pendant la journée
         date_Fin: { $gte: startOfDay }, // et se termine pendant ou après la journée
     });

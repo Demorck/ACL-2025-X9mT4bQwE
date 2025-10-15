@@ -4,6 +4,19 @@ export function routeNewAppointment(req, res) {
     const queryMonth = parseInt(req.query.month);
     const queryYear = parseInt(req.query.year);
     const queryDay = parseInt(req.query.day);
+
+    const queryBeginningHour = parseInt(req.query.beginningHour);
+    let beginningHour = 0;
+    let endHour = 0;
+    if(isNaN(queryBeginningHour))
+    {
+        beginningHour = 8;
+        endHour = 12;
+    }else
+    {
+        beginningHour = queryBeginningHour;
+        endHour = queryBeginningHour+1;
+    }
     
     const today = new Date();
     const year = !isNaN(queryYear) ? queryYear : today.getFullYear();
@@ -19,6 +32,8 @@ export function routeNewAppointment(req, res) {
         day: day,
         month: month,
         year: year,
+        beginningHour: beginningHour,
+        endHour: endHour,
         monthName: monthNames[month],
     });
 }
@@ -30,12 +45,12 @@ export async function routeAddAppointmentToDatabase(req, res, next) {
         const startDateTime = new Date(`${date_debut}T${heure_debut}:00.000Z`);
         const endDateTime = new Date(`${date_fin}T${heure_fin}:00.000Z`);
 
+        
+
 
         // Créer une nouvelle instance du modèle Appointment
         const newAppointment = new AppointmentModel({
-            // TODO: Remplacer par le vrai utilisateur une fois l'authentification mise en place
-            // Pour l'instant, on ne peut pas lier le RDV à un utilisateur.
-            // user: req.user._id, 
+            user: res.locals.user, 
             nom: nom,
             date_Debut: startDateTime,
             date_Fin: endDateTime,

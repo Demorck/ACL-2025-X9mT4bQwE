@@ -23,5 +23,6 @@ export async function routesCreateAccount(req, res){
         res.redirect("/agendas");
     } catch (error) {
         res.status(500).send("Erreur serveur");
+        console.error(error);
     }
 }

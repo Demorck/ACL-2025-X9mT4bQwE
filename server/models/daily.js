@@ -8,7 +8,7 @@ import { getAppointmentsForDay } from "../database/appointment.js";
  * @param {Number} day Le jour (2 chiffres de 0 à 30) 
  * @return {Array} Un tableau contenant les heures de la journée
  */
-export async function getDailyData(year, month, day)
+export async function getDailyData(year, month, day, user)
 {
     const hours = Array.from({length: 24}, () => []);
 
@@ -16,7 +16,7 @@ export async function getDailyData(year, month, day)
 
     //Récupère les appointments d'un user (normalement)
     //Pour le moment récupère tous les appointments qu'il trouve et les affiche
-    const appointments = await getAppointmentsForDay(today);
+    const appointments = await getAppointmentsForDay(today,user);
 
     // On définit le début et la fin de la journée pour des comparaisons précises
     const startOfToday = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
