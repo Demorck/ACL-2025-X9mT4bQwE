@@ -1,16 +1,17 @@
 # Compte-rendu du Sprint retrospective 0
-ce qui s’est bien passé (ou pas) et les décision pour le sprint suivant
 
-## Ce qui s'est bien passé  
+## Ce qui s'est passé  
 
-- La commmunication dans les équipes
-- La communication entre les équipes
-- Bonne répartition des tâches
+- La commmunication dans les équipes.
+- La communication entre les équipes.
+- Bonne répartition des tâches.
+- Travail léger pour un travail de 2 semaines pour 5 personnes.
+- Visualisation un peu trop basique et incomplète.
 
 
 
-## Les décision pour le sprint suivant
+## Les décisions pour le sprint suivant
 
-- Modifier le style de notre site (Tailwind)
-- Continuer à communiquer et à s'écouter
+- Visualisation plus avancée et travaillée afin d'avoir une belle interface.
+- Travail assidu de notre part.
 
