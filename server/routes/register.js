@@ -1,4 +1,8 @@
-import { UserModel } from "../database/users.js";
+import { UserModel, ajouterAgendaParDefaut } from "../database/users.js";
+
+export function routeLogin(req, res) {
+    res.render("accounts/login");
+}
 
 export function routeRegister(req, res) {
     res.render("accounts/register");
@@ -19,6 +23,8 @@ export async function routesCreateAccount(req, res){
 
         let newUser = new UserModel({ username, password });
         await newUser.save();
+
+        ajouterAgendaParDefaut(newUser);
 
         res.redirect("/agendas");
     } catch (error) {

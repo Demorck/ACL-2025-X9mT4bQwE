@@ -1,6 +1,8 @@
 import { AppointmentModel } from "../database/appointment.js";
+import { AgendaModel } from "../database/agenda.js";
 
-export function routeNewAppointment(req, res) {
+
+export async function routeNewAppointment(req, res) {
     const queryMonth = parseInt(req.query.month);
     const queryYear = parseInt(req.query.year);
     const queryDay = parseInt(req.query.day);
@@ -27,7 +29,13 @@ export function routeNewAppointment(req, res) {
         "Janvier","Février","Mars","Avril","Mai","Juin",
         "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
     ];
-    
+
+    // Récupérer tous les agendas d'un user
+    const agendasUserIds = res.locals.user.agendas;
+    const agendasPromises = agendasUserIds.map(agendaId => AgendaModel.findById(agendaId));
+    const agendas = await Promise.all(agendasPromises);
+    const validAgendas = agendas.filter(agenda => agenda !== null);
+
     res.render("calendar/newAppointment", {
         day: day,
         month: month,
@@ -35,22 +43,30 @@ export function routeNewAppointment(req, res) {
         beginningHour: beginningHour,
         endHour: endHour,
         monthName: monthNames[month],
+        agendas: validAgendas,
     });
 }
 
 export async function routeAddAppointmentToDatabase(req, res, next) {
     try {
-        const { nom, date_debut, date_fin, heure_debut, heure_fin, day, month, year } = req.body;
+        const { nom, date_debut, date_fin, heure_debut, heure_fin, day, month, year, agendas } = req.body; 
+        
         
         const startDateTime = new Date(`${date_debut}T${heure_debut}:00.000Z`);
         const endDateTime = new Date(`${date_fin}T${heure_fin}:00.000Z`);
 
-        
 
+        const agenda = await  AgendaModel.findById(agendas); 
+        
+        if(agenda === null)
+        {
+            return res.status(400).send("Aucun agenda trouvé");
+        }
 
         // Créer une nouvelle instance du modèle Appointment
         const newAppointment = new AppointmentModel({
-            user: res.locals.user, 
+            // user: res.locals.user,
+            agenda: agenda,
             nom: nom,
             date_Debut: startDateTime,
             date_Fin: endDateTime,

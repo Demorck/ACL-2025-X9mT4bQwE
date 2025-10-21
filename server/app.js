@@ -13,6 +13,7 @@ import { UserModel } from "./database/users.js";
 import { routeNewAppointment, routeAddAppointmentToDatabase } from "./routes/newAppointment.js";
 import { authMiddleware } from "./middlewares/auth.js";
 import { routeLogOut } from "./routes/logout.js";
+import { routeNewAgenda, routeAddAgendaToDatabase } from "./routes/agendas.js";
 
 
 export const app = express();
@@ -42,6 +43,8 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/agendas", routeCalendar);
+app.get("/agendas/new", routeNewAgenda);
+app.post("/agendas/add", routeAddAgendaToDatabase)
 
 app.get("/register", routeRegister);
 app.post("/register", routesCreateAccount);

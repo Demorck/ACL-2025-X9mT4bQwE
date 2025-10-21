@@ -52,6 +52,15 @@
                 </div>
             </div>
 
+            <div class="flex items-center justify-between mb-6">
+                <label class="bloc font-semibold mb-1" for="agendas">Agendas</label>
+                <select id="agendaId" name="agendas" required class="border px-3 py-2 rounded">
+                    <% agendas.forEach(agenda => { %>
+                    <option id="agendaId" name="agendaId" value="<%= agenda.id %>"><%= agenda.nom %></option>
+                    <% }); %>
+                </select>
+            </div>
+
             <input type="submit" value="Ajouter" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
         </form>
     </div>
