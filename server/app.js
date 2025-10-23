@@ -9,7 +9,6 @@ import { routeRegister } from "./routes/register.js";
 import { routeLogin, login } from "./routes/login.js";
 import { routesCreateAccount } from "./routes/register.js";
 import { routeDaily } from "./routes/daily.js";
-import { UserModel } from "./database/users.js";
 import { routeNewAppointment, routeAddAppointmentToDatabase } from "./routes/newAppointment.js";
 import { authMiddleware } from "./middlewares/auth.js";
 import { routeLogOut } from "./routes/logout.js";

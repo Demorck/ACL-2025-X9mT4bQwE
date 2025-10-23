@@ -20,20 +20,18 @@
         <div>Dim</div>
     </div>
 
-    <div class="grid grid-cols-7 gap-x-2 gap-y-4">
-    <% days.forEach((d) => { %>
-        <% if (d) { %>
-            <% const isToday = (d === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear()); %>
-        <a 
-            href="/daily?day=<%= d %>&month=<%= month %>&year=<%= year %>"
-            class="p-4 border rounded shadow-sm text-center hover:bg-stone-400 <%= isToday ? 'bg-green-400 border-green-600 font-semibold' : 'bg-stone-600' %>"
-        >
-        <%= d %>
-        </a>
-        <% } else { %>
-        <div></div>
-        <% } %>
-    <% }) %>
+    <div class="grid grid-cols-7 gap-2 text-center">
+        <% days.forEach(d => { %>
+            <% const hasAppointment = daysWithAppointments.includes(d.day); %>
+            <a href="/daily?day=<%= d.day %>&month=<%= month %>&year=<%= year %>"
+            class="relative border p-3 rounded hover:bg-stone-400 transition block">
+            <span class="text-stone-200 font-medium"><%= d.day %></span>
+            <% if (hasAppointment) { %>
+                <span class="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-red-400 rounded-full"></span>
+            <% } %>
+            </a>
+        <% }) %>
     </div>
+
 
 </div>
