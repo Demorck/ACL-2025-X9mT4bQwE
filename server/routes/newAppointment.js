@@ -1,8 +1,13 @@
 import { AppointmentModel } from "../database/appointment.js";
-import { AgendaModel } from "../database/agenda.js";
+import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
 
 
 export async function routeNewAppointment(req, res) {
+
+    if(!res.locals.user)
+        return res.redirect("/login");
+
+
     const queryMonth = parseInt(req.query.month);
     const queryYear = parseInt(req.query.year);
     const queryDay = parseInt(req.query.day);
@@ -31,11 +36,8 @@ export async function routeNewAppointment(req, res) {
     ];
 
     // Récupérer tous les agendas d'un user
-    const agendasUserIds = res.locals.user.agendas;
-    const agendasPromises = agendasUserIds.map(agendaId => AgendaModel.findById(agendaId));
-    const agendas = await Promise.all(agendasPromises);
-    const validAgendas = agendas.filter(agenda => agenda !== null);
-
+    const validAgendas = await getAgendasForUser(res.locals.user) // Ajout de 'await' ici
+    
     res.render("calendar/newAppointment", {
         day: day,
         month: month,
@@ -49,6 +51,10 @@ export async function routeNewAppointment(req, res) {
 
 export async function routeAddAppointmentToDatabase(req, res, next) {
     try {
+
+        if(!res.locals.user)
+            return res.redirect("/login");
+
         const { nom, date_debut, date_fin, heure_debut, heure_fin, day, month, year, agendas } = req.body; 
         
         

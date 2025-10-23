@@ -11,6 +11,8 @@ Finalement, sur son calendrier il pourra choisir quel(s) agenda(s) afficher ou n
     - Nom
     - Description
     - Couleur
-- Faire les fonctions d'affichages pour les agendas
+- **MOUAIS** Faire les fonctions d'affichages pour les agendas
+- **OK** Réparer le crash lorsqu'on tente de créer un agenda mais qu'on est déconnecté
 
-
+## Piste d'amélioration
+- Pouvoir modifier/supprimer l'agenda

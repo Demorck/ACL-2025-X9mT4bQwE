@@ -3,6 +3,9 @@ import { creerAgenda } from "../database/agenda.js";
 
 export async function routeNewAgenda(req, res) { 
 
+    if(!res.locals.user)
+        return res.redirect("/login");
+
     res.render("agendas/newAgenda", {
         
     });
@@ -10,6 +13,10 @@ export async function routeNewAgenda(req, res) {
 
 export async function routeAddAgendaToDatabase(req, res, next) {
     try {
+
+        if(!res.locals.user)
+            return res.redirect("/login");
+        
         const { nom, description, couleur } = req.body;
         
 

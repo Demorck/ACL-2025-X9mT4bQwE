@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { ajouterAgenda } from "./users.js";
+import { validateHeaderName } from "http";
 
 const Schema = mongoose.Schema;
 
@@ -32,4 +33,18 @@ export function creerAgenda(user, nom, description, couleur)
 
     ajouterAgenda(user, agenda);
 
+}
+
+/**
+ * Renvoi la liste des agendas d'un user
+ * @param {User} user 
+ */
+export async function getAgendasForUser(user)
+{
+    const agendasUserIds = user.agendas;
+    const agendasPromises = agendasUserIds.map(agendaId => AgendaModel.findById(agendaId));
+    const agendas = await Promise.all(agendasPromises);
+    const validAgendas = agendas.filter(agenda => agenda !== null);
+
+    return validAgendas;
 }
