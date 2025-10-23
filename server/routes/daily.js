@@ -1,7 +1,11 @@
 import { AppointmentModel } from "../database/appointment.js";
 
-export async function routeDaily(req, res) {
+export async function routeDaily(req, res, next) {
   const { day, month, year } = req.query;
+
+  if (!day || !month || !year) {
+    return next(new Error("Paramètres manquants pour la vue quotidienne"));
+  }
 
   const startOfDay = new Date(year, month, day, 0, 0, 0);
   const endOfDay = new Date(year, month, day, 23, 59, 59);
@@ -13,7 +17,9 @@ export async function routeDaily(req, res) {
         date_Fin: { $gte: startOfDay },
       },
     ],
-  }).sort({ date_Debut: 1 });
+  })
+    .populate("agenda")
+    .sort({ date_Debut: 1 });
 
   /**
    * Transforme les rendez-vous pour l'affichage dans la vue quotidienne.
@@ -37,13 +43,13 @@ export async function routeDaily(req, res) {
     const durationHours = (end - start) / (1000 * 60 * 60);
     const startHour = start.getHours() + start.getMinutes() / 60;
 
-
     return {
       nom: app.nom,
       start,
       end,
       startHour,
       durationHours,
+      color: app.agenda.couleur,
       startLabel: start.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
       endLabel: end.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
     };

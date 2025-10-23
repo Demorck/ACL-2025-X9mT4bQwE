@@ -2,11 +2,14 @@
   const dayName = new Date(year, month, day)
     .toLocaleDateString('fr-FR', { weekday: 'long' })
     .replace(/^./, c => c.toUpperCase());
+
+    console.log(appointments);
+    
 %>
 
 <div class="flex justify-between items-center mb-6">
   <a href="/agendas?month=<%= month %>&year=<%= year %>" class="px-3 py-2 bg-stone-800 rounded hover:bg-stone-600">Retour</a>
-  <h1 class="text-2xl font-bold"><%= dayName %> <%= day %>/<%= month+1 %>/<%= year %></h1>
+  <h1 class="text-2xl font-bold"><%= dayName %> <%= day %>/<%= +month+1 %>/<%= year %></h1>
   <a href="/appointment/new?day=<%= day %>&month=<%= month %>&year=<%= year %>" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-400">+ Ajouter</a>
 </div>
 
@@ -32,23 +35,7 @@
 
     <% appointments.forEach(app => { %>
       <div 
-        class="absolute bg-yellow-700 border border-yellow-300 rounded px-3 py-2 text-sm text-white shadow-md overflow-hidden hover:bg-yellow-600"
-        style="
-          top: calc(<%= (app.startHour / 24) * 100%>%);
-          height: calc((<%= app.durationHours %> / 24) * 100%>%);
-          left: calc(<%= (app.colIndex / app.colCount) * 100%>%);
-          width: calc(<%= (1 / app.colCount) * 100%>%);
-        ">
-        <strong><%= app.nom %></strong><br>
-        <%= app.startLabel %> - <%= app.endLabel %>
-      </div>
-    <% }) %>
-  </div>
-    <% } %>
-
-    <% appointments.forEach(app => { %>
-      <div 
-        class="absolute bg-yellow-700 border border-yellow-300 rounded px-3 py-2 text-sm text-white shadow-md overflow-hidden hover:bg-yellow-600"
+        class="absolute bg-<%= app.color %>-700 border border-<%= app.color %>-300 rounded px-3 py-2 text-sm text-white shadow-md overflow-hidden hover:bg-<%= app.color %>-600"
         style="
           top: calc(<%= (app.startHour / 24) * 100%>%);
           height: calc((<%= app.durationHours %> / 24) * 100%>%);

@@ -15,24 +15,27 @@ export async function routeCalendar(req, res) {
   const appointments = await AppointmentModel.find({
     date_Debut: { $lt: endOfMonth },
     date_Fin: { $gte: startOfMonth },
-  }).sort({ date_Debut: 1 });
+  })
+    .populate("agenda")
+    .sort({ date_Debut: 1 });
 
   // Déterminer les jours avec au moins un rendez-vous (un set car on s'en fout le nombre de rendez-vous, tant qu'il y en a au moins un)
-  const daysWithAppointments = new Set();
-  appointments.forEach(app => {
+  const appointmentsByDay = {};
+  for (const app of appointments) {
     const start = new Date(app.date_Debut);
     const end = new Date(app.date_Fin);
 
-    // On borne les dates pour rester dans le mois affiché (plus tard si on fait l'affichage comme au jour)
-    const visibleStart = start < startOfMonth ? startOfMonth : start;
-    const visibleEnd = end > endOfMonth ? endOfMonth : end;
-
-    for (let d = new Date(visibleStart); d <= visibleEnd; d.setDate(d.getDate() + 1)) {
-      if (d.getMonth() === month) {
-        daysWithAppointments.add(d.getDate());
-      }
+    // On parcourt tous les jours que couvre le rendez-vous
+    for (
+      let d = new Date(start);
+      d <= end;
+      d.setDate(d.getDate() + 1)
+    ) {
+      const key = d.toISOString().slice(0, 10); // ex : "2025-10-18"
+      if (!appointmentsByDay[key]) appointmentsByDay[key] = new Set();
+      appointmentsByDay[key].add(app.agenda.couleur);
     }
-  });
+  }
 
   // Construire les jours du mois (besoin que du jour dans la vue mais sait-on jamais)
   const days = [];
@@ -50,7 +53,6 @@ export async function routeCalendar(req, res) {
     year,
     month,
     monthName: monthNames[month],
-    days,
-    daysWithAppointments: Array.from(daysWithAppointments),
+    appointmentsByDay
   });
 }
