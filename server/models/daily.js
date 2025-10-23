@@ -1,4 +1,5 @@
 import { getAppointmentsForDay } from "../database/appointment.js";
+import { getAgendasForUser } from "../database/agenda.js";
 
 /**
  *  Génère les données des 24 heures d'une journée.
@@ -12,29 +13,36 @@ export async function getDailyData(year, month, day, user)
 {
     const hours = Array.from({length: 24}, () => []);
 
+    if(user === null)
+    {
+        return hours;
+    }
     const today = new Date(year,month,day);
 
-    //Récupère les appointments d'un user (normalement)
-    //Pour le moment récupère tous les appointments qu'il trouve et les affiche
-    const appointments = await getAppointmentsForDay(today,user);
+    //Récupère les agendas d'un user (normalement)
+    //POUR Le moment on affiche TOUS les agendas du user
+    const userAgendas = await getAgendasForUser(user);
+    for (const agenda of userAgendas) {
+        //Pour le moment récupère tous les appointments qu'il trouve et les affiche
+        const appointments = await getAppointmentsForDay(today, agenda);
 
-    // On définit le début et la fin de la journée pour des comparaisons précises
-    const startOfToday = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
-    const endOfToday = new Date(Date.UTC(year, month, day, 23, 59, 59, 999));
+        // On définit le début et la fin de la journée pour des comparaisons précises
+        const startOfToday = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
+        const endOfToday = new Date(Date.UTC(year, month, day, 23, 59, 59, 999));
 
-    appointments.forEach(appointment => {
-        // Si le RDV commence avant aujourd'hui, son heure de début pour l'affichage est 0h
-        const heure_debut = appointment.date_Debut.getUTCHours() < startOfToday.getUTCHours() ? 0 : appointment.date_Debut.getUTCHours();
-        // Si le RDV se termine après aujourd'hui, son heure de fin pour l'affichage est 23h
-        const heure_fin = appointment.date_Fin.getUTCHours() > endOfToday.getUTCHours() ? 23 : (appointment.date_Fin.getMinutes() > 0 ? appointment.date_Fin.getUTCHours() : appointment.date_Fin.getUTCHours()-1); //Si les minutes sont à 00 alors on exclut la dernière heure
-        
-        for(let h = heure_debut; h <= heure_fin; h++)
-        {
-            hours[h].push(appointment);
-        }
-    });
+        appointments.forEach(appointment => {
+            // Si le RDV commence avant aujourd'hui, son heure de début pour l'affichage est 0h
+            const heure_debut = appointment.date_Debut.getUTCHours() < startOfToday.getUTCHours() ? 0 : appointment.date_Debut.getUTCHours();
+            // Si le RDV se termine après aujourd'hui, son heure de fin pour l'affichage est 23h
+            const heure_fin = appointment.date_Fin.getUTCHours() > endOfToday.getUTCHours() ? 23 : (appointment.date_Fin.getMinutes() > 0 ? appointment.date_Fin.getUTCHours() : appointment.date_Fin.getUTCHours() - 1); //Si les minutes sont à 00 alors on exclut la dernière heure
+            
+            for (let h = heure_debut; h <= heure_fin; h++) {
+                hours[h].push({ rdv : appointment, color: agenda.couleur });
+            }
+        });
+    }
 
     // console.log(hours);
 
-  return hours;
+    return hours;
 }

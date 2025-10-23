@@ -18,10 +18,10 @@
       <div class="flex-1">
         <% if (hours[h].length > 0) { %>
           <% hours[h].forEach(app => { %>
-            <div class="bg-yellow-700 border border-yellow-300 px-3 py-1 rounded mb-1 text-sm">
-              <strong><%= app.nom %></strong><br>
-              <%= new Date(app.date_Debut).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) %> -
-              <%= new Date(app.date_Fin).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) %>
+            <div class="bg-<%= app.color %>-700 border border-<%= app.color %>-300 px-3 py-1 rounded mb-1 text-sm">
+              <strong><%= app.rdv.nom %></strong><br>
+              <%= new Date(app.rdv.date_Debut).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) %> -
+              <%= new Date(app.rdv.date_Fin).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) %>
             </div>
           <% }) %>
         <% } else { %>

@@ -1,0 +1,43 @@
+<div class="container bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
+
+    <div class="flex items-center justify-between mb-6">
+        <a href="/agendas" class="px-3 py-2 bg-stone-700 rounded hover:bg-stone-600">Retour</a>
+        <h1 class="text-2xl font-bold">Créer un nouvel agenda</h1>
+    </div>
+
+    <div class="text-center font-semibold ">
+        <form method="POST" action="/agendas/add">
+
+            <div class="flex items-center justify-between mb-6">
+                    <label class="flex-1 font-semibold mb-1 md-4" for="nom">Nom de l'agenda</label>
+                    <input id="nom" type="text" name="nom" placeholder="Nom" required class="border px-3 py-2 rounded">
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                    <label class="flex-1 font-semibold mb-1 md-4" for="description">Description de l'agenda</label>
+                    <input id="description" type="text" name="description" placeholder="Description..." class="border px-3 py-2 rounded">
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                    <label class="flex-1 font-semibold mb-1 md-4" for="couleur">Couleur de l'agenda</label>
+                    <select id="couleur" name="couleur">
+                        <option value="red">Rouge</option>
+                        <option value="green">Vert</option>
+                        <option value="blue">Bleu</option>
+                        <option value="yellow">Jaune</option>
+                        <option value="purple">Rose</option>
+                        <option value="orange">Orange</option>
+                        <option value="pink">Rose</option>
+                        <option value="gray">Gris</option>
+                        <option value="black">Noir</option>
+                        <option value="white">Blanc</option>
+                    </select>
+            </div>
+               
+
+
+            <input type="submit" value="Ajouter" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
+        </form>
+    </div>
+
+</div>
