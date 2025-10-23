@@ -44,4 +44,20 @@
       </div>
     <% }) %>
   </div>
+    <% } %>
+
+    <% appointments.forEach(app => { %>
+      <div 
+        class="absolute bg-yellow-700 border border-yellow-300 rounded px-3 py-2 text-sm text-white shadow-md overflow-hidden hover:bg-yellow-600"
+        style="
+          top: calc(<%= (app.startHour / 24) * 100%>%);
+          height: calc((<%= app.durationHours %> / 24) * 100%>%);
+          left: calc(<%= (app.colIndex / app.colCount) * 100%>%);
+          width: calc(<%= (1 / app.colCount) * 100%>%);
+        ">
+        <strong><%= app.nom %></strong><br>
+        <%= app.startLabel %> - <%= app.endLabel %>
+      </div>
+    <% }) %>
+  </div>
 </div>
