@@ -60,7 +60,7 @@ app.get("/daily", routeDaily);
 
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(publicPath, "index.html"));
+  res.render("index");
 });
 
 app.use((error, req, res, next) => {

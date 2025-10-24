@@ -3,10 +3,8 @@ import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
 
 
 export async function routeNewAppointment(req, res) {
-
     if(!res.locals.user)
         return res.redirect("/login");
-
 
     const queryMonth = parseInt(req.query.month);
     const queryYear = parseInt(req.query.year);

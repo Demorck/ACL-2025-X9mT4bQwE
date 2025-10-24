@@ -2,9 +2,6 @@
   const dayName = new Date(year, month, day)
     .toLocaleDateString('fr-FR', { weekday: 'long' })
     .replace(/^./, c => c.toUpperCase());
-
-    console.log(appointments);
-    
 %>
 
 <div class="flex justify-between items-center mb-6">

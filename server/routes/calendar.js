@@ -1,6 +1,10 @@
 import { AppointmentModel } from "../database/appointment.js";
 
 export async function routeCalendar(req, res) {
+  if (!res.locals.user) {
+    return res.redirect("/login");
+  }
+
   const queryMonth = parseInt(req.query.month);
   const queryYear = parseInt(req.query.year);
 

@@ -1,6 +1,11 @@
 import { AppointmentModel } from "../database/appointment.js";
 
 export async function routeDaily(req, res, next) {
+  if (!res.locals.user) {
+    return res.redirect("/login");
+  }
+
+  
   const { day, month, year } = req.query;
 
   if (!day || !month || !year) {
@@ -36,12 +41,16 @@ export async function routeDaily(req, res, next) {
     let start = new Date(app.date_Debut);
     let end = new Date(app.date_Fin);
 
-    // Tronque les rendez-vous aux limites de la journée affichée
-    start = start < startOfDay ? startOfDay : start;
-    end = end > endOfDay ? endOfDay : end;
+    // Convertit les dates en heure locale
+    let startLocal = new Date(start.getTime() + start.getTimezoneOffset() * 60000);
+    let endLocal = new Date(end.getTime() + end.getTimezoneOffset() * 60000);
 
-    const durationHours = (end - start) / (1000 * 60 * 60);
-    const startHour = start.getHours() + start.getMinutes() / 60;
+    // Tronque les rendez-vous aux limites de la journée affichée
+    startLocal = startLocal < startOfDay ? startOfDay : startLocal;
+    endLocal = endLocal > endOfDay ? endOfDay : endLocal;
+
+    const durationHours = (endLocal - startLocal) / (1000 * 60 * 60);
+    const startHour = startLocal.getHours() + startLocal.getMinutes() / 60;
 
     return {
       nom: app.nom,
@@ -50,8 +59,8 @@ export async function routeDaily(req, res, next) {
       startHour,
       durationHours,
       color: app.agenda.couleur,
-      startLabel: start.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
-      endLabel: end.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
+      startLabel: start.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }),
+      endLabel: end.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }),
     };
   });
 
