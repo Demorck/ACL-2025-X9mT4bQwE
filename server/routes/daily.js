@@ -1,25 +1,40 @@
-import { getDailyData } from "../models/daily.js";
+import { AppointmentModel } from "../database/appointment.js";
+import { normalizeAppointment, arrangeAppointmentsInColumns } from "../utils/appointment.js";
+import { parseDate } from "../utils/date.js";
 
-export async function routeDaily(req, res) {
-    const queryDay = parseInt(req.query.day);
-    const queryMonth = parseInt(req.query.month);
-    const queryYear = parseInt(req.query.year);
-    
-    if(isNaN(queryDay) || isNaN(queryMonth) || isNaN(queryYear))
-    {
-        return res.status(400).render("error", { error: "Il manque des paramètres pour afficher la page journalière. Veuillez fournir le jour, le mois et l'année." });
+export async function routeDaily(req, res, next) {
+    if (!res.locals.user) {
+        return res.redirect("/login");
     }
 
-    const monthNames = [
-        "Janvier","Février","Mars","Avril","Mai","Juin",
-        "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
-    ];
-    
-    res.render("calendar/daily", { 
-        day: queryDay,
-        month: queryMonth,
-        year: queryYear,
-        monthName: monthNames[queryMonth],
-        hours: await getDailyData(queryYear, queryMonth, queryDay+1, res.locals.user),
+    let { day, month, year } = req.query;
+
+    if (!day || !month || !year) {
+        return next(new Error("Paramètres manquants pour la vue quotidienne"));
+    }
+
+    let startOfDay = parseDate(day, month, year);
+    let endOfDay = parseDate(day, month, year);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    let appointments = await AppointmentModel.find({
+        $or: [
+            {
+                date_Debut: { $lt: endOfDay },
+                date_Fin: { $gte: startOfDay },
+            },
+        ],
+    })
+        .populate("agenda")
+        .sort({ date_Debut: 1 });
+
+    appointments = normalizeAppointment(appointments, startOfDay, endOfDay);
+    appointments = arrangeAppointmentsInColumns(appointments);
+
+    res.render("calendar/daily", {
+        year,
+        month,
+        day,
+        appointments,
     });
 }

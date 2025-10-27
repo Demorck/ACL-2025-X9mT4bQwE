@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 // TODO: Ajouter les dates en index pour accélérer les recherches.
 const appointmentSchema = new Schema({
-    // user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     agenda : { type: Schema.Types.ObjectId, ref: "Agenda", required: true },
     nom: { type: String, required: true },
     date_Debut: { type: Date, required: true },

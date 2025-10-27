@@ -9,11 +9,11 @@ import { routeRegister } from "./routes/register.js";
 import { routeLogin, login } from "./routes/login.js";
 import { routesCreateAccount } from "./routes/register.js";
 import { routeDaily } from "./routes/daily.js";
-import { UserModel } from "./database/users.js";
 import { routeNewAppointment, routeAddAppointmentToDatabase } from "./routes/newAppointment.js";
 import { authMiddleware } from "./middlewares/auth.js";
 import { routeLogOut } from "./routes/logout.js";
 import { routeNewAgenda, routeAddAgendaToDatabase } from "./routes/agendas.js";
+import { routeWeekly } from "./routes/weekly.js";
 
 
 export const app = express();
@@ -58,10 +58,11 @@ app.get("/appointment/new", routeNewAppointment)
 app.post("/appointment/add", routeAddAppointmentToDatabase);
 
 app.get("/daily", routeDaily);
+app.get("/week", routeWeekly);
 
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(publicPath, "index.html"));
+  res.render("index");
 });
 
 app.use((error, req, res, next) => {

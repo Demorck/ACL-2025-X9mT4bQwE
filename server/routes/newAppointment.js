@@ -1,12 +1,11 @@
 import { AppointmentModel } from "../database/appointment.js";
 import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
+import { toLocalDateHours } from "../utils/date.js";
 
 
 export async function routeNewAppointment(req, res) {
-
     if(!res.locals.user)
         return res.redirect("/login");
-
 
     const queryMonth = parseInt(req.query.month);
     const queryYear = parseInt(req.query.year);
@@ -58,11 +57,16 @@ export async function routeAddAppointmentToDatabase(req, res, next) {
         const { nom, date_debut, date_fin, heure_debut, heure_fin, day, month, year, agendas } = req.body; 
         
         
-        const startDateTime = new Date(`${date_debut}T${heure_debut}:00.000Z`);
-        const endDateTime = new Date(`${date_fin}T${heure_fin}:00.000Z`);
+        const startDateTime = toLocalDateHours(date_debut, parseInt(heure_debut.split(":")[0]), parseInt(heure_debut.split(":")[1]));
+        const endDateTime = toLocalDateHours(date_fin, parseInt(heure_fin.split(":")[0]), parseInt(heure_fin.split(":")[1]));
 
+        let str_debut = startDateTime.toISOString();
+        let str_fin = endDateTime.toISOString();
+        
+        const dateDebut = new Date(str_debut);
+        const dateFin = new Date(str_fin);
 
-        const agenda = await  AgendaModel.findById(agendas); 
+        const agenda = await AgendaModel.findById(agendas); 
         
         if(agenda === null)
         {
@@ -74,8 +78,8 @@ export async function routeAddAppointmentToDatabase(req, res, next) {
             // user: res.locals.user,
             agenda: agenda,
             nom: nom,
-            date_Debut: startDateTime,
-            date_Fin: endDateTime,
+            date_Debut: dateDebut,
+            date_Fin: dateFin,
         });
 
         // Sauvegarder le nouveau rendez-vous dans la base de données

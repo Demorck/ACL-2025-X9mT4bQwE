@@ -1,0 +1,72 @@
+<%
+  const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+%>
+
+<div class="flex justify-between items-center mb-6">
+  <a href="/agendas?month=<%= month %>&year=<%= year %>" class="px-3 py-2 bg-stone-800 rounded hover:bg-stone-600">Retour</a>
+  <h1 class="text-2xl font-bold">
+    Semaine du <%= firstDayOfWeek.getDate() %> au <%= new Date(firstDayOfWeek.getFullYear(), firstDayOfWeek.getMonth(), firstDayOfWeek.getDate() + 6).getDate() %> /
+    <%= +month + 1 %> / <%= year %>
+  </h1>
+  <a href="/appointment/new?week=<%= day %>&month=<%= month %>&year=<%= year %>" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-400">+ Ajouter</a>
+</div>
+
+<div class="border border-stone-800 rounded bg-stone-700 overflow-hidden flex flex-col" style="height: 1200px;">
+
+  <div class="flex bg-stone-800 border-b border-stone-600">
+    <div class="w-16 border-r border-stone-600"></div>
+    <% for (let i = 0; i < 7; i++) { 
+      const currentDay = new Date(firstDayOfWeek);
+      currentDay.setDate(firstDayOfWeek.getDate() + i);
+    %>
+      <div class="flex-1 text-center text-stone-200 text-sm py-3 border-l border-stone-600">
+        <%= daysOfWeek[i] %> <%= currentDay.getDate() %>
+      </div>
+    <% } %>
+  </div>
+
+  <div class="relative flex flex-1 overflow-hidden">
+
+    <!-- Colonne des heures -->
+    <div class="absolute left-0 top-0 w-16 h-full border-r border-stone-600 bg-stone-800">
+      <% for (let h = 0; h < 24; h++) { %>
+        <div 
+          class="absolute text-stone-300 text-xs text-right pr-2"
+          style="top: calc(<%= (h / 24) * 100 %>%); height: calc(100% / 24); width: 100%;">
+          <%= h.toString().padStart(2, "0") %>h
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Colonnes des jours -->
+    <div class="absolute left-16 top-0 right-0 h-full flex">
+      <% for (let i = 0; i < 7; i++) {
+        const dayAppointments = appointmentsByDay[i] || [];
+      %>
+        <div class="relative flex-1 border-l border-stone-600">
+          <!-- Lignes horaires -->
+          <% for (let h = 0; h < 24; h++) { %>
+            <div 
+              class="absolute left-0 right-0 border-t border-stone-600 <%= h % 2 === 0 ? 'bg-stone-600/20' : '' %>"
+              style="top: calc(<%= (h / 24) * 100 %>%); height: calc(100% / 24);">
+            </div>
+          <% } %>
+
+          <!-- Rendez vous -->
+          <% dayAppointments.forEach(app => { %>
+            <div 
+                class="absolute border rounded px-2 py-1 text-xs text-white shadow-md overflow-hidden hover:opacity-90 bg-<%= app.color %>-700"
+                style="
+                    top: calc(<%= (app.startHour / 24) * 100 %>%);
+                    height: calc((<%= app.durationHours %> / 24) * 100%>%);
+                    left: calc(<%= (app.colIndex / app.colCount) * 100%>%);
+                    width: calc(<%= (1 / app.colCount) * 100 %>%);
+                ">
+                <strong><%= app.nom %></strong><br>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
