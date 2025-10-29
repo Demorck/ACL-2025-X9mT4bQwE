@@ -7,6 +7,7 @@ const UserSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     agendas: [{ type: Schema.Types.ObjectId, ref: "Agenda" }],
+    notifications: [{ type: Schema.Types.ObjectId, ref: "Notification", required: false}],
     token: { type: String, default: "" },
 });
 
@@ -20,6 +21,16 @@ export const UserModel = mongoose.model("User", UserSchema);
 export function ajouterAgenda(user, agenda)
 {
     user.agendas.push(agenda);
+    user.save();
+}
+
+/**
+ * Cette fonction ajoute une notification à un user
+ * @param {User} user 
+ * @param {Notification} notification 
+ */
+export function ajouterNotification(user, notification) {
+    user.notifications.push(notification);
     user.save();
 }
 
