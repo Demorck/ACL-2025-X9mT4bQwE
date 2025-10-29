@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { ajouterAgenda } from "./users.js";
 import { validateHeaderName } from "http";
+import { creerNotification } from "./notification.js";
 
 const Schema = mongoose.Schema;
 
@@ -21,7 +22,7 @@ export const AgendaModel = mongoose.model("Agenda", agendaSchema);
  * @param {String} description 
  * @param {String} couleur 
  */
-export function creerAgenda(user, nom, description, couleur)
+export async function creerAgenda(user, nom, description, couleur)
 {
     const agenda = new AgendaModel({
         user: user,
@@ -29,10 +30,11 @@ export function creerAgenda(user, nom, description, couleur)
         description: description,
         couleur: couleur,
     });
-    agenda.save();
+    await agenda.save();
 
-    ajouterAgenda(user, agenda);
-
+    await ajouterAgenda(user, agenda); 
+    // sauvegarder la notification dans la bdd
+    await creerNotification(user, undefined, agenda, 0);
 }
 
 /**
