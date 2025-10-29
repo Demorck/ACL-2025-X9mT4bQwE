@@ -1,6 +1,7 @@
 import { AppointmentModel } from "../database/appointment.js";
 import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
 import { toLocalDateHours } from "../utils/date.js";
+import { creerNotification } from "../database/notification.js";
 
 
 export async function routeNewAppointment(req, res) {
@@ -84,6 +85,9 @@ export async function routeAddAppointmentToDatabase(req, res, next) {
 
         // Sauvegarder le nouveau rendez-vous dans la base de données
         await newAppointment.save();
+
+        // Sauvegarder la notification de création dans la base de données
+        await creerNotification(res.locals.user, newAppointment, undefined, 1);
 
         // Rediriger l'utilisateur vers la page journalière où le RDV a été ajouté
         res.redirect(`/daily?day=${day}&month=${month}&year=${year}`);
