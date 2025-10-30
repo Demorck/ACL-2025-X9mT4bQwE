@@ -7,10 +7,18 @@ export async function routeDaily(req, res, next) {
         return res.redirect("/login");
     }
 
-    let { day, month, year } = req.query;
+    // Code repris de server/routes/calendar.js
+    let queryMonth = parseInt(req.query.month);
+    let queryYear = parseInt(req.query.year);
+    let queryDay = parseInt(req.query.day)
+
+    let today = new Date();
+    let year = !isNaN(queryYear) ? queryYear : today.getFullYear();
+    let month = !isNaN(queryMonth) ? queryMonth : today.getMonth();
+    let day = !isNaN(queryDay) ? queryDay : today.getDate();
 
     if (!day || !month || !year) {
-        return next(new Error("Paramètres manquants pour la vue quotidienne"));
+        return next(new Error("Paramètres manquants pour la vue quotidienne !"));
     }
 
     let startOfDay = parseDate(day, month, year);
