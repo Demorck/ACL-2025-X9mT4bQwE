@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     agendas: [{ type: Schema.Types.ObjectId, ref: "Agenda" }],
-    notifications: [{ type: Schema.Types.ObjectId, ref: "Notification", required: false}],
+    notifications: [{ type: Schema.Types.ObjectId, ref: "Notification", required: false}], // liste des notifications liées à l'utilisateur
     token: { type: String, default: "" },
 });
 
