@@ -10,7 +10,7 @@ import { routeLogin, login } from "./routes/login.js";
 import { routesCreateAccount } from "./routes/register.js";
 import { routeDaily } from "./routes/daily.js";
 import { UserModel } from "./database/users.js";
-import { routeNewAppointment, routeAddAppointmentToDatabase } from "./routes/newAppointment.js";
+import { routeNewAppointment, routeAddAppointmentToDatabase, supprimerAppointment, modifierAppointment } from "./routes/newAppointment.js";
 import { authMiddleware } from "./middlewares/auth.js";
 import { routeLogOut } from "./routes/logout.js";
 import { routeNewAgenda, routeAddAgendaToDatabase } from "./routes/agendas.js";
@@ -56,6 +56,9 @@ app.get("/logout", routeLogOut);
 app.get("/appointment/new", routeNewAppointment)
 
 app.post("/appointment/add", routeAddAppointmentToDatabase);
+
+app.post("/appointment/delete", supprimerAppointment);
+app.post("/appointment/modify", modifierAppointment);
 
 app.get("/daily", routeDaily);
 

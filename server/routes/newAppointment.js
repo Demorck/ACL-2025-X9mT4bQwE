@@ -87,3 +87,19 @@ export async function routeAddAppointmentToDatabase(req, res, next) {
         next(error);
     }
 }
+
+export async function supprimerAppointment(req, res){
+    await AppointmentModel.deleteOne({ _id: req.body.idAppointment });
+}
+
+export async function modifierAppointment(req, res){
+    await AppointmentModel.updateOne(
+        { _id: req.body.id },
+        { agenda: req.body.idAgenda}
+        {
+            nom: req.body.nom,
+            date_Debut: new Date(`${req.body.date_debut}T${req.body.heure_debut}:00.000Z`),
+            date_Fin: new Date(`${req.body.date_fin}T${req.body.heure_fin}:00.000Z`)
+        }
+    );
+}
