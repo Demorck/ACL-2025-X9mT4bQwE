@@ -14,6 +14,7 @@ import { authMiddleware } from "./middlewares/auth.js";
 import { routeLogOut } from "./routes/logout.js";
 import { routeNewAgenda, routeAddAgendaToDatabase } from "./routes/agendas.js";
 import { routeWeekly } from "./routes/weekly.js";
+import { routeNotification } from "./routes/notifications.js";
 
 
 export const app = express();
@@ -59,6 +60,8 @@ app.post("/appointment/add", routeAddAppointmentToDatabase);
 
 app.get("/daily", routeDaily);
 app.get("/week", routeWeekly);
+
+app.get("/notifications", routeNotification);
 
 
 app.get("/", (req, res) => {
