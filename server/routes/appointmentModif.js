@@ -1,7 +1,13 @@
 import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
 import { AppointmentModel } from "../database/appointment.js";
 import { toLocalDateHours } from "../utils/date.js";
+import { creerNotification } from "../database/notification.js";
 
+/**
+ * Fonction qui permet l'affichage du rdv que l'on souhaite modifier
+ * @param {*} req 
+ * @param {*} res 
+ */
 export async function routeModif(req, res) {
     const {id, day, month, year, agendaId} = req.body;
 
@@ -23,11 +29,16 @@ export async function routeModif(req, res) {
         });
     } else {
         res.status(404).send("Rendez-vous introuvable");
+    }
 }
 
-}
-
-export async function routeModifDelete(req,res){
+/**
+ * Fonction qui supprime le rendez-vous selectionné
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+export async function routeModifDelete(req,res, next){
     try{
         const {id, day, month, year, agendaId} = req.body;
 
@@ -43,6 +54,10 @@ export async function routeModifDelete(req,res){
             return res.status(400).send("Ce rendez-vous ne vous appartient pas");
         }
 
+        // Sauvegarde la notification de suppression dans la base de données
+        await creerNotification(userAgenda.user, id, undefined, 3);
+
+        // Supprime le rendez-vous
         await AppointmentModel.findByIdAndDelete(id); 
 
 
@@ -52,7 +67,12 @@ export async function routeModifDelete(req,res){
     }
 }
 
-export async function routeAjouterModif(req,res){
+/**
+ * Fonction qui modifie la base de données avec les modifications du rendez-vous en question
+ * @param {*} req 
+ * @param {*} res 
+ */
+export async function routeAjouterModif(req,res, next){
     try{
         const {id, nom, date_debut, heure_debut, date_fin, heure_fin, day, month, year, agendas} = req.body;
 
@@ -67,7 +87,7 @@ export async function routeAjouterModif(req,res){
 
         const agenda = await AgendaModel.findById(agendas);
 
-        //Modifie tous les champs du rdv en conséquence
+        // Modifie tous les champs du rdv en conséquence
         const modifAppointment = await AppointmentModel.findByIdAndUpdate(
             id,
             {
@@ -77,6 +97,9 @@ export async function routeAjouterModif(req,res){
             date_Fin : dateFin
             }
         ) 
+
+        // Sauvegarde la notification de modification dans la base de données
+        await creerNotification(res.locals.user, id, undefined, 2);
 
         res.redirect(`/daily?day=${day}&month=${month}&year=${year}`);
     } catch (error) {

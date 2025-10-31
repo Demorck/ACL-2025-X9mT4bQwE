@@ -36,7 +36,7 @@ export async function routeNewAppointment(req, res) {
     ];
 
     // Récupérer tous les agendas d'un user
-    const validAgendas = await getAgendasForUser(res.locals.user) // Ajout de 'await' ici
+    const validAgendas = await getAgendasForUser(res.locals.user); 
     
     res.render("calendar/newAppointment", {
         day: day,
@@ -76,17 +76,16 @@ export async function routeAddAppointmentToDatabase(req, res, next) {
 
         // Créer une nouvelle instance du modèle Appointment
         const newAppointment = new AppointmentModel({
-            // user: res.locals.user,
             agenda: agenda,
             nom: nom,
             date_Debut: dateDebut,
             date_Fin: dateFin,
         });
 
-        // Sauvegarder le nouveau rendez-vous dans la base de données
+        // Sauvegarde le nouveau rendez-vous dans la base de données
         await newAppointment.save();
 
-        // Sauvegarder la notification de création dans la base de données
+        // Sauvegarde la notification de création dans la base de données
         await creerNotification(res.locals.user, newAppointment, undefined, 1);
 
         // Rediriger l'utilisateur vers la page journalière où le RDV a été ajouté
