@@ -35,11 +35,14 @@ export function normalizeAppointment(appointments, rangeStart, rangeEnd) {
 
       results.push({
         nom: app.nom,
+        id: app.id,
         start: segmentStart,
         end: segmentEnd,
         startHour,
         durationHours,
         color: app.agenda.couleur,
+        agendaName : app.agenda.nom,
+        agendaId : app.agenda.id,
         startLabel: formatHourMinute(segmentStart),
         endLabel: formatHourMinute(segmentEnd),
       });
