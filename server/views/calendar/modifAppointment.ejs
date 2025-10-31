@@ -1,0 +1,87 @@
+<div class="container bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
+    <% const date = new Date(year,month, day);
+    const dateDeb = new Date(rendezVous.date_Debut);
+    const formMonth = (dateDeb.getMonth() + 1).toString().padStart(2, '0');
+    const formDay = (dateDeb.getDate()).toString().padStart(2, '0');
+    const formYear = dateDeb.getFullYear();
+    const formDate = `${formYear}-${ formMonth }-${formDay}`;
+    const heureDeb = (dateDeb.getUTCHours() + 1).toString().padStart(2, '0');
+
+    const dateFin = new Date(rendezVous.date_Fin);
+    const formMonthFin = (dateFin.getMonth() + 1).toString().padStart(2, '0');
+    const formDayFin = (dateFin.getDate()).toString().padStart(2, '0');
+    const formYearFin = dateFin.getFullYear();
+    const formDateFin = `${formYearFin}-${ formMonthFin }-${formDayFin}`;
+    const heureFin = (dateFin.getUTCHours() + 1).toString().padStart(2, '0');
+
+
+    const name = rendezVous.nom;
+    const rdvId = rendezVous._id.toString();
+    
+    %>
+
+    <div class="flex items-center justify-between mb-6">
+        <a href="/daily?day=<%= day %>&month=<%= month %>&year=<%= year %>" class="px-3 py-2 bg-stone-700 rounded hover:bg-stone-600">Retour</a>
+        <h1 class="text-2xl font-bold">Modifier un Rendez-Vous</h1>
+    </div>
+
+    <div class="text-center font-semibold ">
+        <form method="POST" action="/modif">
+            <input type="hidden" name="day" value="<%= day %>">
+            <input type="hidden" name="month" value="<%= month %>">
+            <input type="hidden" name="year" value="<%= year %>">
+
+            <div class="flex items-center justify-between mb-6">
+                    <label class="flex-1 font-semibold mb-1 md-4" for="nom">Nom du rendez-vous</label>
+                    <input id="nom" type="text" name="nom" placeholder="Nom" value="<%= name %>" required class="border px-3 py-2 rounded">
+
+
+            </div>
+
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1">
+                    <label class="block font-semibold mb-1" for="date_debut">Date début</label>
+                    <input id="date_debut" type="date" name="date_debut" value="<%= formDate %>" required class="w-full border px-3 py-2 rounded">
+                </div>
+                <div class="flex-1"> 
+                    <label class="block font-semibold mb-1" for="heure_debut">Heure début</label>
+                    <input id="heure_debut" type="time" name="heure_debut" value="<%= heureDeb %>:00" required class="w-full border px-3 py-2 rounded">
+                </div>
+            </div>
+
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1">
+                    <label class="block font-semibold mb-1" for="date_fin">Date fin</label>
+                    <input id="date_fin" type="date" name="date_fin" value="<%= formDateFin %>" required
+                        class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="flex-1">
+                    <label class="block font-semibold mb-1" for="heure_fin">Heure fin</label>
+                    <input id="heure_fin" type="time" name="heure_fin" value="<%= heureFin %>:00" required
+                        class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                <label class="bloc font-semibold mb-1" for="agendas">Agendas</label>
+                <select id="agendaId" name="agendas" required class="bg-stone-800 border px-3 py-2 rounded">
+                    <% agendas.forEach(agenda => { 
+                        let currentAgendaId = agenda.id;
+                        let isSelected = '';
+                        if (rendezVous.agenda.toString() === currentAgendaId) {
+                            isSelected = 'selected';
+                        }
+                    %>
+                    <option id="agendaId" name="agendaId" value="<%= currentAgendaId %>" <%= isSelected %>><%= agenda.nom %></option>
+                    <% }); %>
+                </select>
+            </div>
+
+            <input type="hidden" name="id" value="<%= rdvId %>">
+
+            
+
+            <input type="submit" value="Modifier" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
+        </form>
+    </div>
+</div>

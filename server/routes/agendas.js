@@ -19,6 +19,7 @@ export async function routeAddAgendaToDatabase(req, res, next) {
         
         const { nom, description, couleur } = req.body;
         
+        
 
         // Créer une nouvelle instance du modèle Agenda
         creerAgenda(res.locals.user, nom, description, couleur);

@@ -54,7 +54,7 @@
 
             <div class="flex items-center justify-between mb-6">
                 <label class="bloc font-semibold mb-1" for="agendas">Agendas</label>
-                <select id="agendaId" name="agendas" required class="border px-3 py-2 rounded">
+                <select id="agendaId" name="agendas" required class="bg-stone-800 border px-3 py-2 rounded">
                     <% agendas.forEach(agenda => { %>
                     <option id="agendaId" name="agendaId" value="<%= agenda.id %>"><%= agenda.nom %></option>
                     <% }); %>
