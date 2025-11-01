@@ -1,4 +1,4 @@
-import { creerAgenda } from "../database/agenda.js";
+import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda } from "../database/agenda.js";
 
 
 export async function routeNewAgenda(req, res) { 
@@ -31,3 +31,33 @@ export async function routeAddAgendaToDatabase(req, res, next) {
         next(error);
     }
 }
+export async function routeListeAgendas(req, res, next) {
+    const agendas = await listAgendas(res.locals.user);
+    res.render('agendas/listAgendas', { agendas });
+}
+
+export async function routeDeleteAgenda(req, res, next) {
+
+    if (!res.locals.user)
+        return res.redirect("/login");
+
+    await deleteAgenda(res.locals.user, req.params.id);
+    return res.redirect("/agendas/list");
+
+}
+
+export async function routeEditAgenda(req, res, next) {
+    await editAgenda(req.params.id, req.body.nom, req.body.description, req.body.couleur);
+    return res.redirect("/agendas/list");
+}
+
+export async function routeFormEditAgenda(req, res, next){  
+    const agenda = await getAgendasById(req.params.id)
+    console.log(agenda);
+    res.render('agendas/editAgenda', { agenda });
+}
+
+
+
+
+

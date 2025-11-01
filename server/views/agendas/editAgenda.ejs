@@ -1,0 +1,47 @@
+<div class="container bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
+
+    <div class="flex items-center justify-between mb-6">
+        <a href="/agendas" class="px-3 py-2 bg-stone-700 rounded hover:bg-stone-600">Retour</a>
+        <h1 class="text-2xl font-bold">Modifier l'agenda</h1>
+    </div>
+
+    <div class="text-center font-semibold ">
+        <form method="POST" action="/agendas/edit/<%= agenda._id %>">
+
+            <div class="flex items-center justify-between mb-6">
+                <label class="flex-1 font-semibold mb-1 md-4" for="nom">Nom de l'agenda</label>
+                <input id="nom" type="text" name="nom"
+                       value="<%= agenda.nom %>"
+                       required
+                       class="border px-3 py-2 rounded">
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                <label class="flex-1 font-semibold mb-1 md-4" for="description">Description de l'agenda</label>
+                <input id="description" type="text" name="description"
+                       value="<%= agenda.description || '' %>"
+                       class="border px-3 py-2 rounded">
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                <label class="flex-1 font-semibold mb-1 md-4" for="couleur">Couleur de l'agenda</label>
+                <select id="couleur" name="couleur" class="border px-3 py-2 rounded">
+                    <option value="red"    <%= agenda.couleur === 'red' ? 'selected' : '' %>>Rouge</option>
+                    <option value="green"  <%= agenda.couleur === 'green' ? 'selected' : '' %>>Vert</option>
+                    <option value="blue"   <%= agenda.couleur === 'blue' ? 'selected' : '' %>>Bleu</option>
+                    <option value="yellow" <%= agenda.couleur === 'yellow' ? 'selected' : '' %>>Jaune</option>
+                    <option value="purple" <%= agenda.couleur === 'purple' ? 'selected' : '' %>>Violet</option>
+                    <option value="orange" <%= agenda.couleur === 'orange' ? 'selected' : '' %>>Orange</option>
+                    <option value="pink"   <%= agenda.couleur === 'pink' ? 'selected' : '' %>>Rose</option>
+                    <option value="gray"   <%= agenda.couleur === 'gray' ? 'selected' : '' %>>Gris</option>
+                    <option value="black"  <%= agenda.couleur === 'black' ? 'selected' : '' %>>Noir</option>
+                    <option value="white"  <%= agenda.couleur === 'white' ? 'selected' : '' %>>Blanc</option>
+                </select>
+            </div>
+
+            <input type="submit" value="Enregistrer"
+                   class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
+        </form>
+    </div>
+
+</div>
