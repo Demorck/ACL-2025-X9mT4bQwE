@@ -55,3 +55,8 @@ export async function listAgendas(user) {
     const agendas = await AgendaModel.find({ user: user._id });
     return agendas;
 }
+
+export async function deleteAgenda(user, agendaId) {
+    await AgendaModel.deleteOne({_id: agendaId});
+    await mongoose.model("User").updateOne({_id: user._id}, {$pull: {agendas: agendaId}});
+}

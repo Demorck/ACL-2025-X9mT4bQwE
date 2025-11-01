@@ -6,23 +6,21 @@
       <% agendas.forEach(a => { %>
         <div class="flex items-center justify-between bg-stone-800 rounded-xl px-4 py-3">
           <div>
-            <p class="font-semibold"><%= a.titre %></p>
+            <p class="font-semibold"><%= a.nom %></p>
             <% if (a.description) { %>
               <p class="text-sm text-stone-300"><%= a.description %></p>
             <% } %>
           </div>
+
           <div class="flex gap-2">
-            <a href="/agendas/edit"
+            <a href="/agendas/edit/<%= a._id %>"
                class="px-3 py-1 rounded bg-amber-500 text-sm hover:bg-amber-400">
               Modifier
             </a>
-            <form action="/agendas/delete/" method="POST"
-                  onsubmit="return confirm('Supprimer cet agenda ?');">
-              <button type="submit"
-                      class="px-3 py-1 rounded bg-red-500 text-sm hover:bg-red-400">
-                Supprimer
-              </button>
-            </form>
+            <a href="/agendas/delete/<%= a._id %>"
+               class="px-3 py-1 rounded bg-red-500 text-sm hover:bg-red-400">
+              Supprimer
+            </a>
           </div>
         </div>
       <% }) %>

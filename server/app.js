@@ -12,7 +12,7 @@ import { routeDaily } from "./routes/daily.js";
 import { routeNewAppointment, routeAddAppointmentToDatabase } from "./routes/newAppointment.js";
 import { authMiddleware } from "./middlewares/auth.js";
 import { routeLogOut } from "./routes/logout.js";
-import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas } from "./routes/agendas.js";
+import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda} from "./routes/agendas.js";
 import { routeWeekly } from "./routes/weekly.js";
 import { routeNotification } from "./routes/notifications.js";
 import { routeAjouterModif, routeModif } from "./routes/appointmentModif.js";
@@ -51,6 +51,9 @@ app.get("/agendas/new", routeNewAgenda);
 app.post("/agendas/add", routeAddAgendaToDatabase)
 
 app.get("/agendas/list", routeListeAgendas);
+app.get("/agendas/delete/:id", routeDeleteAgenda);
+// app.get("/agendas/edit/:id", editAgenda);
+
 
 app.get("/register", routeRegister);
 app.post("/register", routesCreateAccount);
