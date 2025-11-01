@@ -51,6 +51,11 @@ export async function getAgendasForUser(user)
     return validAgendas;
 }
 
+export async function getAgendasById(id){
+    const agenda = await AgendaModel.findById(id);
+    return agenda; 
+}
+
 export async function listAgendas(user) {
     const agendas = await AgendaModel.find({ user: user._id });
     return agendas;
@@ -59,4 +64,17 @@ export async function listAgendas(user) {
 export async function deleteAgenda(user, agendaId) {
     await AgendaModel.deleteOne({_id: agendaId});
     await mongoose.model("User").updateOne({_id: user._id}, {$pull: {agendas: agendaId}});
+}
+
+export async function editAgenda(agendaId, nom, description, couleur) {
+    const agenda = {
+        nom,
+        description,
+        couleur
+    };
+
+    await AgendaModel.updateOne(
+        { _id: agendaId },
+        { $set: agenda }
+    );
 }
