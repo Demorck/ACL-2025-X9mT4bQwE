@@ -50,3 +50,8 @@ export async function getAgendasForUser(user)
 
     return validAgendas;
 }
+
+export async function listAgendas(user) {
+    const agendas = await AgendaModel.find({ user: user._id });
+    return agendas;
+}

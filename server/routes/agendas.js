@@ -1,4 +1,4 @@
-import { creerAgenda } from "../database/agenda.js";
+import { creerAgenda, listAgendas } from "../database/agenda.js";
 
 
 export async function routeNewAgenda(req, res) { 
@@ -31,3 +31,14 @@ export async function routeAddAgendaToDatabase(req, res, next) {
         next(error);
     }
 }
+
+export async function routeListeAgendas(req, res, next) {
+    const agendas = await listAgendas(res.locals.user);
+    res.render('agendas/listAgendas', { agendas });
+}
+
+
+
+
+
+
