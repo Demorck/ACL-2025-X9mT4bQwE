@@ -16,6 +16,10 @@ import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDelet
 import { routeWeekly } from "./routes/weekly.js";
 import { routeNotification } from "./routes/notifications.js";
 import { routeAddModif, routeModif, routeDelete } from "./routes/appointmentModif.js";
+import { routeMarkAllNotificationsSeen, routeNotification } from "./routes/notifications.js";
+import { routeModif } from "./routes/appointmentModif.js";
+import { routeModifDelete } from "./routes/appointmentModif.js";
+import { notificationMiddleware } from "./middlewares/notification.js";
 
 
 
@@ -38,8 +42,10 @@ app
     .use(express.json())
     .use(express.urlencoded({ extended: false }));
 
-
+// Middlewares
 app.use(authMiddleware);
+app.use(notificationMiddleware);
+
 // Routes    
 app.get("/hello", (req, res) => {
     res.json("Hello world, tout ça");
@@ -62,8 +68,9 @@ app.post("/login", login);
 app.get("/logout", routeLogOut);
 
 app.get("/appointment/new", routeNewAppointment)
-
 app.post("/appointment/add", routeAddAppointmentToDatabase);
+app.post("/rdv/supp", routeModifDelete);
+app.post("/rdv/modif", routeModif);
 
 app.get("/daily", routeDaily);
 app.get("/week", routeWeekly);
@@ -71,6 +78,7 @@ app.get("/week", routeWeekly);
 app.get("/notifications", routeNotification);
 app.post("/appointment/del", routeDelete);
 app.post("/appointment/modif", routeModif);
+app.post("/notifications/all-seen", routeMarkAllNotificationsSeen);
 
 app.post("/modif", routeAddModif);
 

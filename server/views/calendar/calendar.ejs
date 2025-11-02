@@ -1,16 +1,23 @@
 <div class="container mx-auto max-w-4xl px-4">
-    <% const prevMonth = month === 0 ? 11 : month - 1; %>
-    <% const nextMonth = month === 11 ? 0 : month + 1; %>
-    <% const prevYear = month === 0 ? year - 1 : year; %>
-    <% const nextYear = month === 11 ? year + 1 : year; %>
+    <% 
+        const prevMonth = month === 0 ? 11 : month - 1;
+        const nextMonth = month === 11 ? 0 : month + 1;
+        const prevYear = month === 0 ? year - 1 : year;
+        const nextYear = month === 11 ? year + 1 : year;
+    %>
 
     <div class="flex items-center justify-between mb-6">
-        <a href="/agendas?month=<%= prevMonth %>&year=<%= prevYear %>" class="px-3 py-2 bg-stone-800 rounded hover:bg-stone-600">←</a>
-        <h1 class="text-2xl font-bold"><%= monthName %> <%= year %></h1>
-        <a href="/agendas?month=<%= nextMonth %>&year=<%= nextYear %>" class="px-3 py-2 bg-stone-800 rounded hover:bg-stone-600">→</a>
+        <a href="/agendas?month=<%= prevMonth %>&year=<%= prevYear %>" 
+           class="px-3 py-2 bg-stone-800 rounded hover:bg-stone-600">←</a>
+
+        <h1 class="text-2xl font-bold capitalize"><%= monthName %> <%= year %></h1>
+
+        <a href="/agendas?month=<%= nextMonth %>&year=<%= nextYear %>" 
+           class="px-3 py-2 bg-stone-800 rounded hover:bg-stone-600">→</a>
     </div>
 
-    <div class="grid grid-cols-7 text-center font-semibold border-b pb-2 mb-2">
+    <div class="grid grid-cols-8 text-center font-semibold border-b pb-2 mb-2">
+        <div>N° de semaine</div>
         <div>Lun</div>
         <div>Mar</div>
         <div>Mer</div>
@@ -20,36 +27,55 @@
         <div>Dim</div>
     </div>
 
-    <div class="grid grid-cols-7 gap-2">
-        <% // j'sais pas si je mets ça dans la vue ou dans le modèle
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            for (let day = 1; day <= daysInMonth; day++) { 
-            const dateKey = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-            const colors = appointmentsByDay[dateKey] ? Array.from(appointmentsByDay[dateKey]) : [];
-        %>
+    <% 
+        function getWeekNumber(date) {
+            const target = new Date(date.valueOf());
+            const dayNr = (date.getDay() + 6) % 7; // Lundi = 0
+            target.setDate(target.getDate() - dayNr + 3);
+            const firstThursday = new Date(target.getFullYear(), 0, 4);
+            const diff = target - firstThursday;
+            return 1 + Math.round(diff / (7 * 24 * 60 * 60 * 1000));
+        }
+    %>
 
-        <div class="p-2 text-center border rounded-xl bg-stone-700 hover:bg-stone-600">
-            <a href="/daily?day=<%= day %>&month=<%= month %>&year=<%= year %>" class="block text-stone-50 font-semibold">
-            <%= day %>
-            <div class="flex justify-center gap-1 mt-1">
-            <% if (colors.length > 0) { %>
-                <% colors.slice(0, 3).forEach(color => { %>
-                <span class="w-2 h-2 rounded-full  bg-<%= color %>-500"></span>
-                <% }) %>
-                <% if (colors.length > 3) { %>
-                <span class="text-xs text-gray-300">+</span>
-                <% } %>
-            <% } else { %>
-                <span class="w-2 h-2 rounded-full"></span>
+    <% let s = 0;
+        for (let i = 0; i < days.length; i += 7) { 
+            const startWeek = days[i];  
+            const weekNumber = weeks[s++];
+    %>
+        <div class="grid grid-cols-8 gap-2 mb-2">
+            <div class="p-2 text-center rounded-xl">
+                <a href="/week?day=<%= startWeek.getDate() %>&month=<%= startWeek.getMonth() %>&year=<%= startWeek.getFullYear() %>" class="block text-stone-50 font-semibold">
+                    <div class="flex justify-center gap-1 mt-1 underline">
+                        <%= weekNumber %>
+                    </div>
+                </a>
+            </div>
 
+            <% for (let j = 0; j < 7; j++) { 
+                const d = days[i + j];
+                const dateKey = d.toISOString().split('T')[0];
+                const colors = appointmentsByDay[dateKey]
+                const isCurrentMonth = d.getMonth() === month;
+            %>
+
+                <div class="p-2 text-center border rounded-xl <%= isCurrentMonth ? 'bg-stone-700 hover:bg-stone-600' : 'bg-stone-800 opacity-50' %>">
+                    <a href="/daily?day=<%= d.getDate() %>&month=<%= d.getMonth() %>&year=<%= d.getFullYear() %>" class="block text-stone-50 font-semibold">
+                        <%= d.getDate() %>
+                        <div class="flex justify-center gap-1 mt-1">
+                            <% if (colors) {
+                                colors.forEach((color,i) => { %>
+                                    <span class="w-2 h-2 rounded-full bg-<%= color %>-500"></span>
+                                <% }) %>
+                                
+                            <% } else { %>
+                                <span class="w-2 h-2 rounded-full"></span>
+                            <% } %>
+                        </div>
+                    </a>
+                </div>
 
             <% } %>
-            </div>
-            </a>
         </div>
-        <% } %>
-    </div>
-
-
-
+    <% } %>
 </div>

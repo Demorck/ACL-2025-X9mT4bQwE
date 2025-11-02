@@ -1,4 +1,4 @@
-import { AppointmentModel } from "../database/appointment.js";
+import { AppointmentModel, getAppointmentsByUserAndDateRange } from "../database/appointment.js";
 import { normalizeAppointment } from "../utils/appointment.js";
 import { formatDate, getFirstDayOfWeek } from "../utils/date.js";
 
@@ -28,12 +28,7 @@ export async function routeWeekly(req, res, next) {
     endOfWeek.setDate(startOfWeek.getDate() + 6);
     endOfWeek.setHours(23, 59, 59, 999);
 
-    let appointments = await AppointmentModel.find({
-        date_Debut: { $lt: endOfWeek },
-        date_Fin: { $gte: startOfWeek },
-    })
-    .populate("agenda")
-    .sort({ date_Debut: 1 });
+    let appointments = await getAppointmentsByUserAndDateRange(res.locals.user, startOfWeek, endOfWeek);
     
 
     let appointmentsByDay = normalizeAppointment(appointments, startOfWeek, endOfWeek);

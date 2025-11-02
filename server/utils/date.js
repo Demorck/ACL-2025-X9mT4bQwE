@@ -42,6 +42,35 @@ export function toLocalDateHours(date, hours, minutes = 0, seconds = 0, millisec
     return local;
 }
 
+export function getCalendarDays(year, month) {
+    // 1️⃣ Premier et dernier jour du mois
+    const firstOfMonth = new TZDate(year, month, 1, TIMEZONE);
+    const lastOfMonth = new TZDate(year, month + 1, 0, TIMEZONE);
+
+    // 2️⃣ Trouver le lundi avant ou égal au premier jour du mois
+    const start = new TZDate(firstOfMonth);
+    const day = start.getDay(); // 0=dimanche, 1=lundi, ...
+    const diffToMonday = (day + 6) % 7; // combien de jours avant lundi
+    start.setDate(start.getDate() - diffToMonday);
+
+    // 3️⃣ Trouver le dimanche après ou égal au dernier jour du mois
+    const end = new TZDate(lastOfMonth);
+    const endDay = end.getDay();
+    const diffToSunday = (7 - endDay) % 7;
+    end.setDate(end.getDate() + diffToSunday);
+
+    // 4️⃣ Générer toutes les semaines
+    const weeks = [];
+    let current = new TZDate(start);
+
+    const days = [];
+    while (current <= end) {
+        days.push(new TZDate(current));
+        current.setDate(current.getDate() + 1);
+    }
+    return days;
+}
+
 /**
  * Formate une date selon un motif donné.
  * @param {Date} date La date à formater
