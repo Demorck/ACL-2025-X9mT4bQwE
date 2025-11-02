@@ -48,7 +48,7 @@ export function normalizeAppointment(appointments, rangeStart, rangeEnd) {
       });
 
       current = new Date(dayEnd.getTime() + 1);
-      current.setHours(0, 0, 0, 0);
+      // current.setHours(0, 0, 0, 0);
     }
   }
 
