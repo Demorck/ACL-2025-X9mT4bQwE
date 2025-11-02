@@ -1,4 +1,4 @@
-import { AppointmentModel } from "../database/appointment.js";
+import { getAppointmentsByUserAndDateRange } from "../database/appointment.js";
 import { normalizeAppointment, arrangeAppointmentsInColumns } from "../utils/appointment.js";
 import { parseDate } from "../utils/date.js";
 
@@ -25,16 +25,7 @@ export async function routeDaily(req, res, next) {
     let endOfDay = parseDate(day, month, year);
     endOfDay.setHours(23, 59, 59, 999);
 
-    let appointments = await AppointmentModel.find({
-        $or: [
-            {
-                date_Debut: { $lt: endOfDay },
-                date_Fin: { $gte: startOfDay },
-            },
-        ],
-    })
-        .populate("agenda")
-        .sort({ date_Debut: 1 });
+    let appointments = await getAppointmentsByUserAndDateRange(res.locals.user, startOfDay, endOfDay);
 
     appointments = normalizeAppointment(appointments, startOfDay, endOfDay);
     appointments = arrangeAppointmentsInColumns(appointments);

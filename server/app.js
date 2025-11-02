@@ -14,9 +14,10 @@ import { authMiddleware } from "./middlewares/auth.js";
 import { routeLogOut } from "./routes/logout.js";
 import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda} from "./routes/agendas.js";
 import { routeWeekly } from "./routes/weekly.js";
-import { routeNotification } from "./routes/notifications.js";
+import { routeMarkAllNotificationsSeen, routeNotification } from "./routes/notifications.js";
 import { routeAjouterModif, routeModif } from "./routes/appointmentModif.js";
 import { routeModifDelete } from "./routes/appointmentModif.js";
+import { notificationMiddleware } from "./middlewares/notification.js";
 
 
 
@@ -39,8 +40,10 @@ app
     .use(express.json())
     .use(express.urlencoded({ extended: false }));
 
-
+// Middlewares
 app.use(authMiddleware);
+app.use(notificationMiddleware);
+
 // Routes    
 app.get("/hello", (req, res) => {
     res.json("Hello world, tout ça");
@@ -63,15 +66,15 @@ app.post("/login", login);
 app.get("/logout", routeLogOut);
 
 app.get("/appointment/new", routeNewAppointment)
-
 app.post("/appointment/add", routeAddAppointmentToDatabase);
+app.post("/rdv/supp", routeModifDelete);
+app.post("/rdv/modif", routeModif);
 
 app.get("/daily", routeDaily);
 app.get("/week", routeWeekly);
 
 app.get("/notifications", routeNotification);
-app.post("/rdv/supp", routeModifDelete);
-app.post("/rdv/modif", routeModif);
+app.post("/notifications/all-seen", routeMarkAllNotificationsSeen);
 
 app.post("/modif", routeAjouterModif);
 
