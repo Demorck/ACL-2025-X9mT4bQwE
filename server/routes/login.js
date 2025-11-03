@@ -9,8 +9,12 @@ export async function login(req, res) {
   const { username, password } = req.body;
   const user = await UserModel.findOne({ username });
 
-  if (!user || user.password !== password) {
-    return res.status(401).json({ status:"failed" });
+  if(!user){
+    return res.render("accounts/login", {exist: false});
+  }
+
+  if (user.password !== password) {
+    return res.render("accounts/login", {exist: false});
   }
 
   const token = crypto.randomBytes(60).toString("base64url");
