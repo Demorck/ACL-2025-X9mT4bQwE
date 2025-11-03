@@ -4,7 +4,7 @@ const valeur = typeof exist === "undefined" ? true : exist;
 <div class="container bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
     <h1 class="text-2xl font-bold mb-6 text-center">Connexion</h1>
     <% if(!valeur){%>
-        <p style="color: red;">login ou mot de passe incorect</p>
+        <p style="color: red;">Login ou mot de passe incorrect !</p>
     <% } %>
     <form name="login" action="/login" method="POST" class="text-center font-semibold">
         <div class="mb-4">
