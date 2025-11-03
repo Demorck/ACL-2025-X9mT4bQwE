@@ -21,7 +21,7 @@ export const UserModel = mongoose.model("User", UserSchema);
 export function ajouterAgenda(user, agenda)
 {
     user.agendas.push(agenda);
-    user.save();
+    return user.save();
 }
 
 /**
@@ -31,7 +31,7 @@ export function ajouterAgenda(user, agenda)
  */
 export function ajouterNotification(user, notification) {
     user.notifications.push(notification);
-    user.save();
+    return user.save();
 }
 
 /**
