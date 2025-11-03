@@ -38,7 +38,7 @@ export async function routeModif(req, res) {
  * @param {*} res 
  * @returns 
  */
-export async function routeModifDelete(req,res, next){
+export async function routeDelete(req,res, next){
     try{
         const {id, day, month, year, agendaId} = req.body;
 
@@ -72,7 +72,7 @@ export async function routeModifDelete(req,res, next){
  * @param {*} req 
  * @param {*} res 
  */
-export async function routeAjouterModif(req,res, next){
+export async function routeAddModif(req,res, next){
     try{
         const {id, nom, date_debut, heure_debut, date_fin, heure_fin, day, month, year, agendas} = req.body;
 

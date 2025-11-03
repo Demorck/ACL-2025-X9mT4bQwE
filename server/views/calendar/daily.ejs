@@ -57,7 +57,7 @@
         <strong><%= app.nom %></strong>
 
         <div class="inline-flex space-x-1 rdv-actions invisible group-hover:visible">
-            <form method="POST" action="/rdv/modif" class="m-0 p-0 leading-none">
+            <form method="POST" action="/appointment/modif" class="m-0 p-0 leading-none">
               <input type="hidden" name="id" value="<%= app.id %>">
               <input type="hidden" name="day" value="<%= day %>">
               <input type="hidden" name="month" value="<%= month %>">
@@ -70,7 +70,7 @@
                   ✎
               </button>
             </form>
-            <form method="POST" action="/rdv/supp" class="m-0 p-0 leading-none">
+            <form method="POST" action="/appointment/del" class="m-0 p-0 leading-none">
                 <input type="hidden" name="id" value="<%= app.id %>">
                 <input type="hidden" name="day" value="<%= day %>">
                 <input type="hidden" name="month" value="<%= month %>">

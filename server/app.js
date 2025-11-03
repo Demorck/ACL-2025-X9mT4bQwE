@@ -15,8 +15,7 @@ import { routeLogOut } from "./routes/logout.js";
 import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda} from "./routes/agendas.js";
 import { routeWeekly } from "./routes/weekly.js";
 import { routeNotification } from "./routes/notifications.js";
-import { routeAjouterModif, routeModif } from "./routes/appointmentModif.js";
-import { routeModifDelete } from "./routes/appointmentModif.js";
+import { routeAddModif, routeModif, routeDelete } from "./routes/appointmentModif.js";
 
 
 
@@ -70,10 +69,10 @@ app.get("/daily", routeDaily);
 app.get("/week", routeWeekly);
 
 app.get("/notifications", routeNotification);
-app.post("/rdv/supp", routeModifDelete);
-app.post("/rdv/modif", routeModif);
+app.post("/appointment/del", routeDelete);
+app.post("/appointment/modif", routeModif);
 
-app.post("/modif", routeAjouterModif);
+app.post("/modif", routeAddModif);
 
 
 app.get("/", (req, res) => {
