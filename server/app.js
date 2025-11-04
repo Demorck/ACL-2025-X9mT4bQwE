@@ -1,8 +1,8 @@
 import express from "express";
 import path from "path";
-import expressLayouts from "express-ejs-layouts";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
+import engine from "ejs-mate";
 import engine from "ejs-mate";
 
 import { routeCalendar } from "./routes/calendar.js";
@@ -15,19 +15,15 @@ import { authMiddleware } from "./middlewares/auth.js";
 import { routeLogOut } from "./routes/logout.js";
 import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda} from "./routes/agendas.js";
 import { routeWeekly } from "./routes/weekly.js";
-import { routeNotification } from "./routes/notifications.js";
+import { routeMarkAllNotificationsSeen, routeNotification } from "./routes/notifications.js";
 import { routeAddModif, routeModif, routeDelete } from "./routes/appointmentModif.js";
 import { routeMarkAllNotificationsSeen, routeNotification } from "./routes/notifications.js";
 import { routeModif } from "./routes/appointmentModif.js";
 import { routeModifDelete } from "./routes/appointmentModif.js";
 import { notificationMiddleware } from "./middlewares/notification.js";
-import { getAgendasForUser } from "./database/agenda.js";
-import { getAppointmentsByUserAndDateRange } from "./database/appointment.js";
-import { arrangeAppointmentsInColumns, normalizeAppointment } from "./utils/appointment.js";
-import { formatDate, getFirstDayOfMonth, getFirstDayOfWeek } from "./utils/date.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
-import { getDayData, getMonthData, getWeekData } from "./models/appointment.js";
-import { TZDate } from "@date-fns/tz";
+import { notificationMiddleware } from "./middlewares/notification.js";
+import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
 
 
 
@@ -76,6 +72,7 @@ app.get("/logout", routeLogOut);
 
 app.get("/appointment/new", routeNewAppointment)
 app.post("/appointment/add", routeAddAppointmentToDatabase);
+
 app.post("/rdv/supp", routeModifDelete);
 app.post("/rdv/modif", routeModif);
 
