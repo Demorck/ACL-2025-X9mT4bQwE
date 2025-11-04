@@ -1,5 +1,5 @@
 import { TZDate } from "@date-fns/tz";
-import { addDays, endOfWeek, endOfDay, isSameDay, startOfDay, startOfWeek, format } from "date-fns";
+import { addDays, endOfWeek, endOfDay, isSameDay, startOfDay, startOfWeek, format, startOfMonth } from "date-fns";
 import { fr } from "date-fns/locale";
 
 const TIMEZONE = "Europe/Paris";
@@ -142,5 +142,20 @@ export function getWeekRange(date) {
 export function getFirstDayOfWeek(date) {
     let local = new TZDate(date, TIMEZONE);
     let start = startOfWeek(local, { weekStartsOn: 1 });
+    return start;
+}
+
+/**************************************************************************
+ * Fonctions utilitaires pour la gestion des mois
+ ***************************************************************************/
+
+/**
+ * 
+ * @param {Date} date 
+ * @returns 
+ */
+export function getFirstDayOfMonth(date) {
+    let local = new TZDate(date, TIMEZONE);
+    let start = startOfMonth(local);
     return start;
 }

@@ -1,0 +1,28 @@
+<% layout('calendar/layout_calendar') %>
+
+<div class="flex border-b border-stone-700 sticky top-0 bg-stone-800 z-10 ">
+    <% data.days.forEach((day, index) => { %>
+    <div class="flex-1 p-2 text-center text-sm font-semibold border-r border-stone-700">
+        <%= day %>
+    </div>
+    <% }) %>
+</div>
+<div class = "flex relative">
+    <% for (let i = 0; i < 7; i++) { 
+        let isToday = new Date();
+
+        %>
+    <div class = "flex-1 relative border-r border-stone-700"
+          style = "height: 1500px;
+              background: linear-gradient(to bottom, transparent 0%, transparent calc(100%/24 - 1px), rgba(255, 255, 255, 0.829) calc(100%/24 - 1px), rgba(44, 44, 44, 0.253) calc(100%/24)); 
+              background-size: auto calc(100%/24)">
+        <% data.appointments.filter(a => a.start.getDay() === i).forEach(app => { 
+            let day = app.start.getDay()
+            let month = app.start.getMonth()
+            let year = app.start.getYear()
+        %>
+        <%- include('../components/appointment', { app, day, month, year }) %>
+        <% }) %>
+    </div>
+    <% } %>
+</div>
