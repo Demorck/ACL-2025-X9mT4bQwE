@@ -1,11 +1,11 @@
 <% layout('template/layout') %>
 
-<div class="flex flex-col h-screen bg-stone-900 text-stone-100">
+<div class="flex flex-1 flex-col bg-stone-900 text-stone-100">
 
   <div class="flex flex-1 overflow-hidden">
 
     <div class="w-54 border-r border-stone-700 bg-stone-800 p-4 overflow-y-auto" id="agenda-filter">
-      <%- include("components/agenda_filter") %>
+      <%- include("components/agenda_filter", { view }) %>
     </div>
 
     <div class="flex flex-1 flex-col">

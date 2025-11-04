@@ -19,7 +19,7 @@ export async function routeModif(req, res) {
     const validAgendas = await getAgendasForUser(res.locals.user)
 
     if (appointment) {
-        res.render('calendar/modifAppointment', {
+        res.render('appointments/modifAppointment', {
             rendezVous: appointment,
             agendaName: agendaName,
             day: day,
@@ -61,7 +61,7 @@ export async function routeModifDelete(req,res, next){
         await AppointmentModel.findByIdAndDelete(id); 
 
 
-        res.redirect(`/daily?day=${day}&month=${month}&year=${year}`);
+        res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
     } catch(error){
         next(error);
     }
@@ -101,7 +101,7 @@ export async function routeAjouterModif(req,res, next){
         // Sauvegarde la notification de modification dans la base de données
         await creerNotification(res.locals.user, id, undefined, 2);
 
-        res.redirect(`/daily?day=${day}&month=${month}&year=${year}`);
+        res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
     } catch (error) {
         next(error);
     }

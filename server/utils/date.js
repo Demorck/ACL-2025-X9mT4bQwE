@@ -159,3 +159,13 @@ export function getFirstDayOfMonth(date) {
     let start = startOfMonth(local);
     return start;
 }
+
+export function getMonthDateArraysByWeeks(year, month) {
+    let days = getCalendarDays(year, month);
+    let weeks = [];
+    for (let i = 0; i < days.length; i += 7) {
+        weeks.push(days.slice(i, i + 7));
+    }
+    
+    return weeks;
+}

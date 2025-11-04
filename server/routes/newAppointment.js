@@ -38,7 +38,7 @@ export async function routeNewAppointment(req, res) {
     // Récupérer tous les agendas d'un user
     const validAgendas = await getAgendasForUser(res.locals.user); 
     
-    res.render("calendar/newAppointment", {
+    res.render("appointments/newAppointment", {
         day: day,
         month: month,
         year: year,
@@ -89,7 +89,7 @@ export async function routeAddAppointmentToDatabase(req, res, next) {
         await creerNotification(res.locals.user, newAppointment, undefined, 1);
 
         // Rediriger l'utilisateur vers la page journalière où le RDV a été ajouté
-        res.redirect(`/daily?day=${day}&month=${month}&year=${year}`);
+        res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
     } catch (error) {
         next(error);
     }
