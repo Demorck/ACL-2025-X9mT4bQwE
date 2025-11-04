@@ -1,8 +1,8 @@
 import express from "express";
 import path from "path";
-import expressLayouts from "express-ejs-layouts";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
+import engine from "ejs-mate";
 
 import { routeCalendar } from "./routes/calendar.js";
 import { routeRegister } from "./routes/register.js";
@@ -14,8 +14,10 @@ import { authMiddleware } from "./middlewares/auth.js";
 import { routeLogOut } from "./routes/logout.js";
 import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda} from "./routes/agendas.js";
 import { routeWeekly } from "./routes/weekly.js";
-import { routeNotification } from "./routes/notifications.js";
+import { routeMarkAllNotificationsSeen, routeNotification } from "./routes/notifications.js";
 import { routeAddModif, routeModif, routeDelete } from "./routes/appointmentModif.js";
+import { notificationMiddleware } from "./middlewares/notification.js";
+import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
 
 
 
@@ -24,13 +26,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicPath = path.join(__dirname, "../public");
 
 // Chemin et initialisation des views (avec l'EJS)
-app.set("views", path.join(__dirname, "views"));
+app.engine("ejs", engine);
 app.set("view engine", "ejs");
-app.use(expressLayouts);
+app.set("views", path.join(__dirname, "views"));
 app.use(cookieParser());
-app.set("layout", "template/layout");
 
-
+app.locals._layoutFile = "template/layout";
 
 // Chemin du dossier public pour les fichiers statiques, du json et des formulaires.
 app
@@ -38,14 +39,16 @@ app
     .use(express.json())
     .use(express.urlencoded({ extended: false }));
 
-
+// Middlewares
+app.use(mergeRenderOptionsMiddleware);
 app.use(authMiddleware);
+app.use(notificationMiddleware);
+
 // Routes    
 app.get("/hello", (req, res) => {
     res.json("Hello world, tout ça");
 });
 
-app.get("/agendas", routeCalendar);
 app.get("/agendas/new", routeNewAgenda);
 app.post("/agendas/add", routeAddAgendaToDatabase)
 
@@ -62,8 +65,10 @@ app.post("/login", login);
 app.get("/logout", routeLogOut);
 
 app.get("/appointment/new", routeNewAppointment)
-
 app.post("/appointment/add", routeAddAppointmentToDatabase);
+
+app.post("/rdv/supp", routeDelete);
+app.post("/rdv/modif", routeModif);
 
 app.get("/daily", routeDaily);
 app.get("/week", routeWeekly);
@@ -71,16 +76,18 @@ app.get("/week", routeWeekly);
 app.get("/notifications", routeNotification);
 app.post("/appointment/del", routeDelete);
 app.post("/appointment/modif", routeModif);
+app.post("/notifications/all-seen", routeMarkAllNotificationsSeen);
 
 app.post("/modif", routeAddModif);
 
+app.get("/calendar/:view", routeCalendar);
 
 app.get("/", (req, res) => {
-  res.render("index");
+    res.render("index");
 });
 
-app.use((error, req, res, next) => {
-    res.render("error", { error: error }); 
-    next();
+app.use(function(req, res, next) {
+    res.status(404);
+    res.render('errors/404', { url: req.url });
 });
 

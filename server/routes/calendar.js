@@ -1,62 +1,73 @@
-import { AppointmentModel } from "../database/appointment.js";
+import { TZDate } from "@date-fns/tz";
+import { getAgendasForUser } from "../database/agenda.js";
+import { getDayData, getWeekData, getMonthData } from "../models/appointment.js";
+import { formatDate, getFirstDayOfWeek } from "../utils/date.js";
+
+function getDateFromQuery(query) {
+    let queryMonth = parseInt(query.month);
+    let queryYear = parseInt(query.year);
+    let queryDay = parseInt(query.day)
+
+    let today = new Date();
+    let year = !isNaN(queryYear) ? queryYear : today.getFullYear();
+    let month = !isNaN(queryMonth) ? queryMonth : today.getMonth();
+    let day = !isNaN(queryDay) ? queryDay : today.getDate();
+
+    return { day, month, year };
+}
 
 export async function routeCalendar(req, res) {
     if (!res.locals.user) {
         return res.redirect("/login");
     }
 
-    let queryMonth = parseInt(req.query.month);
-    let queryYear = parseInt(req.query.year);
+    let { day, month, year } = getDateFromQuery(req.query);
+    let requestedDate = new TZDate(year, month, day);
 
-    let today = new Date();
-    let year = !isNaN(queryYear) ? queryYear : today.getFullYear();
-    let month = !isNaN(queryMonth) ? queryMonth : today.getMonth();
+    let view = req.params.view || "week";
+    let agendas = await getAgendasForUser(res.locals.user);
+    let data = {};
+    let title = "";
+    let previous_url = "";
+    let after_url = "";
 
-    let startOfMonth = new Date(year, month, 1, 0, 0, 0);
-    let endOfMonth = new Date(year, month + 1, 0, 23, 59, 59);
 
-    // Récupération des rendez-vous du mois
-    let appointments = await AppointmentModel.find({
-        date_Debut: { $lt: endOfMonth },
-        date_Fin: { $gte: startOfMonth },
-    })
-        .populate("agenda")
-        .sort({ date_Debut: 1 });
+    switch(view) {
+        case "day":
+            data = await getDayData(day, month, year, res.locals.user);
+            title = "Jour du " + data.dayLabel;
+            previous_url = `/calendar/day?day=${day - 1}&month=${month}&year=${year}`;
+            after_url = `/calendar/day?day=${day + 1}&month=${month}&year=${year}`;
+            break;
+        case "week":
+            let startOfWeek = getFirstDayOfWeek(requestedDate, { weekStartsOn: 1 });
+            let endOfWeek = new TZDate(startOfWeek);
+            endOfWeek.setDate(endOfWeek.getDate() + 6);
 
-    // Déterminer les jours avec au moins un rendez-vous (un set car on s'en fout le nombre de rendez-vous, tant qu'il y en a au moins un)
-    let appointmentsByDay = {};
-    for (let app of appointments) {
-    let start = new Date(app.date_Debut);
-        let end = new Date(app.date_Fin);
-
-        // On parcourt tous les jours que couvre le rendez-vous
-        for (
-            let d = new Date(start);
-            d <= end;
-            d.setDate(d.getDate() + 1)
-        ) {
-            let key = d.toISOString().slice(0, 10);
-            if (!appointmentsByDay[key]) appointmentsByDay[key] = new Set();
-            appointmentsByDay[key].add(app.agenda.couleur);
-        }
+            data = await getWeekData(startOfWeek, endOfWeek, res.locals.user);
+            title = "Semaine du " +  data.startLabel + " au " + data.endLabel;
+            previous_url = `/calendar/week?day=${startOfWeek.getDate() - 7}&month=${startOfWeek.getMonth()}&year=${startOfWeek.getFullYear()}`;
+            after_url = `/calendar/week?day=${startOfWeek.getDate() + 7}&month=${startOfWeek.getMonth()}&year=${startOfWeek.getFullYear()}`;
+            break;
+        case "month":
+            data = await getMonthData(requestedDate.getFullYear(), requestedDate.getMonth(), res.locals.user);
+            data.monthName = formatDate(requestedDate, "LLLL yyyy");
+            title = data.startLabel;
+            previous_url = `/calendar/month?month=${requestedDate.getMonth() - 1}&year=${requestedDate.getFullYear()}`;
+            after_url = `/calendar/month?month=${requestedDate.getMonth() + 1}&year=${requestedDate.getFullYear()}`;
+            break;
+        default:
+            return res.redirect("/calendar/week");
     }
 
-    // Construire les jours du mois (besoin que du jour dans la vue mais sait-on jamais)
-    let days = [];
-    let daysInMonth = new Date(year, month + 1, 0).getDate();
-    for (let i = 1; i <= daysInMonth; i++) {
-        days.push({ day: i, month, year });
-    }
+    data.agendas = agendas;
 
-    let monthNames = [
-        "Janvier","Février","Mars","Avril","Mai","Juin",
-        "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
-    ];
-
-    res.render("calendar/calendar", {
-        year,
-        month,
-        monthName: monthNames[month],
-        appointmentsByDay
+    res.render(`calendar/views/${view}`, {
+        title,
+        view,
+        data,
+        requestedDate,
+        previous_url,
+        after_url
     });
 }

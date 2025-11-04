@@ -26,7 +26,7 @@ export async function routeAddAgendaToDatabase(req, res, next) {
 
 
         // Rediriger l'utilisateur vers l'agenda
-        res.redirect(`/agendas`);
+        res.redirect(`/calendar/week`);
     } catch (error) {
         next(error);
     }

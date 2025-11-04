@@ -1,0 +1,46 @@
+<% layout('template/layout') %>
+
+<div class="flex flex-1 flex-col bg-stone-900 text-stone-100">
+
+  <div class="flex flex-1 overflow-hidden">
+
+    <div class="w-54 border-r border-stone-700 bg-stone-800 p-4 overflow-y-auto" id="agenda-filter">
+      <%- include("components/agenda_filter", { view }) %>
+    </div>
+
+    <div class="flex flex-1 flex-col">
+        <%- include("components/header", { title, view }) %>
+
+        <div class="flex-1 relative overflow-auto">
+            
+            <%- body %>
+
+            <!-- Ligne de l’heure actuelle - pas encore utilisée mais pour bientôt
+            <div class="absolute left-0 right-0 border-t-2 border-red-500" style="top: 50%;"></div>-->
+        </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        let btn_collapseAgenda = document.querySelector('[data-action="agendas-filter"]');
+
+        btn_collapseAgenda?.addEventListener("click", (event) => {
+            let el = event.target;
+            let el_agendaFilter = document.querySelector("#agenda-filter");
+            
+            el_agendaFilter.classList.toggle("hidden");
+            let child = el.querySelector("span");
+            if (child) {
+                child.classList.toggle("fa-angle-double-left");
+                child.classList.toggle("fa-angle-double-right");
+            } else {
+                el.classList.toggle("fa-angle-double-left");
+                el.classList.toggle("fa-angle-double-right");
+            }
+
+        });
+    });
+</script>

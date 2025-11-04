@@ -1,7 +1,7 @@
-<div class="container bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
+<div class=" h-fit my-16 bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
 
     <div class="flex items-center justify-between mb-6">
-        <a href="/agendas" class="px-3 py-2 bg-stone-700 rounded hover:bg-stone-600">Retour</a>
+        <a href="/calendar/week" class="px-3 py-2 bg-stone-700 rounded hover:bg-stone-600">Retour</a>
         <h1 class="text-2xl font-bold">Créer un nouvel agenda</h1>
     </div>
 
@@ -19,20 +19,24 @@
             </div>
 
             <div class="flex items-center justify-between mb-6">
-                    <label class="flex-1 font-semibold mb-1 md-4" for="couleur">Couleur de l'agenda</label>
-                    <select id="couleur" name="couleur">
-                        <option value="red">Rouge</option>
-                        <option value="green">Vert</option>
-                        <option value="blue">Bleu</option>
-                        <option value="yellow">Jaune</option>
-                        <option value="purple">Rose</option>
-                        <option value="orange">Orange</option>
-                        <option value="pink">Rose</option>
-                        <option value="gray">Gris</option>
-                        <option value="black">Noir</option>
-                        <option value="white">Blanc</option>
+                <label class="flex-1 font-semibold mb-1 md-4" for="couleur">Couleur de l'agenda</label>
+                <div class="relative">
+                    <select id="couleur" name="couleur" class="appearance-none border px-3 py-2 rounded bg-stone-700 text-stone-100 pr-8">
+                        <option value="red" data-color="bg-red-600">Rouge</option>
+                        <option value="green" data-color="bg-green-600">Vert</option>
+                        <option value="blue" data-color="bg-blue-600">Bleu</option>
+                        <option value="yellow" data-color="bg-yellow-500">Jaune</option>
+                        <option value="purple" data-color="bg-purple-600">Violet</option>
+                        <option value="orange" data-color="bg-orange-600">Orange</option>
+                        <option value="pink" data-color="bg-pink-600">Rose</option>
+                        <option value="gray" data-color="bg-gray-600">Gris</option>
                     </select>
+
+                    <div id="color-preview" class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full border border-stone-400"></div>
+                </div>
             </div>
+
+
                
 
 
@@ -41,3 +45,18 @@
     </div>
 
 </div>
+
+
+<script>
+    const select = document.getElementById('couleur');
+    const preview = document.getElementById('color-preview');
+
+    function updateColorPreview() {
+        const selected = select.options[select.selectedIndex];
+        const colorClass = selected.dataset.color;
+        preview.className = `absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full border border-stone-400 ${colorClass}`;
+    }
+
+    select.addEventListener('change', updateColorPreview);
+    updateColorPreview();
+</script>

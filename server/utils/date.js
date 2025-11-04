@@ -1,5 +1,5 @@
 import { TZDate } from "@date-fns/tz";
-import { addDays, endOfWeek, endOfDay, isSameDay, startOfDay, startOfWeek, format } from "date-fns";
+import { addDays, endOfWeek, endOfDay, isSameDay, startOfDay, startOfWeek, format, startOfMonth } from "date-fns";
 import { fr } from "date-fns/locale";
 
 const TIMEZONE = "Europe/Paris";
@@ -40,6 +40,31 @@ export function toLocalDateHours(date, hours, minutes = 0, seconds = 0, millisec
     let local = new TZDate(date, TIMEZONE);
     local.setHours(hours, minutes, seconds, milliseconds);
     return local;
+}
+
+export function getCalendarDays(year, month) {
+    const firstOfMonth = new TZDate(year, month, 1, TIMEZONE);
+    const lastOfMonth = new TZDate(year, month + 1, 0, TIMEZONE);
+
+    const start = new TZDate(firstOfMonth);
+    const day = start.getDay();
+    const diffToMonday = (day + 6) % 7; 
+    start.setDate(start.getDate() - diffToMonday);
+
+    const end = new TZDate(lastOfMonth);
+    const endDay = end.getDay();
+    const diffToSunday = (7 - endDay) % 7;
+    end.setDate(end.getDate() + diffToSunday);
+
+    let current = new TZDate(start);
+
+    const days = [];
+    while (current <= end) {
+        days.push(new TZDate(current));
+        current.setDate(current.getDate() + 1);
+    }
+    
+    return days;
 }
 
 /**
@@ -118,4 +143,29 @@ export function getFirstDayOfWeek(date) {
     let local = new TZDate(date, TIMEZONE);
     let start = startOfWeek(local, { weekStartsOn: 1 });
     return start;
+}
+
+/**************************************************************************
+ * Fonctions utilitaires pour la gestion des mois
+ ***************************************************************************/
+
+/**
+ * 
+ * @param {Date} date 
+ * @returns 
+ */
+export function getFirstDayOfMonth(date) {
+    let local = new TZDate(date, TIMEZONE);
+    let start = startOfMonth(local);
+    return start;
+}
+
+export function getMonthDateArraysByWeeks(year, month) {
+    let days = getCalendarDays(year, month);
+    let weeks = [];
+    for (let i = 0; i < days.length; i += 7) {
+        weeks.push(days.slice(i, i + 7));
+    }
+    
+    return weeks;
 }

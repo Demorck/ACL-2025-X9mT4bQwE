@@ -28,5 +28,5 @@ export async function login(req, res) {
     maxAge: 1000 * 60 * 60 * 24,
   });
 
-  return res.redirect("/agendas")
+  return res.redirect("/calendar/week")
 }

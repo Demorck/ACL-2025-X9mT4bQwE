@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { AgendaModel } from "./agenda.js";
 
 const Schema = mongoose.Schema;
 
@@ -12,32 +13,18 @@ const appointmentSchema = new Schema({
 
 export const AppointmentModel = mongoose.model("Appointment", appointmentSchema);
 
-/**
- * Cette fonction renvoie un tableau des rendez-vous qui ont lieu durant une journée donnée.
- * @param {Date} day - Un objet Date représentant le jour pour lequel on cherche les rendez-vous.
- * @return {Promise<Array>} Une promesse qui se résout avec un tableau des rendez-vous trouvés.
- */
-export async function getAppointmentsForDay(day,agenda)
-{
-    if(agenda === null)
-    {
-        //Si aucun user connecté alors renvoyer une liste vide
-        return [];
-    }
 
-    // Définir le début du jour
-    const startOfDay = new Date(day);
-    startOfDay.setUTCHours(0, 0, 0, 0);
+export async function getAppointmentsByUserAndDateRange(user, startDate, endDate) {
+    let agendas = await AgendaModel.find({user: user._id});
+    let agendaIds = agendas.map(agenda => agenda._id);
 
-    // Définir la fin du jour
-    const endOfDay = new Date(day);
-    endOfDay.setUTCHours(23, 59, 59, 999);
+    let appointments = await AppointmentModel.find({
+        agenda: { $in: agendaIds },
+        date_Debut: { $lt: endDate },
+        date_Fin: { $gte: startDate },
+    })
+        .populate("agenda")
+        .sort({ date_Debut: 1 });
 
-    const appointments = await AppointmentModel.find({
-        agenda: agenda,
-        date_Debut: { $lte: endOfDay }, // Le RDV commence avant ou pendant la journée
-        date_Fin: { $gte: startOfDay }, // et se termine pendant ou après la journée
-    });
-    
     return appointments;
 }

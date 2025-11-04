@@ -1,4 +1,4 @@
-<div class="container bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
+<div class="h-fit w-3/4 mt-4 bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
     <h1 class="text-2xl font-bold mb-6 text-center">Créer un compte</h1>
 
     <form name="accountCreation" action="/register" method="POST" class="space-y-4">
@@ -20,6 +20,11 @@
             <span id="passwordRepeatedMessage" class="text-red-500 text-sm mt-1"></span>
         </div>
 
+        <% if (typeof error != "undefined") { %>
+            <div class="error text-red-500">
+                <%= error %>
+            </div>
+        <% } %>
         <div class="text-center">
             <input type="submit" value="Créer le compte" class="px-4 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
         </div>
