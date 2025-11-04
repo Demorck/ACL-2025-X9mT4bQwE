@@ -3,7 +3,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 import engine from "ejs-mate";
-import engine from "ejs-mate";
 
 import { routeCalendar } from "./routes/calendar.js";
 import { routeRegister } from "./routes/register.js";
@@ -17,11 +16,6 @@ import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDelet
 import { routeWeekly } from "./routes/weekly.js";
 import { routeMarkAllNotificationsSeen, routeNotification } from "./routes/notifications.js";
 import { routeAddModif, routeModif, routeDelete } from "./routes/appointmentModif.js";
-import { routeMarkAllNotificationsSeen, routeNotification } from "./routes/notifications.js";
-import { routeModif } from "./routes/appointmentModif.js";
-import { routeModifDelete } from "./routes/appointmentModif.js";
-import { notificationMiddleware } from "./middlewares/notification.js";
-import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
 import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
 
@@ -46,9 +40,9 @@ app
     .use(express.urlencoded({ extended: false }));
 
 // Middlewares
+app.use(mergeRenderOptionsMiddleware);
 app.use(authMiddleware);
 app.use(notificationMiddleware);
-app.use(mergeRenderOptionsMiddleware);
 
 // Routes    
 app.get("/hello", (req, res) => {
@@ -73,7 +67,7 @@ app.get("/logout", routeLogOut);
 app.get("/appointment/new", routeNewAppointment)
 app.post("/appointment/add", routeAddAppointmentToDatabase);
 
-app.post("/rdv/supp", routeModifDelete);
+app.post("/rdv/supp", routeDelete);
 app.post("/rdv/modif", routeModif);
 
 app.get("/daily", routeDaily);

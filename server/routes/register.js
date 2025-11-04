@@ -13,12 +13,12 @@ export async function routesCreateAccount(req, res){
         const { username, password } = req.body;
 
         if (!username || !password) {
-            return res.status(400).send("Nom d'utilisateur et mot de passe requis");
+            return res.render("accounts/register", { error: "Veuillez remplir tous les champs." });
         }
 
         let userExists = await UserModel.findOne({ username });
         if (userExists) {
-            return res.status(400).send("Nom d'utilisateur déjà pris");
+            return res.render("accounts/register", { error: "Nom d'utilisateur déjà pris" });
         }
 
         let newUser = new UserModel({ username, password });
@@ -26,7 +26,7 @@ export async function routesCreateAccount(req, res){
 
         ajouterAgendaParDefaut(newUser);
 
-        res.redirect("/agendas");
+        res.redirect("/calendar/week");
     } catch (error) {
         res.status(500).send("Erreur serveur");
         console.error(error);

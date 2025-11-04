@@ -20,6 +20,11 @@
             <span id="passwordRepeatedMessage" class="text-red-500 text-sm mt-1"></span>
         </div>
 
+        <% if (typeof error != "undefined") { %>
+            <div class="error text-red-500">
+                <%= error %>
+            </div>
+        <% } %>
         <div class="text-center">
             <input type="submit" value="Créer le compte" class="px-4 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
         </div>
