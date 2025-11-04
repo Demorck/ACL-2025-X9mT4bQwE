@@ -1,3 +1,4 @@
+import { getAgendasForUser } from "../database/agenda.js";
 import { getAppointmentsByUserAndDateRange } from "../database/appointment.js";
 import { normalizeAppointment, arrangeAppointmentsInColumns } from "../utils/appointment.js";
 import { parseDate } from "../utils/date.js";
@@ -30,10 +31,13 @@ export async function routeDaily(req, res, next) {
     appointments = normalizeAppointment(appointments, startOfDay, endOfDay);
     appointments = arrangeAppointmentsInColumns(appointments);
 
+    let agendas = await getAgendasForUser(res.locals.user);
+
     res.render("calendar/daily", {
         year,
         month,
         day,
         appointments,
+        agendas,
     });
 }

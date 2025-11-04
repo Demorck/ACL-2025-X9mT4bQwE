@@ -1,0 +1,37 @@
+<% 
+    let class_notChoosen = "bg-stone-700 hover:bg-stone-600";
+    let class_Choosen    = "bg-pink-700 hover:bg-pink-600";
+%>
+
+<div class="flex items-center justify-between p-4 border-b border-stone-700 bg-stone-800">
+    <div class="flex items-center gap-2">
+        <div class="px-2 py-1 bg-stone-700 rounded hover:bg-stone-600 cursor-pointer"  data-action="agendas-filter">
+            <span class="fa fa-angle-double-left"></span>
+        </div>
+    </div>
+    <div class="flex items-center gap-2">
+        <span class="font-semibold"><%= title %></span>
+    </div>
+    <div class="flex items-center gap-2">
+        <div class="flex items-center">
+            <a href="/calendar/day" class="font-semibold px-2 py-1 bg-stone-700 hover:bg-stone-600">
+                <div>&lt;</div>
+            </a>
+            <a href="/calendar/day" class="font-semibold px-2 py-1 bg-stone-700 hover:bg-stone-600">
+                <span >Aujourd'hui</span>
+            </a>
+            <a href="/calendar/day" class="font-semibold px-2 py-1 bg-stone-700 hover:bg-stone-600">
+                <div>&gt;</div>
+            </a>
+        </div>
+        <a href="/calendar/day">
+            <div class="px-3 py-1 <%= view == "day" ? class_Choosen : class_notChoosen %> rounded">Jour</div>
+        </a>
+        <a href="/calendar/week">
+            <div class="px-3 py-1 <%= view == "week" ? class_Choosen : class_notChoosen %> rounded">Semaine</div>
+        </a>
+        <a href="/calendar/month">
+            <div class="px-3 py-1 <%= view == "month" ? class_Choosen : class_notChoosen %> rounded">Mois</div>
+        </a>
+    </div>
+</div>
