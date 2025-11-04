@@ -1,85 +1,94 @@
-<div class="mb-4 p-3">
-  <h2 class="text-lg font-semibold mb-2">Agendas</h2>
-  <div class="flex flex-wrap flex-row sm:flex-col gap-3">
-    <% data.agendas.forEach(a => { %>
-      <label class="flex items-center gap-2 text-stone-200 cursor-pointer">
-        <input 
-          type="checkbox" 
-          class="agenda-toggle accent-<%= a.couleur %>-600" 
-          value="<%= a._id %>" 
-          checked
-        >
-        <span 
-          class="inline-block w-3 h-3 rounded-full bg-<%= a.couleur %>-600 border border-stone-400"
-        ></span>
-        <span><%= a.nom %></span>
-      </label>
-    <% }) %>
-  </div>
+<div class="mb-4 p-3" data-view="<%= view %>" id="container-filter">
+    <h2 class="text-lg font-semibold mb-2">Agendas</h2>
+    <div class="flex flex-wrap flex-row sm:flex-col gap-3">
+        <% data.agendas.forEach(a => { %>
+            <label class="flex items-center gap-2 text-stone-200 cursor-pointer">
+                <input 
+                    type="checkbox" 
+                    class="agenda-toggle" 
+                    value="<%= a._id %>" 
+                    checked
+                >
+                <span 
+                    class="inline-block w-3 h-3 rounded-full bg-<%= a.couleur %>-600"
+                ></span>
+                <span><%= a.nom %></span>
+            </label>
+        <% }) %>
+    </div>
 </div>
 <script>
 function layoutAppointments() {
-  const days = [];
+    const days = [];
 
-  document.querySelectorAll(".appointment").forEach(el => {
-    if (el.style.display === "none") return;
-    const day = el.dataset.day;
-    const start = parseFloat(el.dataset.start);
-    const duration = parseFloat(el.dataset.duration);
+    document.querySelectorAll(".appointment").forEach(el => {
+        if (el.style.display === "none") return;
+        const day = el.dataset.day;
+        const start = parseFloat(el.dataset.start);
+        const duration = parseFloat(el.dataset.duration);
 
-    if (!days[day]) days[day] = [];
-    days[day].push({ el, start, duration });
-  });
-
-  Object.values(days).forEach(appointments => {
-    appointments.sort((a, b) => a.start - b.start);
-
-    const columns = [];
-    appointments.forEach(appt => {
-      let placed = false;
-      for (let i = 0; i < columns.length; i++) {
-        const last = columns[i][columns[i].length - 1];
-        if (last.duration <= appt.start) {
-          columns[i].push(appt);
-          placed = true;
-          break;
-        }
-      }
-      if (!placed) columns.push([appt]);
+        if (!days[day]) days[day] = [];
+        days[day].push({ el, start, duration });
     });
 
-    const colCount = columns.length;
-    console.log(colCount);
-    
-    const width = 100 / colCount;
+    Object.values(days).forEach(appointments => {
+        appointments.sort((a, b) => a.start - b.start);
 
-    columns.forEach((col, i) => {
-      col.forEach(appt => {
-        appt.el.style.left = `${i * width}%`;
-        appt.el.style.width = `${width}%`;
-      });
+        const columns = [];
+        appointments.forEach(appt => {
+            let placed = false;
+            for (let i = 0; i < columns.length; i++) {
+                const last = columns[i][columns[i].length - 1];
+                if (last.duration <= appt.start) {
+                    columns[i].push(appt);
+                    placed = true;
+                    break;
+                }
+            }
+            if (!placed) columns.push([appt]);
+        });
+
+        const colCount = columns.length;
+        
+        const width = 100 / colCount;
+
+        columns.forEach((col, i) => {
+            col.forEach(appt => {
+                appt.el.style.left = `${i * width}%`;
+                appt.el.style.width = `${width}%`;
+            });
+        });
     });
-  });
 }
 </script>
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const toggles = document.querySelectorAll(".agenda-toggle");
-
-  toggles.forEach(toggle => {
-    toggle.addEventListener("change", () => {
-      const agendaId = toggle.value;
-      const visible = toggle.checked;
-
-      document.querySelectorAll(`.appointment[data-agenda='${agendaId}']`)
-        .forEach(el => {
-          el.style.display = visible ? "block" : "none";
+    const toggles = document.querySelectorAll(".agenda-toggle");
+    let view = document.querySelector('#container-filter');
+    view = view.dataset.view
+    
+    toggles.forEach(toggle => {
+        toggle.addEventListener("change", () => {
+            const agendaId = toggle.value;
+            const visible = toggle.checked;
+            
+            switch (view) {
+                case "month":
+                    document.querySelectorAll(`.appointment-month[data-agenda="${agendaId}"]`)
+                            .forEach(el => el.classList.toggle("hidden"));
+                    break;
+            
+                default:
+                document.querySelectorAll(`.appointment[data-agenda='${agendaId}']`)
+                        .forEach(el => {
+                            el.style.display = visible ? "block" : "none";
+                        });
+                    layoutAppointments();
+                    break;
+            }
         });
-      layoutAppointments();
     });
-  });
 
-  layoutAppointments();
+    layoutAppointments();
 });
 </script>

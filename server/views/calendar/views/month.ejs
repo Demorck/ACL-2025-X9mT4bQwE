@@ -1,28 +1,43 @@
 <% layout('calendar/layout_calendar') %>
 
-<div class="flex border-b border-stone-700 sticky top-0 bg-stone-800 z-10 ">
-    <% data.days.forEach((day, index) => { %>
-    <div class="flex-1 p-2 text-center text-sm font-semibold border-r border-stone-700">
-        <%= day %>
-    </div>
-    <% }) %>
-</div>
-<div class = "flex relative">
-    <% for (let i = 0; i < 7; i++) { 
-        let isToday = new Date();
+<div class="flex flex-col flex-1 h-full bg-stone-900 text-stone-100">
+  <div class="flex flex-1 flex-col border border-stone-700 rounded overflow-hidden">
 
-        %>
-    <div class = "flex-1 relative border-r border-stone-700"
-          style = "height: 1500px;
-              background: linear-gradient(to bottom, transparent 0%, transparent calc(100%/24 - 1px), rgba(255, 255, 255, 0.829) calc(100%/24 - 1px), rgba(44, 44, 44, 0.253) calc(100%/24)); 
-              background-size: auto calc(100%/24)">
-        <% data.appointments.filter(a => a.start.getDay() === i).forEach(app => { 
-            let day = app.start.getDay()
-            let month = app.start.getMonth()
-            let year = app.start.getYear()
-        %>
-        <%- include('../components/appointment', { app, day, month, year }) %>
+    <div class="flex flex-row">
+        <% const weekDays = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]; %>
+        <% weekDays.forEach(day => { %>
+        <div class="bg-stone-800 text-center py-2 font-semibold border-b border-stone-700 flex-1">
+            <%= day %>
+        </div>
         <% }) %>
     </div>
-    <% } %>
+
+    <% data.days.forEach(week => { %>
+        <div class="flex flex-row flex-1">
+            <% week.forEach(day => { %>
+                <div class="flex flex-1">
+                    <div class="relative w-full border-r flex-1 border-b border-stone-800 p-2 bg-stone-800/50">
+                        <div class="text-sm text-stone-400">
+                            <%= day.getDate() %>
+                        </div>
+                        <div class="flex flex-1 flex-col gap-1 mt-1">
+                        <% let appointments = data.appointments.filter(a => a.start.getDate() == day.getDate()); 
+                            appointments.forEach(app => {
+                            %>
+                            <a href="/calendar/day" class="text-xs truncate px-2 py-1 rounded bg-<%=app.color%>-500/80 text-stone-900 hover:bg-<%=app.color%>-400 transition appointment-month"
+                                  data-agenda="<%= app.agendaId %>"  >
+                            <%= app.nom %>
+                            </a>
+                        <% }) %>
+                        </div>
+                        <% if (day.getMonth() != data.requestedMonth) { %>
+                        <div class="absolute inset-0 bg-stone-900/60 pointer-events-none"></div>
+                        <% } %>
+                    </div>
+                </div>
+            <% }) %> 
+        </div> 
+    <% }) %>
+
+  </div>
 </div>
