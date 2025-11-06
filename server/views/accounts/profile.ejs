@@ -1,0 +1,30 @@
+<div class=" h-fit my-16 bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
+    <div class="flex items-center justify-center mb-6">
+        <h1 class="text-2xl font-bold">Profil utilisateur</h1>
+    </div>
+    <div class="text-center font-semibold ">
+        <form method="POST" action="/api/accounts/edit">
+            <div class="flex items-center justify-center mb-6 gap-4">
+                    <label class="font-semibold mb-1 md-4 flex-1" for="nom">Username</label>
+                    <input id="nom" type="text" name="nom" placeholder="Nom" required class="border px-3 flex-1 py-2 rounded" value="<%= user.username %>">
+            </div>
+            <!--<div class="flex items-center justify-center mb-6 gap-4">
+                    <label class="font-semibold mb-1 md-4 flex-1" for="description">Password</label>
+                    <input id="password" type="text" name="password" placeholder="password..." class="border px-3 flex-1 py-2 rounded">
+            </div>-->
+            <div class="flex items-center justify-center mb-6 gap-4">
+                    <label class="font-semibold mb-1 md-4 flex-1" for="nom">Nom</label>
+                    <input id="nom" type="text" name="nom" placeholder="Nom..." class="border px-3 flex-1 py-2 rounded">
+            </div>
+            <div class="flex items-center justify-center mb-6 gap-4">
+                    <label class="font-semibold mb-1 md-4 flex-1" for="prenom">Prenom</label>
+                    <input id="prenom" type="text" name="prenom" placeholder="Prenom..." class="border px-3 flex-1 py-2 rounded">
+            </div>
+            <div class="flex items-center justify-center mb-6 gap-4">
+                    <label class="font-semibold mb-1 md-4 " for="description">Description</label>
+                    <textarea id="description" type="text" name="description" placeholder="Description..." class="border px-3 flex-1 py-2 rounded"></textarea>
+            </div>
+            <input type="submit" value="Sauvegarder" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
+        </form>
+    </div>
+</div>

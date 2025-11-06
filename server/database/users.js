@@ -4,10 +4,14 @@ import { AgendaModel } from "./agenda.js";
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+    last_name: { type: String },
+    first_name: { type: String} ,
+    description: { type: String },
+    profile_picture: { type: Schema.Types.String },
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     agendas: [{ type: Schema.Types.ObjectId, ref: "Agenda" }],
-    notifications: [{ type: Schema.Types.ObjectId, ref: "Notification", required: false}], // liste des notifications liées à l'utilisateur
+    notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }], // liste des notifications liées à l'utilisateur
     token: { type: String, default: "" },
 });
 
