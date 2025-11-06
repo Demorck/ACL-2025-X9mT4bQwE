@@ -20,7 +20,7 @@ Priorité: 1 maximum - 5 minimum
 | rendez vous récurrents | | 1 | Équipe 1, Équipe 3
 | rechercher un rdv | | 3 | Équipe 1
 | Améliorer l'ajout d'un rdv | | 2 | Équipe 2
-| Ajouter confirmation de suppression | | 3 | Équipe 2
+| Ajouter confirmation de suppression | | 3 | Équipe 1
 
 ### Entre utilisateurs
 | Item                  |  | Niveau de priorité  | Équipe |
