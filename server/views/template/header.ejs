@@ -6,6 +6,8 @@
     <nav class="space-x-4 flex items-center">
       <% if (user) {
        %>
+        <input type="text" name="recherche" id="recherche" placeholder=" recherche" class="hover:border-white-300 hover:border-1 rounded-sm hidden test">
+        <i class="fa-solid fa-magnifying-glass hover:text-amber-300"></i>
         <a href="/agendas/list" class="hover:text-amber-300">Mes agendas</a>
         <a href="/calendar/week" class="hover:text-amber-300">Calendrier</a>
         <a href="/appointment/new" class="hover:text-amber-300">Nouveau RDV</a>
@@ -28,3 +30,15 @@
     </nav>
   </div>
 </header>
+<script>
+  let variableI = document.querySelector("i");
+  affichage(variableI);
+</script>
+<script>
+  function affichage(variableI =  document.querySelector("i")) {
+    variableI.addEventListener("click", () => {
+      let visible = document.querySelector(".test");
+      visible.classList.toggle("hidden");
+    });
+  }
+</script>
