@@ -18,7 +18,7 @@ import { routeMarkAllNotificationsSeen, routeNotification } from "./routes/notif
 import { routeAddModif, routeModif, routeDelete } from "./routes/appointmentModif.js";
 import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
-
+import { routeShowProfile } from "./routes/accounts/userProfile.js";
 
 
 export const app = express();
@@ -77,6 +77,8 @@ app.get("/notifications", routeNotification);
 app.post("/appointment/del", routeDelete);
 app.post("/appointment/modif", routeModif);
 app.post("/notifications/all-seen", routeMarkAllNotificationsSeen);
+
+app.get("/profile", routeShowProfile)
 
 app.post("/modif", routeAddModif);
 
