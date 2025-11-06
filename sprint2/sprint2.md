@@ -15,25 +15,47 @@ Priorité: 1 maximum - 5 minimum
 ## Fonctionnalitées
 
 ### Rendez-vous
-| Item                  |  | Niveau de priorité |  | Équipe |
-|------------------------|--|-----------------|--|-|
-| rendez vous récurrents | | 1 | Équipe 1
-| rechercher un rdv | | 2 | Équipe 1
+| Item                  |  | Niveau de priorité  | Équipe |
+|------------------------|--|-----------------|---|
+| rendez vous récurrents | | 1 | Équipe 1, Équipe 3
+| rechercher un rdv | | 3 | Équipe 1
 | Améliorer l'ajout d'un rdv | | 2 | Équipe 2
-| Ajouter confirmation de suppression | | 2 | Équipe 1
+| Ajouter confirmation de suppression | | 3 | Équipe 2
 
 ### Entre utilisateurs
-| Item                  |  | Niveau de priorité |  | Équipe |
-|------------------------|--|-----------------|--|-|
+| Item                  |  | Niveau de priorité  | Équipe |
+|------------------------|--|-----------------|---|
 | Partage d'un agenda | | 1 | Équipe 2
 | Révoquer le partage d'un agenda | | 2 | Équipe 2
-| Ajout de notification lors d'une invitation à un agenda | | 2 | Équipe 3
+| Ajout de notification lors d'une invitation à un agenda | | 2 | Équipe 2
 
 ### Utilisateur
-| Item                  |  | Niveau de priorité |  | Équipe |
-|------------------------|--|-----------------|--|-|
+| Item                  |  | Niveau de priorité  | Équipe |
+|------------------------|--|-----------------|---|
 | Ajouter profil utilisateur | | 1 | Équipe 3
-| Modification profil utilisateur | | 2 | Équipe 3
+| Modification profil utilisateur | | 3 | Équipe 3
+
+### Notifications
+| Item                  |  | Niveau de priorité  | Équipe |
+|------------------------|--|-----------------|---|
+| Suppression des notifications liés aux rendez-vous/agendas quand ceux-ci sont supprimés | | 1 | Équipe 1
+| Les notifications sont un menu déroulant quand on clique | | 4 | Équipe 1
+
+### Affichage
+| Item                  |  | Niveau de priorité  | Équipe |
+|------------------------|--|-----------------|---|
+| Choix d'un thème utilisateur | | 5 | Équipe 3
+| Responsive | | 3 | Équipe 3
+| Divers affichages du calendrier (+ bug chevauchement) | | 1 | Équipe 3
+| Changer bouton retour | | 3 | Équipe 3
+
+## Améliorations
+
+### Backend
+| Item                  |  | Niveau de priorité  | Équipe |
+|------------------------|--|-----------------|---|
+| Unifier les routes + route /api/ + dossier | | 1 | Toutes les équipes
+| Hasher le mot de passe | | 1 | Équipe 2
 
 
 ## Spécification du sprint

@@ -41,7 +41,6 @@
 ### Frontend:
 - Plusieurs thèmes (car je trouve ça bien)
 - Faire du tailwind local, éviter le CDN pour appliquer des styles css plus rapidement/facilement
-- Les chevrons doivent modifier le mois/jour/semaine en fonction de ce qui est affiché
 - Les notifications sont un menu déroulant
 - Responsive
 - Des petites animations aux filtres du calendrier
