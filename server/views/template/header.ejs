@@ -6,11 +6,11 @@
     <nav class="space-x-4 flex items-center">
       <% if (user) {
        %>
-        <input type="text" name="recherche" id="recherche" placeholder=" recherche" class="hover:border-white-300 hover:border-1 rounded-sm hidden test">
+        <input type="text" name="recherche" id="recherche" placeholder=" recherche" class="hover:border-white-300 hover:border-1 rounded-sm hidden test" size="30">
         <i class="fa-solid fa-magnifying-glass hover:text-amber-300"></i>
-        <a href="/agendas/list" class="hover:text-amber-300">Mes agendas</a>
-        <a href="/calendar/week" class="hover:text-amber-300">Calendrier</a>
-        <a href="/appointment/new" class="hover:text-amber-300">Nouveau RDV</a>
+        <a href="/agendas/list" class="hover:text-amber-300 test">Mes agendas</a>
+        <a href="/calendar/week" class="hover:text-amber-300 test">Calendrier</a>
+        <a href="/appointment/new" class="hover:text-amber-300 test">Nouveau RDV</a>
         <a href="/notifications" class="relative text-white hover:text-slate-300">
           <i class="fa fa-bell text-xl"></i>
           <% if (notificationCount > 0) { %>
@@ -31,14 +31,20 @@
   </div>
 </header>
 <script>
-  let variableI = document.querySelector("i");
-  affichage(variableI);
-</script>
-<script>
-  function affichage(variableI =  document.querySelector("i")) {
-    variableI.addEventListener("click", () => {
-      let visible = document.querySelector(".test");
-      visible.classList.toggle("hidden");
-    });
-  }
+  document.addEventListener("DOMContentLoaded", () => {
+    let variableI = document.querySelector("i");
+    let recherche = document.querySelector("#recherche");
+    affichage(variableI);
+    function affichage(variableI =  document.querySelector("i")) {
+      variableI.addEventListener("click", () => {
+        let visible = document.querySelectorAll(".test");
+        visible.forEach(element => {
+            element.classList.toggle("hidden");
+        });
+        if(visible)
+          recherche.focus();
+      });
+  
+    }
+  })
 </script>
