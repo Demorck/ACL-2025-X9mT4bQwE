@@ -6,6 +6,8 @@
     <nav class="space-x-4 flex items-center">
       <% if (user) {
        %>
+        <input type="text" name="recherche" id="recherche" placeholder=" recherche" class="hover:border-white-300 hover:border-1 rounded-sm hidden test">
+        <i class="fa-solid fa-magnifying-glass hover:text-amber-300"></i>
         <a href="/agendas/list" class="hover:text-amber-300">Mes agendas</a>
         <a href="/calendar/week" class="hover:text-amber-300">Calendrier</a>
         <a href="/appointment/new" class="hover:text-amber-300">Nouveau RDV</a>
@@ -24,7 +26,22 @@
         <a href="/register" class="ml-2 px-3 py-1 bg-amber-400 text-stone-900 rounded hover:bg-amber-500">Inscription</a>
       <% } else { %>
         <a href="/logout" class="ml-2 px-3 py-1 bg-red-400 text-stone-900 rounded hover:bg-red-500">Déconnexion</a>
+        <a href="/profile" class="rounded-full flex items-center justify-center border-2 border-stone-500 w-12 h-12 cursor-pointer">
+          <% if (!user.profile_picture) { %>
+            <i class="fa fa-user text-2xl"></i>
+          <% } else { %>
+            <img src="<%=user.profile_picture%>" alt="" class="w-full h-full rounded-full">
+          <% }%>
+        </a>
       <% } %>
     </nav>
   </div>
 </header>
+<script>
+  function affichage(variableI =  document.querySelector("i")) {
+    variableI.addEventListener("click", () => {
+      let visible = document.querySelector(".test");
+      visible.classList.toggle("hidden");
+    });
+  }
+</script>
