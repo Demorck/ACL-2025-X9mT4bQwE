@@ -18,29 +18,57 @@
     </div>
 </div>
 <script>
+/**
+* Gère le placement des rendez-vous avec le filtre.
+*
+*/
 function layoutAppointments() {
-    const days = [];
+    let days = [];
 
+    /**
+    * Récupère tous les rendez-vous visible et extrait les données des attributs data-*
+    *   - start: début du rendez-vous en heure décimale ;
+    *   - duratioin: durée du rendez-vous en heure décimale ;
+    *   - day: Jour du rendez-vous.
+    *   
+    *   - end: start + duration
+    */
     document.querySelectorAll(".appointment").forEach(el => {
         if (el.style.display === "none") return;
-        const day = el.dataset.day;
-        const start = parseFloat(el.dataset.start);
-        const duration = parseFloat(el.dataset.duration);
+        let day = el.dataset.day;
+        let start = parseFloat(el.dataset.start);
+        let duration = parseFloat(el.dataset.duration);
+        let end = start + duration;
 
         if (!days[day]) days[day] = [];
-        days[day].push({ el, start, duration });
+        days[day].push({ el, start, duration, end });
     });
 
+    /**
+    * Itère pour chaque jour (car les rendez-vous sont par jour, triés par heure de début)
+    */
     Object.values(days).forEach(appointments => {
         appointments.sort((a, b) => a.start - b.start);
 
-        const columns = [];
+        // On aura un tableau qui seront les colonnes pour placer chaque rendez-vous
+        let columns = [];
+
+        /** 
+        * Pour chaque rendez-vous par jour:
+        * Sur chaque colonne, si le dernier rendez-vous termine avant le début du rendez-vous actuel : aucun chevauchement (ils sont triés), on l'ajoute à la colonne
+        * Si pour chaque colonne, y a pas de chevauchement, alors le rendez-vous se chevauche avec tout
+        *   => Il n'est pas placé, on rajoute une colonne avec ce rendez-vous
+        * 
+        * Petit hic, si on a un rendez-vous qui peut prendre toute la largeur et qu'on utilise seulement ça, il va prendre que la largeur & posiiton de la première colonne disponible
+        */
         appointments.forEach(appt => {
             let placed = false;
             for (let i = 0; i < columns.length; i++) {
-                const last = columns[i][columns[i].length - 1];
-                if (last.duration <= appt.start) {
-                    columns[i].push(appt);
+                let col = columns[i];
+                let last = col[col.length - 1];
+                let lastEnd = last.start + last.duration;
+                if (lastEnd <= appt.start) {
+                    col.push(appt);
                     placed = true;
                     break;
                 }
@@ -48,29 +76,42 @@ function layoutAppointments() {
             if (!placed) columns.push([appt]);
         });
 
-        const colCount = columns.length;
-        
-        const width = 100 / colCount;
+        let colCount = columns.length;
 
+        /**
+        * Pour pallier le hic précédent, on sur chaque colonne.
+        * Pour chaque rendez-vous, on regarde les colonnes d'après:
+        *   Si le rendez-vous overlap, on passe, sinon on incrémente un compteur
+        *   On met donc le début (la colonne) proportionnellement au numéro de la colonne et on l'étend, proportionnellement aux nombres de colonne disponibles
+        */
         columns.forEach((col, i) => {
             col.forEach(appt => {
-                appt.el.style.left = `${i * width}%`;
+                let span = 1;
+                for (let j = i + 1; j < columns.length; j++) {
+                    let overlap = columns[j].some(c => !(appt.end <= c.start || appt.start >= c.end));
+                    if (overlap) break;
+                    span++;
+                }
+
+                let width = span * 100 / colCount;
+                appt.el.style.left = `${(100 / colCount) * i}%`;
                 appt.el.style.width = `${width}%`;
             });
         });
     });
 }
+
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const toggles = document.querySelectorAll(".agenda-toggle");
+    let toggles = document.querySelectorAll(".agenda-toggle");
     let view = document.querySelector('#container-filter');
     view = view.dataset.view
     
     toggles.forEach(toggle => {
         toggle.addEventListener("change", () => {
-            const agendaId = toggle.value;
-            const visible = toggle.checked;
+            let agendaId = toggle.value;
+            let visible = toggle.checked;
             
             switch (view) {
                 case "month":

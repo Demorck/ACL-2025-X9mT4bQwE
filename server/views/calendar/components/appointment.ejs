@@ -8,8 +8,8 @@
     "
     data-agenda="<%= app.agendaId %>"
     data-start="<%= app.startHour %>"
-    data-end="<%= app.durationHours %>"
-    data-day="<%= app.start %>"
+    data-duration="<%= app.durationHours %>"
+    data-day="<%= app.start.getDay() %>"
 >
     <strong><%= app.nom %></strong>
 
