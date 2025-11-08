@@ -1,0 +1,204 @@
+@import "tailwindcss";
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    mask-image:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24' %3E%3Cg%3E%3Cpath d='M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-image: none;
+    background-color: currentColor;
+    mask-type: match-source; 
+}
+
+.random {
+    @apply bg-red-500 bg-blue-500 bg-amber-500 bg-lime-500 bg-emerald-500 bg-cyan-500 bg-violet-500 bg-purple-500 bg-pink-500 bg-rose-500
+}
+
+body, header, .inner-container, 
+.calendar-container, .calendar-header, .calendar-header-button, .calendar-header-button--active,
+.calendar-hours-background, .calendar-hours-background-today, .day-hours-background,
+.month-day, .not-month-day {
+    @apply transition-colors duration-300
+}
+
+.filter-color {
+    @apply inline-block w-3 h-3 rounded-full
+}
+
+.filter-color-red, .appointment-color-red {
+    @apply bg-red-600
+}
+
+.filter-color-green, .appointment-color-green {
+    @apply bg-green-600
+}
+
+.filter-color-blue, .appointment-color-blue {
+    @apply bg-blue-600 text-neutral-50
+}
+
+.filter-color-yellow, .appointment-color-yellow {
+    @apply bg-yellow-600
+}
+
+.filter-color-purple, .appointment-color-purple {
+    @apply bg-purple-600
+}
+
+.filter-color-orange, .appointment-color-orange {
+    @apply bg-orange-600
+}
+
+.filter-color-pink, .appointment-color-pink {
+    @apply bg-pink-600
+}
+
+.filter-color-gray, .appointment-color-gray {
+    @apply bg-gray-600
+}
+
+.appointment {
+    @apply absolute border rounded px-3 py-2 text-sm text-white shadow-md overflow-hidden 
+}
+
+.day-hours-background {
+    @apply left-0 top-0 w-16 h-full border-r
+}
+
+.day-hours-background div {
+    @apply border-b text-center self-center
+}
+
+/*********** DARK ************/
+
+body.dark {
+    @apply bg-stone-700
+}
+
+body.dark header {
+    @apply bg-stone-800 text-stone-200 border-stone-50
+}
+
+body.dark > div {
+    @apply text-stone-200
+}
+
+body.dark .calendar-container {
+    @apply bg-stone-900 text-stone-100
+}
+
+body.dark .calendar-header, body.light #agenda-filter {
+    @apply bg-stone-800 border-stone-700
+}
+
+body.dark .calendar-header-button {
+    @apply bg-stone-700 hover:bg-stone-600
+}
+
+body.dark .calendar-header-button--active {
+    @apply bg-pink-700 hover:bg-pink-600
+}
+
+/*
+    Pour expliquer ce background un peu (si ça intéresse quelqu'un)
+    linear-gradient = dégradé linéaire
+        -> premier argument c'est la direction: to bottom c'est vers le bas. On peut aussi mettre des degrés
+        -> La suite c'est les dégradés. Le premier c'est un genre de bordure (pour faire les traits des heures)
+        -> Le second c'est le background
+    
+    Le calcul 100%/24 c'est pour diviser tout (car le div en question est la colonne complète, nous on veut un background répétitif sur l'axe Y
+*/
+body.dark .calendar-hours-background {
+    background: linear-gradient(to bottom,  rgba(58, 62, 65, 0.85) calc(100%/24 - 1px), rgba(51, 51, 44, 0.7) calc(100%/24));
+}
+
+body.dark .calendar-hours-background-today {
+    background: linear-gradient(to bottom,  rgba(58, 62, 65, 0.85) calc(100%/24 - 1px), rgba(54, 53, 5, 0.7) calc(100%/24));
+}
+
+body.dark .month-day {
+    @apply border-stone-800  bg-stone-800/50
+}
+
+body.dark .not-month-day {
+    @apply bg-stone-900/60 
+}
+
+body.dark .inner-container, 
+body.dark .inner-container input, 
+body.dark .inner-container textarea, 
+body.dark .inner-container select {
+    @apply bg-stone-800 text-stone-50
+}
+
+body.dark input[type='submit'] {
+    @apply bg-stone-400 text-stone-100 hover:bg-stone-700 hover:text-stone-400
+}
+
+/*********** LIGHT ************/
+
+body.light {
+    @apply bg-neutral-200
+}
+
+body.light header {
+    @apply bg-white text-stone-800 border-stone-800
+}
+
+body.light > div {
+    @apply text-stone-600
+}
+
+body.light .calendar-container {
+    @apply bg-white
+}
+
+body.light .calendar-header, body.light #agenda-filter {
+    @apply bg-neutral-100 text-stone-700 border-neutral-100
+}
+
+body.light .calendar-header-button {
+    @apply bg-neutral-200 hover:bg-neutral-300 border border-neutral-400
+}
+
+body.light .calendar-header-button--active {
+    @apply bg-pink-200 hover:bg-pink-300 border border-neutral-400
+}
+
+
+body.light .calendar-inner-container {
+    @apply border border-neutral-600
+}
+
+body.light .calendar-inner-container > div:first-child {
+    @apply bg-white 
+}
+
+body.light .day-hours-background {
+    @apply bg-white
+}
+
+body.light .calendar-hours-background {
+    background: linear-gradient(to bottom,  rgba(218, 220, 224, 0.85) calc(100%/24 - 1px), rgba(255, 255, 255, 0.952) calc(100%/24));
+}
+
+body.light .calendar-hours-background-today {
+    background: linear-gradient(to bottom,  rgba(218, 220, 224, 0.85) calc(100%/24 - 1px), rgba(251, 250, 212, 0.85) calc(100%/24));
+}
+
+body.light .month-day {
+    @apply border-neutral-200 bg-white text-neutral-800
+}
+
+body.light .not-month-day {
+    @apply bg-neutral-300/70 
+}
+
+body.light .inner-container, 
+body.light .inner-container input, 
+body.light .inner-container textarea, 
+body.light .inner-container select {
+    @apply bg-neutral-50 text-neutral-800
+}
+
+body.light input[type='submit'] {
+    @apply bg-neutral-400 text-neutral-100 hover:bg-neutral-700 hover:text-neutral-400
+}

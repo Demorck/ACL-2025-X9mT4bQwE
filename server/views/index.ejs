@@ -1,10 +1,15 @@
 <% 
-    let colors = ["red", "blue", "amber", "lime", "emerald", "cyan", "violet", "purple", "pink", "rose"];
-    const random_color = colors[Math.floor(Math.random() * colors.length)];
+    let colors = ["bg-red-500", "bg-blue-500", "bg-amber-500", "bg-lime-500", "bg-emerald-500", "bg-cyan-500", "bg-violet-500", "bg-purple-500", "bg-pink-500", "bg-rose-500"];
+    let hover = ["hover:bg-red-400", "hover:bg-blue-400", "hover:bg-amber-400", "hover:bg-lime-400", "hover:bg-emerald-400", "hover:bg-cyan-400", "hover:bg-violet-400", "hover:bg-purple-400", "hover:bg-pink-400", "hover:bg-rose-400"];
+    let txt = ["text-red-400", "text-blue-400", "text-amber-400", "text-lime-400", "text-emerald-400", "text-cyan-400", "text-violet-400", "text-purple-400", "text-pink-400", "text-rose-400"];
+    let i = Math.floor(Math.random() * colors.length);
+    const random_color = colors[i];
+    const text_color = txt[i];
+    const hover_color = hover[i];
 %>
 
-<div class="container mx-auto max-w-3xl text-center py-16 text-stone-200">
-  <h1 class="text-4xl font-bold mb-4">Bienvenue sur <span class="text-<%= random_color %>-400">Mon SUPER Agenda (trop slaaay)</span></h1>
+<div class="container mx-auto max-w-3xl text-center py-16">
+  <h1 class="text-4xl font-bold mb-4">Bienvenue sur <span class="<%= text_color %>">Mon SUPER Agenda (trop slaaay)</span></h1>
   <p class="text-stone-400 text-lg mb-10">
     P'tit projet sympathique. (voilà)
   </p>
@@ -18,8 +23,8 @@
     <div class="space-y-4">
       <p class="text-lg font-medium">Bonjour, <%= user.username %></p>
       <div class="flex justify-center gap-4">
-        <a href="/calendar/week" class="px-5 py-2 bg-<%= random_color %>-500 rounded hover:bg-<%= random_color %>-400 font-medium">Voir mes agendas</a>
-        <a href="/logout" class="px-5 py-2 bg-red-600 rounded hover:bg-red-500 font-medium">Se déconnecter</a>
+        <a href="/calendar/week" class="px-5 py-2 text-white <%= random_color %> rounded <%= hover_color %> font-medium">Voir mes agendas</a>
+        <a href="/logout" class="px-5 py-2 bg-red-600  text-white rounded hover:bg-red-500 font-medium">Se déconnecter</a>
       </div>
     </div>
   <% } %>

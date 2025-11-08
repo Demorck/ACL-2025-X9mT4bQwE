@@ -1,5 +1,5 @@
-<header class="bg-stone-800 shadow-sm">
-  <div class="container mx-auto px-6 py-2 flex justify-between items-center text-stone-200">
+<header class="shadow-sm border-b-4">
+  <div class="container mx-auto px-6 py-2 flex justify-between items-center">
     <a href="/" class="text-xl font-bold hover:text-amber-300">
       Mon SUPER Agenda (trop slaaay)
     </a>
@@ -14,7 +14,7 @@
         <a href="/agendas/list" class="hover:text-amber-300 test">Mes agendas</a>
         <a href="/calendar/week" class="hover:text-amber-300 test">Calendrier</a>
         <a href="/appointment/new" class="hover:text-amber-300 test">Nouveau RDV</a>
-        <a href="/notifications" class="relative text-white hover:text-slate-300">
+        <a href="/notifications" class="relative">
           <i class="fa fa-bell text-xl"></i>
           <% if (notificationCount > 0) { %>
             <span class="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
@@ -23,6 +23,8 @@
           <% } %>
         </a>
       <% } %>
+
+        <i class="fa fa-sun" data-action="theme"></i>
 
       <% if (!user) {%>
         <a href="/login" class="ml-4 px-3 py-1 bg-amber-500 text-stone-900 rounded hover:bg-amber-600">Connexion</a>
@@ -89,4 +91,22 @@
         }).catch(err => console.error(err));
     });
   })
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  let theme_picker_el = document.querySelector('i[data-action="theme"]');
+
+  theme_picker_el.addEventListener("click", () => {
+    let is_dark = document.body.classList.contains("dark");
+
+    if (is_dark) {
+
+    }
+
+    theme_picker_el.classList.toggle("fa-sun");   
+    theme_picker_el.classList.toggle("fa-moon");    
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  })
+})  
 </script>
