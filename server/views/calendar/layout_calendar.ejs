@@ -1,17 +1,17 @@
 <% layout('template/layout') %>
 
-<div class="flex flex-1 flex-col bg-stone-900 text-stone-100">
+<div class="flex flex-1 flex-col calendar-container ">
 
   <div class="flex flex-1 overflow-hidden">
 
-    <div class="w-54 border-r border-stone-700 bg-stone-800 p-4 overflow-y-auto" id="agenda-filter">
+    <div class="w-54 border-r p-4 overflow-y-auto" id="agenda-filter">
       <%- include("components/agenda_filter", { view }) %>
     </div>
 
     <div class="flex flex-1 flex-col">
         <%- include("components/header", { title, view }) %>
 
-        <div class="flex-1 relative overflow-auto">
+        <div class="flex-1 relative overflow-auto calendar-inner-container">
             
             <%- body %>
 
