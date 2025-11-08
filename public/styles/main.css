@@ -19,52 +19,43 @@
     --color-yellow-600: oklch(68.1% 0.162 75.834);
     --color-lime-400: oklch(84.1% 0.238 128.85);
     --color-lime-500: oklch(76.8% 0.233 130.85);
-    --color-green-400: oklch(79.2% 0.209 151.711);
     --color-green-500: oklch(72.3% 0.219 149.579);
     --color-green-600: oklch(62.7% 0.194 149.214);
     --color-green-700: oklch(52.7% 0.154 150.069);
-    --color-green-800: oklch(44.8% 0.119 151.328);
-    --color-green-900: oklch(39.3% 0.095 152.535);
-    --color-green-950: oklch(26.6% 0.065 152.934);
     --color-emerald-400: oklch(76.5% 0.177 163.223);
     --color-emerald-500: oklch(69.6% 0.17 162.48);
     --color-cyan-400: oklch(78.9% 0.154 211.53);
     --color-cyan-500: oklch(71.5% 0.143 215.221);
-    --color-sky-50: oklch(97.7% 0.013 236.62);
-    --color-sky-100: oklch(95.1% 0.026 236.824);
-    --color-sky-300: oklch(82.8% 0.111 230.318);
     --color-blue-400: oklch(70.7% 0.165 254.624);
     --color-blue-500: oklch(62.3% 0.214 259.815);
     --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-blue-700: oklch(48.8% 0.243 264.376);
-    --color-indigo-900: oklch(35.9% 0.144 278.697);
-    --color-indigo-950: oklch(25.7% 0.09 281.288);
     --color-violet-400: oklch(70.2% 0.183 293.541);
     --color-violet-500: oklch(60.6% 0.25 292.717);
-    --color-violet-800: oklch(43.2% 0.232 292.759);
-    --color-violet-900: oklch(38% 0.189 293.745);
     --color-purple-400: oklch(71.4% 0.203 305.504);
     --color-purple-500: oklch(62.7% 0.265 303.9);
     --color-purple-600: oklch(55.8% 0.288 302.321);
-    --color-purple-800: oklch(43.8% 0.218 303.724);
-    --color-purple-900: oklch(38.1% 0.176 304.987);
-    --color-fuchsia-200: oklch(90.3% 0.076 319.62);
-    --color-fuchsia-700: oklch(51.8% 0.253 323.949);
-    --color-pink-100: oklch(94.8% 0.028 342.258);
+    --color-pink-200: oklch(89.9% 0.061 343.231);
+    --color-pink-300: oklch(82.3% 0.12 346.018);
     --color-pink-400: oklch(71.8% 0.202 349.761);
     --color-pink-500: oklch(65.6% 0.241 354.308);
     --color-pink-600: oklch(59.2% 0.249 0.584);
-    --color-pink-800: oklch(45.9% 0.187 3.815);
-    --color-pink-950: oklch(28.4% 0.109 3.907);
+    --color-pink-700: oklch(52.5% 0.223 3.958);
     --color-rose-400: oklch(71.2% 0.194 13.428);
     --color-rose-500: oklch(64.5% 0.246 16.439);
+    --color-slate-300: oklch(86.9% 0.022 252.894);
+    --color-gray-50: oklch(98.5% 0.002 247.839);
     --color-gray-400: oklch(70.7% 0.022 261.325);
     --color-gray-600: oklch(44.6% 0.03 256.802);
     --color-neutral-50: oklch(98.5% 0 0);
+    --color-neutral-100: oklch(97% 0 0);
     --color-neutral-200: oklch(92.2% 0 0);
     --color-neutral-300: oklch(87% 0 0);
+    --color-neutral-400: oklch(70.8% 0 0);
+    --color-neutral-600: oklch(43.9% 0 0);
+    --color-neutral-700: oklch(37.1% 0 0);
     --color-neutral-800: oklch(26.9% 0 0);
-    --color-neutral-900: oklch(20.5% 0 0);
+    --color-stone-50: oklch(98.5% 0.001 106.423);
     --color-stone-100: oklch(97% 0.001 106.424);
     --color-stone-200: oklch(92.3% 0.003 48.717);
     --color-stone-300: oklch(86.9% 0.005 56.366);
@@ -74,7 +65,6 @@
     --color-stone-700: oklch(37.4% 0.01 67.558);
     --color-stone-800: oklch(26.8% 0.007 34.298);
     --color-stone-900: oklch(21.6% 0.006 56.043);
-    --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-md: 28rem;
@@ -337,9 +327,6 @@
   .mt-1 {
     margin-top: calc(var(--spacing) * 1);
   }
-  .mt-2 {
-    margin-top: calc(var(--spacing) * 2);
-  }
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }
@@ -358,8 +345,8 @@
   .mb-10 {
     margin-bottom: calc(var(--spacing) * 10);
   }
-  .ml-1 {
-    margin-left: calc(var(--spacing) * 1);
+  .ml-2 {
+    margin-left: calc(var(--spacing) * 2);
   }
   .ml-4 {
     margin-left: calc(var(--spacing) * 4);
@@ -415,9 +402,6 @@
   .w-24 {
     width: calc(var(--spacing) * 24);
   }
-  .w-40 {
-    width: calc(var(--spacing) * 40);
-  }
   .w-54 {
     width: calc(var(--spacing) * 54);
   }
@@ -464,9 +448,6 @@
   .items-center {
     align-items: center;
   }
-  .items-stretch {
-    align-items: stretch;
-  }
   .justify-between {
     justify-content: space-between;
   }
@@ -507,6 +488,13 @@
       --tw-space-y-reverse: 0;
       margin-block-start: calc(calc(var(--spacing) * 5) * var(--tw-space-y-reverse));
       margin-block-end: calc(calc(var(--spacing) * 5) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-x-4 {
+    :where(& > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline-start: calc(calc(var(--spacing) * 4) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-x-reverse)));
     }
   }
   .truncate {
@@ -569,9 +557,6 @@
   .border-b-4 {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 4px;
-  }
-  .border-neutral-200 {
-    border-color: var(--color-neutral-200);
   }
   .border-red-500 {
     border-color: var(--color-red-500);
@@ -708,9 +693,6 @@
   .pr-8 {
     padding-right: calc(var(--spacing) * 8);
   }
-  .pb-4 {
-    padding-bottom: calc(var(--spacing) * 4);
-  }
   .text-center {
     text-align: center;
   }
@@ -781,35 +763,23 @@
   .text-emerald-400 {
     color: var(--color-emerald-400);
   }
+  .text-gray-50 {
+    color: var(--color-gray-50);
+  }
   .text-gray-400 {
     color: var(--color-gray-400);
   }
   .text-gray-600 {
     color: var(--color-gray-600);
   }
-  .text-green-400 {
-    color: var(--color-green-400);
-  }
-  .text-green-500 {
-    color: var(--color-green-500);
-  }
   .text-lime-400 {
     color: var(--color-lime-400);
-  }
-  .text-neutral-50 {
-    color: var(--color-neutral-50);
-  }
-  .text-neutral-900 {
-    color: var(--color-neutral-900);
   }
   .text-pink-400 {
     color: var(--color-pink-400);
   }
   .text-purple-400 {
     color: var(--color-purple-400);
-  }
-  .text-purple-800 {
-    color: var(--color-purple-800);
   }
   .text-red-400 {
     color: var(--color-red-400);
@@ -847,10 +817,6 @@
   }
   .shadow-lg {
     --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .shadow-md {
-    --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .shadow-sm {
@@ -1108,148 +1074,35 @@
       flex-direction: column;
     }
   }
-  .md\:visible {
-    @media (width >= 48rem) {
-      visibility: visible;
-    }
-  }
-  .md\:static {
-    @media (width >= 48rem) {
-      position: static;
-    }
-  }
-  .md\:block {
-    @media (width >= 48rem) {
-      display: block;
-    }
-  }
-  .md\:flex {
-    @media (width >= 48rem) {
-      display: flex;
-    }
-  }
-  .md\:hidden {
-    @media (width >= 48rem) {
-      display: none;
-    }
-  }
-  .md\:w-fit {
-    @media (width >= 48rem) {
-      width: fit-content;
-    }
-  }
-  .md\:flex-1 {
-    @media (width >= 48rem) {
-      flex: 1;
-    }
-  }
-  .md\:flex-row {
-    @media (width >= 48rem) {
-      flex-direction: row;
-    }
-  }
-  .md\:items-center {
-    @media (width >= 48rem) {
-      align-items: center;
-    }
-  }
-  .md\:p-2 {
-    @media (width >= 48rem) {
-      padding: calc(var(--spacing) * 2);
-    }
-  }
-  .md\:px-3 {
-    @media (width >= 48rem) {
-      padding-inline: calc(var(--spacing) * 3);
-    }
-  }
 }
-:root {
-  --bg-page: #fff;
-  --text-main: oklch(26.8% 0.007 34.298);
-  --bg-header: #fff;
-  --text-header: oklch(21.6% 0.006 56.043);
-  --border-header: oklch(26.8% 0.007 34.298);
-  --bg-calendar: #fff;
-  --text-calendar: oklch(37.4% 0.01 67.558);
-  --bg-calendar-header: oklch(97% 0 0);
-  --border-calendar-header: oklch(97% 0 0);
-  --btn-bg: oklch(92.2% 0 0);
-  --btn-bg-hover: oklch(87% 0 0);
-  --btn-border: oklch(70.8% 0 0);
-  --btn-active-bg: oklch(89.9% 0.061 343.231);
-  --btn-active-bg-hover: oklch(82.3% 0.12 346.018);
-  --inner-bg: oklch(98.5% 0 0);
-  --inner-text: oklch(26.8% 0.007 34.298);
-  --input-submit-bg: oklch(70.8% 0 0);
-  --input-submit-text: oklch(97% 0.001 106.424);
-  --input-submit-hover-bg: oklch(37.1% 0 0);
-  --input-submit-hover-text: oklch(70.8% 0 0);
+input[type="date"]::-webkit-calendar-picker-indicator {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24' %3E%3Cg%3E%3Cpath d='M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-image: none;
+  background-color: currentColor;
+  mask-type: match-source;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24' %3E%3Cg%3E%3Cpath d='M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-image: none;
+  background-color: currentColor;
+  mask-type: match-source;
 }
-body {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
-  transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-  transition-duration: var(--tw-duration, var(--default-transition-duration));
-  --tw-duration: 300ms;
-  transition-duration: 300ms;
-  background-color: var(--bg-page);
-  color: var(--text-main);
+.random {
+  background-color: var(--color-amber-500);
+  background-color: var(--color-blue-500);
+  background-color: var(--color-cyan-500);
+  background-color: var(--color-emerald-500);
+  background-color: var(--color-lime-500);
+  background-color: var(--color-pink-500);
+  background-color: var(--color-purple-500);
+  background-color: var(--color-red-500);
+  background-color: var(--color-rose-500);
+  background-color: var(--color-violet-500);
 }
-header {
-  background-color: var(--bg-header);
-  color: var(--text-header);
-  border-color: var(--border-header);
-}
-#theme-menu {
-  background-color: var(--inner-bg);
-}
-#theme-toggle:hover, #theme-menu li:hover {
-  background-color: var(--btn-bg-hover);
-}
-.calendar-container {
-  background-color: var(--bg-calendar);
-  color: var(--text-calendar);
-}
-.calendar-header, #agenda-filter {
-  background-color: var(--bg-calendar-header);
-  border-color: var(--border-calendar-header);
-}
-.calendar-header-button {
-  background-color: var(--btn-bg);
-  border-color: var(--btn-border);
-  border-style: var(--tw-border-style);
-  border-width: 1px;
-  --tw-border-style: solid;
-  border-style: solid;
-}
-.calendar-header-button:hover {
-  background-color: var(--btn-bg-hover);
-}
-.calendar-header-button--active {
-  background-color: var(--btn-active-bg);
-}
-.calendar-header-button--active:hover {
-  background-color: var(--btn-active-bg-hover);
-}
-.calendar-hours-background, .calendar-hours-background-today {
-  background-size: auto calc(100%/24);
-}
-.inner-container, .inner-container input, .inner-container textarea, .inner-container select {
-  background-color: var(--inner-bg);
-  color: var(--inner-text);
-}
-input[type='submit'] {
-  background-color: var(--input-submit-bg);
-  color: var(--input-submit-text);
-}
-input[type='submit']:hover {
-  background-color: var(--input-submit-hover-bg);
-  color: var(--input-submit-hover-text);
-}
-body, header, .inner-container, .calendar-container, .calendar-header, .calendar-header-button, .calendar-header-button--active, .calendar-hours-background, .calendar-hours-background-today, .day-hours-background, .month-day, .not-month-day {
+body, header, .inner-container, 
+.calendar-container, .calendar-header, .calendar-header-button, .calendar-header-button--active,
+.calendar-hours-background, .calendar-hours-background-today, .day-hours-background,
+.month-day, .not-month-day {
   transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
   transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
   transition-duration: var(--tw-duration, var(--default-transition-duration));
@@ -1293,15 +1146,13 @@ body, header, .inner-container, .calendar-container, .calendar-header, .calendar
   border-radius: 0.25rem;
   border-style: var(--tw-border-style);
   border-width: 1px;
+  padding-inline: calc(var(--spacing) * 3);
   padding-block: calc(var(--spacing) * 2);
   font-size: var(--text-sm);
   line-height: var(--tw-leading, var(--text-sm--line-height));
   color: var(--color-white);
   --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  @media (width >= 48rem) {
-    padding-inline: calc(var(--spacing) * 3);
-  }
 }
 .day-hours-background {
   top: calc(var(--spacing) * 0);
@@ -1317,363 +1168,168 @@ body, header, .inner-container, .calendar-container, .calendar-header, .calendar
   border-bottom-width: 1px;
   text-align: center;
 }
-input[type="date"]::-webkit-calendar-picker-indicator {
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24' %3E%3Cg%3E%3Cpath d='M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-image: none;
-  background-color: currentColor;
-  mask-type: match-source;
+body.dark {
+  background-color: var(--color-stone-700);
 }
-@layer base {
-  body.dark {
-    --bg-page: oklch(37.4% 0.01 67.558);
-    --text-main: oklch(92.3% 0.003 48.717);
-    --bg-header: oklch(26.8% 0.007 34.298);
-    --text-header: oklch(92.3% 0.003 48.717);
-    --border-header: oklch(98.5% 0.001 106.423);
-    --bg-calendar: oklch(21.6% 0.006 56.043);
-    --text-calendar: oklch(97% 0.001 106.424);
-    --bg-calendar-header: oklch(26.8% 0.007 34.298);
-    --border-calendar-header: oklch(37.4% 0.01 67.558);
-    --btn-bg: oklch(37.4% 0.01 67.558);
-    --btn-bg-hover: oklch(44.4% 0.011 73.639);
-    --btn-border: transparent;
-    --btn-active-bg: oklch(52.5% 0.223 3.958);
-    --btn-active-bg-hover: oklch(59.2% 0.249 0.584);
-    --inner-bg: oklch(26.8% 0.007 34.298);
-    --inner-text: oklch(98.5% 0.001 106.423);
-    --input-submit-bg: oklch(70.9% 0.01 56.259);
-    --input-submit-text: oklch(97% 0.001 106.424);
-    --input-submit-hover-bg: oklch(37.4% 0.01 67.558);
-    --input-submit-hover-text: oklch(70.9% 0.01 56.259);
-  }
-  body.dark .theme-active i {
-    color: oklch(70.7% 0.165 254.624) !important;
-  }
-  body.dark .calendar-hours-background {
-    background: linear-gradient( to bottom, rgba(58, 62, 65, 0.85) calc(100% / 24 - 1px), rgba(51, 51, 44, 0.7) calc(100% / 24) );
-  }
-  body.dark .calendar-hours-background-today {
-    background: linear-gradient( to bottom, rgba(58, 62, 65, 0.85) calc(100% / 24 - 1px), rgba(54, 53, 5, 0.7) calc(100% / 24) );
-  }
-  body.dark .month-day {
-    border-color: var(--color-stone-800);
-    background-color: color-mix(in srgb, oklch(26.8% 0.007 34.298) 50%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-stone-800) 50%, transparent);
-    }
-  }
-  body.dark .not-month-day {
-    background-color: color-mix(in srgb, oklch(21.6% 0.006 56.043) 60%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-stone-900) 60%, transparent);
+body.dark header {
+  border-color: var(--color-stone-50);
+  background-color: var(--color-stone-800);
+  color: var(--color-stone-200);
+}
+body.dark > div {
+  color: var(--color-stone-200);
+}
+body.dark .calendar-container {
+  background-color: var(--color-stone-900);
+  color: var(--color-stone-100);
+}
+body.dark .calendar-header, body.light #agenda-filter {
+  border-color: var(--color-stone-700);
+  background-color: var(--color-stone-800);
+}
+body.dark .calendar-header-button {
+  background-color: var(--color-stone-700);
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--color-stone-600);
     }
   }
 }
-@layer base {
-  body.light {
-    --bg-page: oklch(92.2% 0 0);
-    --text-main: oklch(44.4% 0.011 73.639);
-    --bg-header: #fff;
-    --text-header: oklch(26.8% 0.007 34.298);
-    --border-header: oklch(26.8% 0.007 34.298);
-    --bg-calendar: #fff;
-    --text-calendar: oklch(37.4% 0.01 67.558);
-    --bg-calendar-header: oklch(97% 0 0);
-    --border-calendar-header: oklch(97% 0 0);
-    --btn-bg: oklch(92.2% 0 0);
-    --btn-bg-hover: oklch(87% 0 0);
-    --btn-border: oklch(70.8% 0 0);
-    --btn-active-bg: oklch(89.9% 0.061 343.231);
-    --btn-active-bg-hover: oklch(82.3% 0.12 346.018);
-    --inner-bg: oklch(98.5% 0 0);
-    --inner-text: oklch(26.8% 0.007 34.298);
-    --input-submit-bg: oklch(70.8% 0 0);
-    --input-submit-text: oklch(97% 0.001 106.424);
-    --input-submit-hover-bg: oklch(37.1% 0 0);
-    --input-submit-hover-text: oklch(70.8% 0 0);
-  }
-  body.light .theme-active i {
-    color: oklch(44.4% 0.011 73.639) !important;
-  }
-  body.light .calendar-hours-background {
-    background: linear-gradient(to bottom, rgba(218, 220, 224, 0.85) calc(100% / 24 - 1px), rgba(255, 255, 255, 0.952) calc(100% / 24));
-  }
-  body.light .calendar-hours-background-today {
-    background: linear-gradient(to bottom, rgba(218, 220, 224, 0.85) calc(100% / 24 - 1px), rgba(251, 250, 212, 0.85) calc(100% / 24));
-  }
-  body.light .month-day {
-    border-color: var(--color-neutral-200);
-    background-color: var(--color-white);
-    color: var(--color-neutral-800);
-  }
-  body.light .not-month-day {
-    background-color: color-mix(in srgb, oklch(87% 0 0) 70%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-neutral-300) 70%, transparent);
+body.dark .calendar-header-button--active {
+  background-color: var(--color-pink-700);
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--color-pink-600);
     }
   }
 }
-@layer base {
-  body.forest {
-    --bg-page: oklch(26.6% 0.065 152.934);
-    --text-main: oklch(98.2% 0.018 155.826);
-    --bg-header: oklch(39.3% 0.095 152.535);
-    --text-header: oklch(96.2% 0.044 156.743);
-    --border-header: oklch(62.7% 0.194 149.214);
-    --bg-calendar: oklch(26.6% 0.065 152.934);
-    --text-calendar: oklch(98.2% 0.018 155.826);
-    --bg-calendar-header: oklch(39.3% 0.095 152.535);
-    --border-calendar-header: oklch(52.7% 0.154 150.069);
-    --btn-bg: oklch(44.8% 0.119 151.328);
-    --btn-bg-hover: oklch(52.7% 0.154 150.069);
-    --btn-border: transparent;
-    --btn-active-bg: oklch(50.8% 0.118 165.612);
-    --btn-active-bg-hover: oklch(59.6% 0.145 163.225);
-    --inner-bg: oklch(39.3% 0.095 152.535);
-    --inner-text: oklch(98.2% 0.018 155.826);
-    --input-submit-bg: oklch(76.5% 0.177 163.223);
-    --input-submit-text: oklch(26.6% 0.065 152.934);
-    --input-submit-hover-bg: oklch(52.7% 0.154 150.069);
-    --input-submit-hover-text: oklch(84.5% 0.143 164.978);
+body.dark .calendar-hours-background {
+  background: linear-gradient(to bottom,  rgba(58, 62, 65, 0.85) calc(100%/24 - 1px), rgba(51, 51, 44, 0.7) calc(100%/24));
+}
+body.dark .calendar-hours-background-today {
+  background: linear-gradient(to bottom,  rgba(58, 62, 65, 0.85) calc(100%/24 - 1px), rgba(54, 53, 5, 0.7) calc(100%/24));
+}
+body.dark .month-day {
+  border-color: var(--color-stone-800);
+  background-color: color-mix(in srgb, oklch(26.8% 0.007 34.298) 50%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-stone-800) 50%, transparent);
   }
-  body.forest .calendar-hours-background {
-    background: linear-gradient( to bottom, rgba(34, 70, 45, 0.85) calc(100% / 24 - 1px), rgba(20, 40, 25, 0.8) calc(100% / 24) );
+}
+body.dark .not-month-day {
+  background-color: color-mix(in srgb, oklch(21.6% 0.006 56.043) 60%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-stone-900) 60%, transparent);
   }
-  body.forest .calendar-hours-background-today {
-    background: linear-gradient( to bottom, rgba(34, 70, 45, 0.85) calc(100% / 24 - 1px), rgba(60, 90, 50, 0.8) calc(100% / 24) );
-  }
-  body.forest .month-day {
-    border-color: var(--color-green-800);
-    background-color: color-mix(in srgb, oklch(39.3% 0.095 152.535) 50%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-green-900) 50%, transparent);
+}
+body.dark .inner-container, 
+body.dark .inner-container input, 
+body.dark .inner-container textarea, 
+body.dark .inner-container select {
+  background-color: var(--color-stone-800);
+  color: var(--color-stone-50);
+}
+body.dark input[type='submit'] {
+  background-color: var(--color-stone-400);
+  color: var(--color-stone-100);
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--color-stone-700);
     }
   }
-  body.forest .not-month-day {
-    background-color: color-mix(in srgb, oklch(26.6% 0.065 152.934) 60%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-green-950) 60%, transparent);
+  &:hover {
+    @media (hover: hover) {
+      color: var(--color-stone-400);
     }
   }
 }
-@layer base {
-  body.retro {
-    --bg-page: oklch(25.7% 0.09 281.288);
-    --text-main: oklch(94.8% 0.028 342.258);
-    --bg-header: oklch(38.1% 0.176 304.987);
-    --text-header: oklch(89.9% 0.061 343.231);
-    --border-header: oklch(66.7% 0.295 322.15);
-    --bg-calendar: oklch(25.7% 0.09 281.288);
-    --text-calendar: oklch(94.8% 0.028 342.258);
-    --bg-calendar-header: oklch(40.1% 0.17 325.612);
-    --border-calendar-header: oklch(51.8% 0.253 323.949);
-    --btn-bg: oklch(45.2% 0.211 324.591);
-    --btn-bg-hover: oklch(51.8% 0.253 323.949);
-    --btn-border: oklch(59.1% 0.293 322.896);
-    --btn-active-bg: oklch(85.2% 0.199 91.936);
-    --btn-active-bg-hover: oklch(90.5% 0.182 98.111);
-    --inner-bg: oklch(38.1% 0.176 304.987);
-    --inner-text: oklch(95.2% 0.037 318.852);
-    --input-submit-bg: oklch(74% 0.238 322.16);
-    --input-submit-text: oklch(29.1% 0.149 302.717);
-    --input-submit-hover-bg: oklch(85.2% 0.199 91.936);
-    --input-submit-hover-text: oklch(40.1% 0.17 325.612);
-  }
-  body.retro .calendar-hours-background {
-    background: linear-gradient(to bottom, rgba(147, 51, 234, 0.6) calc(100% / 24 - 1px), rgba(88, 28, 135, 0.5) calc(100% / 24));
-  }
-  body.retro .calendar-hours-background-today {
-    background: linear-gradient(to bottom, rgba(251, 191, 36, 0.6) calc(100% / 24 - 1px), rgba(236, 72, 153, 0.5) calc(100% / 24));
-  }
-  body.retro .month-day {
-    border-color: var(--color-fuchsia-700);
-    background-color: color-mix(in srgb, oklch(38.1% 0.176 304.987) 50%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-purple-900) 50%, transparent);
-    }
-    color: var(--color-pink-100);
-  }
-  body.retro .not-month-day {
-    background-color: color-mix(in srgb, oklch(35.9% 0.144 278.697) 50%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-indigo-900) 50%, transparent);
-    }
-    color: var(--color-fuchsia-200);
-  }
+body.light {
+  background-color: var(--color-neutral-200);
 }
-@layer base {
-  body.inoxtag {
-    --bg-page: oklch(97.7% 0.013 236.62);
-    --text-main: oklch(27.9% 0.041 260.031);
-    --bg-header: oklch(95.1% 0.026 236.824);
-    --text-header: oklch(20.8% 0.042 265.755);
-    --border-header: oklch(90.1% 0.058 230.902);
-    --bg-calendar: oklch(95.1% 0.026 236.824);
-    --text-calendar: oklch(20.8% 0.042 265.755);
-    --bg-calendar-header: oklch(90.1% 0.058 230.902);
-    --border-calendar-header: oklch(82.8% 0.111 230.318);
-    --btn-bg: oklch(90.1% 0.058 230.902);
-    --btn-bg-hover: oklch(82.8% 0.111 230.318);
-    --btn-border: oklch(74.6% 0.16 232.661);
-    --btn-active-bg: oklch(78.9% 0.154 211.53);
-    --btn-active-bg-hover: oklch(71.5% 0.143 215.221);
-    --inner-bg: oklch(97.7% 0.013 236.62);
-    --inner-text: oklch(27.9% 0.041 260.031);
-    --input-submit-bg: oklch(71.5% 0.143 215.221);
-    --input-submit-text: white;
-    --input-submit-hover-bg: oklch(60.9% 0.126 221.723);
-    --input-submit-hover-text: white;
-  }
-  body.inoxtag .calendar-hours-background {
-    background: linear-gradient(to bottom,	rgba(200, 230, 255, 0.85) calc(100% / 24 - 1px),	rgba(220, 240, 255, 0.7) calc(100% / 24));
-  }
-  body.inoxtag .calendar-hours-background-today {
-    background: linear-gradient(to bottom,	rgba(170, 220, 255, 0.85) calc(100% / 24 - 1px),	rgba(140, 210, 255, 0.7) calc(100% / 24));
-  }
-  body.inoxtag .month-day {
-    border-color: var(--color-sky-300);
-    background-color: color-mix(in srgb, oklch(95.1% 0.026 236.824) 50%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-sky-100) 50%, transparent);
-    }
-  }
-  body.inoxtag .not-month-day {
-    background-color: color-mix(in srgb, oklch(97.7% 0.013 236.62) 70%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-sky-50) 70%, transparent);
+body.light header {
+  border-color: var(--color-stone-800);
+  background-color: var(--color-white);
+  color: var(--color-stone-800);
+}
+body.light > div {
+  color: var(--color-stone-600);
+}
+body.light .calendar-container {
+  background-color: var(--color-white);
+}
+body.light .calendar-header, body.light #agenda-filter {
+  border-color: var(--color-neutral-100);
+  background-color: var(--color-neutral-100);
+  color: var(--color-stone-700);
+}
+body.light .calendar-header-button {
+  border-style: var(--tw-border-style);
+  border-width: 1px;
+  border-color: var(--color-neutral-400);
+  background-color: var(--color-neutral-200);
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--color-neutral-300);
     }
   }
 }
-@layer base {
-  body.galaxy {
-    --bg-page: oklch(25.7% 0.09 281.288);
-    --text-main: oklch(93% 0.034 272.788);
-    --bg-header: oklch(35.9% 0.144 278.697);
-    --text-header: oklch(93% 0.034 272.788);
-    --border-header: oklch(60.6% 0.25 292.717);
-    --bg-calendar: oklch(25.7% 0.09 281.288);
-    --text-calendar: oklch(94.3% 0.029 294.588);
-    --bg-calendar-header: oklch(35.9% 0.144 278.697);
-    --border-calendar-header: oklch(49.1% 0.27 292.581);
-    --btn-bg: oklch(43.2% 0.232 292.759);
-    --btn-bg-hover: oklch(49.1% 0.27 292.581);
-    --btn-border: transparent;
-    --btn-active-bg: oklch(59.1% 0.293 322.896);
-    --btn-active-bg-hover: oklch(66.7% 0.295 322.15);
-    --inner-bg: oklch(35.9% 0.144 278.697);
-    --inner-text: oklch(96.9% 0.016 293.756);
-    --input-submit-bg: oklch(59.1% 0.293 322.896);
-    --input-submit-text: white;
-    --input-submit-hover-bg: oklch(66.7% 0.295 322.15);
-    --input-submit-hover-text: white;
-  }
-  body.galaxy .calendar-hours-background {
-    background: linear-gradient(to bottom, rgba(35, 20, 50, 0.9) calc(100% / 24 - 1px), rgba(45, 30, 70, 0.8) calc(100% / 24));
-  }
-  body.galaxy .calendar-hours-background-today {
-    background: linear-gradient(to bottom, rgba(80, 30, 130, 0.9) calc(100% / 24 - 1px), rgba(60, 20, 100, 0.8) calc(100% / 24));
-  }
-  body.galaxy .month-day {
-    border-color: var(--color-violet-800);
-    background-color: color-mix(in srgb, oklch(38% 0.189 293.745) 50%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-violet-900) 50%, transparent);
-    }
-  }
-  body.galaxy .not-month-day {
-    background-color: color-mix(in srgb, oklch(25.7% 0.09 281.288) 60%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-indigo-950) 60%, transparent);
+body.light .calendar-header-button--active {
+  border-style: var(--tw-border-style);
+  border-width: 1px;
+  border-color: var(--color-neutral-400);
+  background-color: var(--color-pink-200);
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--color-pink-300);
     }
   }
 }
-@layer base {
-  body.h4ck3r {
-    --bg-page: black;
-    --text-main: oklch(79.2% 0.209 151.711);
-    --bg-header: oklch(21% 0.034 264.665);
-    --text-header: oklch(87.1% 0.15 154.449);
-    --border-header: oklch(72.3% 0.219 149.579);
-    --bg-calendar: black;
-    --text-calendar: oklch(79.2% 0.209 151.711);
-    --bg-calendar-header: oklch(13% 0.028 261.692);
-    --border-calendar-header: oklch(52.7% 0.154 150.069);
-    --btn-bg: oklch(27.8% 0.033 256.848);
-    --btn-bg-hover: oklch(37.3% 0.034 259.733);
-    --btn-border: oklch(62.7% 0.194 149.214);
-    --btn-active-bg: oklch(62.7% 0.194 149.214);
-    --btn-active-bg-hover: oklch(72.3% 0.219 149.579);
-    --inner-bg: oklch(13% 0.028 261.692);
-    --inner-text: oklch(79.2% 0.209 151.711);
-    --input-submit-bg: oklch(62.7% 0.194 149.214);
-    --input-submit-text: black;
-    --input-submit-hover-bg: oklch(72.3% 0.219 149.579);
-    --input-submit-hover-text: black;
-  }
-  body.h4ck3r .calendar-hours-background {
-    background: linear-gradient(to bottom, rgba(0, 20, 0, 0.9) calc(100% / 24 - 1px), rgba(0, 40, 0, 0.9) calc(100% / 24));
-  }
-  body.h4ck3r .calendar-hours-background-today {
-    background: linear-gradient(to bottom, rgba(10, 60, 10, 0.9) calc(100% / 24 - 1px), rgba(0, 50, 0, 0.9) calc(100% / 24));
-  }
-  body.h4ck3r .month-day {
-    border-color: var(--color-green-800);
-    background-color: color-mix(in srgb, oklch(26.6% 0.065 152.934) 50%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-green-950) 50%, transparent);
-    }
-  }
-  body.h4ck3r .not-month-day {
-    background-color: color-mix(in srgb, #000 80%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-black) 80%, transparent);
-    }
+body.light .calendar-inner-container {
+  border-style: var(--tw-border-style);
+  border-width: 1px;
+  border-color: var(--color-neutral-600);
+}
+body.light .calendar-inner-container > div:first-child {
+  background-color: var(--color-white);
+}
+body.light .day-hours-background {
+  background-color: var(--color-white);
+}
+body.light .calendar-hours-background {
+  background: linear-gradient(to bottom,  rgba(218, 220, 224, 0.85) calc(100%/24 - 1px), rgba(255, 255, 255, 0.952) calc(100%/24));
+}
+body.light .calendar-hours-background-today {
+  background: linear-gradient(to bottom,  rgba(218, 220, 224, 0.85) calc(100%/24 - 1px), rgba(251, 250, 212, 0.85) calc(100%/24));
+}
+body.light .month-day {
+  border-color: var(--color-neutral-200);
+  background-color: var(--color-white);
+  color: var(--color-neutral-800);
+}
+body.light .not-month-day {
+  background-color: color-mix(in srgb, oklch(87% 0 0) 70%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-neutral-300) 70%, transparent);
   }
 }
-@layer base {
-  body.kawaii {
-    --bg-page: oklch(52.5% 0.223 3.958);
-    --text-main: oklch(97.1% 0.014 343.198);
-    --bg-header: oklch(65.6% 0.241 354.308);
-    --text-header: oklch(94.8% 0.028 342.258);
-    --border-header: oklch(59.2% 0.249 0.584);
-    --bg-calendar: oklch(52.5% 0.223 3.958);
-    --text-calendar: oklch(97.1% 0.014 343.198);
-    --bg-calendar-header: oklch(65.6% 0.241 354.308);
-    --border-calendar-header: oklch(52.5% 0.223 3.958);
-    --btn-bg: oklch(45.9% 0.187 3.815);
-    --btn-bg-hover: oklch(52.5% 0.223 3.958);
-    --btn-border: transparent;
-    --btn-active-bg: oklch(51.4% 0.222 16.935);
-    --btn-active-bg-hover: oklch(58.6% 0.253 17.585);
-    --inner-bg: oklch(65.6% 0.241 354.308);
-    --inner-text: oklch(97.1% 0.014 343.198);
-    --input-submit-bg: oklch(71.2% 0.194 13.428);
-    --input-submit-text: oklch(52.5% 0.223 3.958);
-    --input-submit-hover-bg: oklch(52.5% 0.223 3.958);
-    --input-submit-hover-text: oklch(81% 0.117 11.638);
-  }
-  body.kawaii .theme-active i {
-    color: oklch(42.4% 0.199 265.638) !important;
-  }
-  body.kawaii .calendar-hours-background {
-    background: linear-gradient( to bottom, rgba(34, 70, 45, 0.85) calc(100% / 24 - 1px), rgba(90, 57, 83, 0.8) calc(100% / 24) );
-  }
-  body.kawaii .calendar-hours-background-today {
-    background: linear-gradient( to bottom, rgba(34, 70, 45, 0.85) calc(100% / 24 - 1px), rgba(97, 53, 133, 0.8) calc(100% / 24) );
-  }
-  body.kawaii .month-day {
-    border-color: var(--color-pink-800);
-    background-color: color-mix(in srgb, oklch(64.5% 0.246 16.439) 50%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-rose-500) 50%, transparent);
+body.light .inner-container, 
+body.light .inner-container input, 
+body.light .inner-container textarea, 
+body.light .inner-container select {
+  background-color: var(--color-neutral-50);
+  color: var(--color-neutral-800);
+}
+body.light input[type='submit'] {
+  background-color: var(--color-neutral-400);
+  color: var(--color-neutral-100);
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--color-neutral-700);
     }
   }
-  body.kawaii .not-month-day {
-    background-color: color-mix(in srgb, oklch(28.4% 0.109 3.907) 60%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-pink-950) 60%, transparent);
+  &:hover {
+    @media (hover: hover) {
+      color: var(--color-neutral-400);
     }
   }
 }
@@ -1693,6 +1349,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   initial-value: 0;
 }
 @property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-space-x-reverse {
   syntax: "*";
   inherits: false;
   initial-value: 0;
@@ -1786,6 +1447,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       --tw-translate-y: 0;
       --tw-translate-z: 0;
       --tw-space-y-reverse: 0;
+      --tw-space-x-reverse: 0;
       --tw-border-style: solid;
       --tw-leading: initial;
       --tw-font-weight: initial;
