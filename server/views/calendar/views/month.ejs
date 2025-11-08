@@ -20,13 +20,13 @@
                         <div class="text-sm ">
                             <%= day.getDate() %>
                         </div>
-                        <div class="flex flex-1 flex-col gap-1 mt-1">
+                        <div class="flex md:flex-1 flex-col gap-1 mt-1">
                         <% let appointments = data.appointments.filter(a => a.start.getDate() == day.getDate()); 
                             appointments.forEach(app => {
                             %>
                             <a href="/calendar/day" class="text-xs truncate px-2 py-1 rounded appointment-color-<%=app.color%> transition appointment-month"
                                   data-agenda="<%= app.agendaId %>"  >
-                            <%= app.nom %>
+                            <span class="hidden md:block"><%= app.nom %></span>
                             </a>
                         <% }) %>
                         </div>

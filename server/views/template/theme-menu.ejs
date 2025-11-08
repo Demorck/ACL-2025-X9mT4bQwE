@@ -1,0 +1,45 @@
+<div class="relative">
+    <button id="theme-toggle" class="flex items-center gap-2 px-3 py-1 border rounded transition">
+    <i class="fa-solid fa-sun text-lg" id="theme-icon"></i>
+    <span id="theme-label">Light</span>
+    <i class="fa-solid fa-caret-down text-sm ml-1"></i>
+    </button>
+
+    <div id="theme-menu" class="absolute right-0 mt-1 w-40 border border-stone-300rounded shadow-md hidden z-10">
+        <ul class="py-1 text-sm">
+            <li class="flex items-center gap-2 px-3 py-2 cursor-pointer" data-theme="light">
+            <i class="fa fa-sun text-neutral-50"></i> <span>Light</span>
+            </li>
+            <li class="flex items-center gap-2 px-3 py-2 cursor-pointer" data-theme="dark">
+            <i class="fa fa-moon text-neutral-900"></i> <span>Dark</span>
+            </li>
+            <li class="flex items-center gap-2 px-3 py-2 cursor-pointer" data-theme="forest">
+            <i class="fa fa-tree text-green-500"></i> <span>Forest</span>
+            </li>
+            <li class="flex items-center gap-2 px-3 py-2 cursor-pointer" data-theme="retro">
+            <i class="fa fa-car text-purple-400"></i> <span>Retrowave</span>
+            </li>
+            <li class="flex items-center gap-2 px-3 py-2 cursor-pointer" data-theme="inoxtag">
+            <i class="fa fa-mountain text-blue-400"></i> <span>Glacial</span>
+            </li>
+            <li class="flex items-center gap-2 px-3 py-2 cursor-pointer" data-theme="galaxy">
+            <i class="fa fa-star text-purple-800"></i> <span>Spacial</span>
+            </li>
+            <li class="flex items-center gap-2 px-3 py-2 cursor-pointer" data-theme="h4ck3r">
+            <i class="fa fa-code text-green-400"></i> <span>H@CK3R</span>
+            </li>
+            <li class="flex items-center gap-2 px-3 py-2 cursor-pointer" data-theme="kawaii">
+            <i class="fa fa-heart text-pink-400"></i> <span>Kawaii (◕‿◕✿)</span>
+            </li>
+
+            <!-- TEMPLATE. 
+                Le "template" dans data-theme est à modifier par le nom de la classe utilisée dans le fichier css.
+                Le fa-template est à modifier par une icône de font awesome.
+                Le text-red-500 est pour la couleur de l'icône
+                Et le texte à modifier
+            <li class="flex items-center gap-2 px-3 py-2 cursor-pointer" data-theme="template">
+                <i class="fa fa-template text-red-500"></i> <span>Template</span>
+            </li> -->
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,180 @@
+/* Fallback (si y a aucune class dans le body) */
+:root {
+    --bg-page: theme(colors.white);
+    --text-main: theme(colors.stone.800);
+
+    --bg-header: theme(colors.white);
+    --text-header: theme(colors.stone.900);
+    --border-header: theme(colors.stone.800);
+
+
+    --bg-calendar: theme(colors.white);
+    --text-calendar: theme(colors.stone.700);
+
+    --bg-calendar-header: theme(colors.neutral.100);
+    --border-calendar-header: theme(colors.neutral.100);
+
+
+    --btn-bg: theme(colors.neutral.200);
+    --btn-bg-hover: theme(colors.neutral.300);
+    --btn-border: theme(colors.neutral.400);
+    --btn-active-bg: theme(colors.pink.200);
+    --btn-active-bg-hover: theme(colors.pink.300);
+
+    --inner-bg: theme(colors.neutral.50);
+    --inner-text: theme(colors.stone.800);
+    --input-submit-bg: theme(colors.neutral.400);
+    --input-submit-text: theme(colors.stone.100);
+    --input-submit-hover-bg: theme(colors.neutral.700);
+    --input-submit-hover-text: theme(colors.neutral.400);
+}
+
+
+body {
+    @apply transition-colors duration-300 min-h-screen flex flex-col;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+}
+
+header {
+    background-color: var(--bg-header);
+    color: var(--text-header);
+    border-color: var(--border-header);
+}
+
+#theme-menu {
+    background-color: var(--inner-bg);
+}
+
+#theme-toggle:hover,
+#theme-menu li:hover {
+    background-color: var(--btn-bg-hover);
+}
+
+.calendar-container {
+    background-color: var(--bg-calendar);
+    color: var(--text-calendar);
+}
+
+.calendar-header,
+#agenda-filter {
+    background-color: var(--bg-calendar-header);
+    border-color: var(--border-calendar-header);
+}
+
+.calendar-header-button {
+    background-color: var(--btn-bg);
+    border-color: var(--btn-border);
+    @apply border-solid border
+}
+
+.calendar-header-button:hover {
+    background-color: var(--btn-bg-hover);
+}
+
+.calendar-header-button--active {
+    background-color: var(--btn-active-bg);
+}
+
+.calendar-header-button--active:hover {
+    background-color: var(--btn-active-bg-hover);
+}
+
+.calendar-hours-background,
+.calendar-hours-background-today {
+    background-size: auto calc(100%/24);
+}
+
+.inner-container,
+.inner-container input,
+.inner-container textarea,
+.inner-container select {
+    background-color: var(--inner-bg);
+    color: var(--inner-text);
+}
+
+input[type='submit'] {
+    background-color: var(--input-submit-bg);
+    color: var(--input-submit-text);
+}
+
+input[type='submit']:hover {
+    background-color: var(--input-submit-hover-bg);
+    color: var(--input-submit-hover-text);
+}
+
+/* Fin de la base des thèmes */
+
+body,
+header,
+.inner-container,
+.calendar-container,
+.calendar-header,
+.calendar-header-button,
+.calendar-header-button--active,
+.calendar-hours-background,
+.calendar-hours-background-today,
+.day-hours-background,
+.month-day,
+.not-month-day {
+    @apply transition-colors duration-300
+}
+
+/* Couleurs des rendez-vous */
+.filter-color {
+    @apply inline-block w-3 h-3 rounded-full
+}
+
+.filter-color-red, .appointment-color-red {
+    @apply bg-red-600
+}
+
+.filter-color-green, .appointment-color-green {
+    @apply bg-green-600
+}
+
+.filter-color-blue, .appointment-color-blue {
+    @apply bg-blue-600 text-neutral-50
+}
+
+.filter-color-yellow, .appointment-color-yellow {
+    @apply bg-yellow-600
+}
+
+.filter-color-purple, .appointment-color-purple {
+    @apply bg-purple-600
+}
+
+.filter-color-orange, .appointment-color-orange {
+    @apply bg-orange-600
+}
+
+.filter-color-pink, .appointment-color-pink {
+    @apply bg-pink-600
+}
+
+.filter-color-gray, .appointment-color-gray {
+    @apply bg-gray-600
+}
+
+/* Fin des couleurs des rendez-vous */
+
+.appointment {
+    @apply absolute border rounded md:px-3 py-2 text-sm text-white shadow-md overflow-hidden
+}
+
+.day-hours-background {
+    @apply left-0 top-0 w-16 h-full border-r
+}
+
+.day-hours-background div {
+    @apply border-b text-center self-center
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24' %3E%3Cg%3E%3Cpath d='M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-image: none;
+    background-color: currentColor;
+    mask-type: match-source;
+}

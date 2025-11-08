@@ -79,4 +79,20 @@ routeProfile.post("/api/accounts/edit", (req, res, next) => {
     }
 );
 
+routeProfile.use("/api/accounts/edit/theme", express.json(), async (req, res) => {
+    try {
+        if (!res.locals.user)
+            return res.status(401).json({ message: "Utilisateur non authentifié" });
+
+        let user = res.locals.user;
+        let { theme } = req.body;
+        await UserModel.findByIdAndUpdate(user._id, { theme }, { new: true });
+
+        res.json({ message: "Thème mis à jour avec succès" });
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour du thème utilisateur :", error);
+        res.status(500).json({ message: "Erreur lors de la mise à jour du thème" });
+    }
+});
+
 export const editUserProfile = routeProfile;
