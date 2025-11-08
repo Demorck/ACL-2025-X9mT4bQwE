@@ -1,5 +1,5 @@
-<div class="flex items-center justify-between py-2 px-4 border-b calendar-header">
-    <div class="flex items-center gap-2">
+<div class="flex md:items-center justify-between py-2 px-4 flex-col md:flex-row border-b calendar-header">
+        <div class="flex items-center gap-2">
         <div class="px-2 py-1 calendar-header-button rounded cursor-pointer"  data-action="agendas-filter">
             <span class="fa fa-angle-double-left "></span>
         </div>
@@ -19,15 +19,22 @@
                 <div>&gt;</div>
             </a>
         </div>
-        <a href="/calendar/day">
-            <div class="px-3 py-1 calendar-header-button<%= view == "day" ? "--active" : "" %> rounded">Jour</div>
+        
+        <a href="/calendar/day" class="hidden md:block">
+            <div class="md:px-3 py-1 calendar-header-button<%= view == "day" ? "--active" : "" %> rounded">Jour</div>
         </a>
-        <a href="/calendar/week">
-            <div class="px-3 py-1 calendar-header-button<%= view == "week" ? "--active" : "" %> rounded">Semaine</div>
+        <a href="/calendar/week" class="hidden md:block">
+            <div class="md:px-3 py-1 calendar-header-button<%= view == "week" ? "--active" : "" %> rounded">Semaine</div>
         </a>
-        <a href="/calendar/month">
-            <div class="px-3 py-1 calendar-header-button<%= view == "month" ? "--active" : "" %> rounded">Mois</div>
+        <a href="/calendar/month" class="hidden md:block">
+            <div class="md:px-3 py-1 calendar-header-button<%= view == "month" ? "--active" : "" %> rounded">Mois</div>
         </a>
+
+        <select name="" id="view-select" class="md:hidden">
+            <option value="day">Jour</option>
+            <option value="week">Semaine</option>
+            <option value="month">Mois</option>
+        </select>
     </div>
 </div>
 

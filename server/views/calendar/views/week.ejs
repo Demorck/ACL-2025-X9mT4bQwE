@@ -1,6 +1,6 @@
 <% layout('calendar/layout_calendar') %>
 
-<div class="flex border-b border-stone-700 sticky top-0 bg-stone-800 z-10 ">
+<div class="flex border-b sticky top-0">
     <% data.daysLabel.forEach(day => { %>
     <div class="flex-1 md:p-2 text-center text-sm font-semibold border-r">
         <%= day %>
@@ -11,7 +11,7 @@
     <% for (let i = 1; i < 8; i++) { 
         let isToday = new Date().getDate() == data.days[i - 1].getDate();
         %>
-    <div class = "flex-1 relative border-r border-stone-700 calendar-hours-background<%= isToday ? "-today" : "" %>"
+    <div class = "flex-1 relative border-r calendar-hours-background<%= isToday ? "-today" : "" %>"
           style = "height: 95vh; background-size: auto calc(100%/24);">
         <% data.appointments.filter(a => a.start.getDay() === i).forEach(app => { 
             let day = app.start.getDay()
