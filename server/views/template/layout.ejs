@@ -9,18 +9,14 @@
 </head>
 <script>
   let user = JSON.parse('<%- JSON.stringify(user) %>')
-  if (user  && user.theme) localStorage.setItem("theme", user.theme);
-  
-  let theme = user ? user.theme : '';
-  if (theme == '') {
-    theme = localStorage.getItem("theme") || "dark"; 
-  }
+  theme = user.theme || localStorage.getItem("theme") || "dark"; 
+
 
   document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add(theme);
   })
 </script>
-<body class="text-gray-50 min-h-screen flex flex-col">
+<body>
 
   <%- include("header") %>
 

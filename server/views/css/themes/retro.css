@@ -1,0 +1,49 @@
+@layer base {
+    body.retro {
+        --bg-page: theme(colors.indigo.950);
+        --text-main: theme(colors.pink.100);
+
+        --bg-header: theme(colors.purple.900);
+        --text-header: theme(colors.pink.200);
+        --border-header: theme(colors.fuchsia.500);
+
+        --bg-calendar: theme(colors.indigo.950);
+        --text-calendar: theme(colors.pink.100);
+        --bg-calendar-header: theme(colors.fuchsia.900);
+        --border-calendar-header: theme(colors.fuchsia.700);
+
+        --btn-bg: theme(colors.fuchsia.800);
+        --btn-bg-hover: theme(colors.fuchsia.700);
+        --btn-border: theme(colors.fuchsia.600);
+        --btn-active-bg: theme(colors.yellow.400);
+        --btn-active-bg-hover: theme(colors.yellow.300);
+
+        --inner-bg: theme(colors.purple.900);
+        --inner-text: theme(colors.fuchsia.100);
+
+        --input-submit-bg: theme(colors.fuchsia.400);
+        --input-submit-text: theme(colors.purple.950);
+        --input-submit-hover-bg: theme(colors.yellow.400);
+        --input-submit-hover-text: theme(colors.fuchsia.900);
+    }
+
+    body.retro .calendar-hours-background {
+        background: linear-gradient(to bottom,
+                rgba(147, 51, 234, 0.6) calc(100% / 24 - 1px),
+                rgba(88, 28, 135, 0.5) calc(100% / 24));
+    }
+
+    body.retro .calendar-hours-background-today {
+        background: linear-gradient(to bottom,
+                rgba(251, 191, 36, 0.6) calc(100% / 24 - 1px),
+                rgba(236, 72, 153, 0.5) calc(100% / 24));
+    }
+
+    body.retro .month-day {
+        @apply border-fuchsia-700 bg-purple-900/50 text-pink-100;
+    }
+
+    body.retro .not-month-day {
+        @apply bg-indigo-900/50 text-fuchsia-200;
+    }
+}

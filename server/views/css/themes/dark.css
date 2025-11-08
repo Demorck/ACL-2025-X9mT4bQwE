@@ -1,0 +1,56 @@
+@layer base {
+  body.dark {
+    --bg-page: theme(colors.stone.700);
+    --text-main: theme(colors.stone.200);
+    --bg-header: theme(colors.stone.800);
+    --text-header: theme(colors.stone.200);
+    --border-header: theme(colors.stone.50);
+
+    --bg-calendar: theme(colors.stone.900);
+    --text-calendar: theme(colors.stone.100);
+    --bg-calendar-header: theme(colors.stone.800);
+    --border-calendar-header: theme(colors.stone.700);
+
+    --btn-bg: theme(colors.stone.700);
+    --btn-bg-hover: theme(colors.stone.600);
+    --btn-border: transparent;
+    --btn-active-bg: theme(colors.pink.700);
+    --btn-active-bg-hover: theme(colors.pink.600);
+
+    --inner-bg: theme(colors.stone.800);
+    --inner-text: theme(colors.stone.50);
+
+    --input-submit-bg: theme(colors.stone.400);
+    --input-submit-text: theme(colors.stone.100);
+    --input-submit-hover-bg: theme(colors.stone.700);
+    --input-submit-hover-text: theme(colors.stone.400);
+  }
+
+  body.dark .theme-active i {
+    color: theme(--color-blue-400) !important;
+  }
+
+  body.dark .calendar-hours-background {
+    background: linear-gradient(
+      to bottom,
+      rgba(58, 62, 65, 0.85) calc(100% / 24 - 1px),
+      rgba(51, 51, 44, 0.7) calc(100% / 24)
+    );
+  }
+
+  body.dark .calendar-hours-background-today {
+    background: linear-gradient(
+      to bottom,
+      rgba(58, 62, 65, 0.85) calc(100% / 24 - 1px),
+      rgba(54, 53, 5, 0.7) calc(100% / 24)
+    );
+  }
+
+  body.dark .month-day {
+    @apply border-stone-800 bg-stone-800/50;
+  }
+
+  body.dark .not-month-day {
+    @apply bg-stone-900/60;
+  }
+}
