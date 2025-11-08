@@ -53,7 +53,6 @@ export async function routeEditAgenda(req, res, next) {
 
 export async function routeFormEditAgenda(req, res, next){  
     const agenda = await getAgendasById(req.params.id)
-    console.log(agenda);
     res.render('agendas/editAgenda', { agenda });
 }
 
