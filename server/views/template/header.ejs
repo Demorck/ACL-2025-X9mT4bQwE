@@ -7,6 +7,7 @@
       <% if (user) {
        %>
         <input type="text" name="recherche" id="recherche" placeholder=" recherche" class="hover:border-white-300 hover:border-1 rounded-sm hidden test" size="30">
+        <div id="resultats"></div>
         <i class="fa-solid fa-magnifying-glass hover:text-amber-300"></i>
         <a href="/agendas/list" class="hover:text-amber-300 test">Mes agendas</a>
         <a href="/calendar/week" class="hover:text-amber-300 test">Calendrier</a>
@@ -32,7 +33,7 @@
 </header>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    let variableI = document.querySelector("i");
+    let variableI = document.querySelector(".fa-magnifying-glass");
     let recherche = document.querySelector("#recherche");
     let visible = document.querySelectorAll(".test");
 
@@ -43,5 +44,18 @@
         if(visible)
           recherche.focus();
       })
+
+    recherche.addEventListener("input", () => { // utiliser recherche.value pour avoir la valeur à l'intérieur du input
+      let str = recherche.value;
+      fetch("/api/recherche", {
+        method: "POST",
+        headers: { "Content-Type": "application/json;charset=UTF-8" },
+        body: JSON.stringify({str})
+      })
+      .then(response => response.json()) 
+      .then(data => { // utilisation du résultat ici (!!! mettre les res dans la div de input)
+        console.log("reponse : ", data);
+      }).catch(err => console.error(err));
+    })
   })
 </script>
