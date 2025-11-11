@@ -34,17 +34,14 @@
   document.addEventListener("DOMContentLoaded", () => {
     let variableI = document.querySelector("i");
     let recherche = document.querySelector("#recherche");
-    affichage(variableI);
-    function affichage(variableI =  document.querySelector("i")) {
-      variableI.addEventListener("click", () => {
-        let visible = document.querySelectorAll(".test");
+    let visible = document.querySelectorAll(".test");
+
+    variableI.addEventListener("click", () => {
         visible.forEach(element => {
             element.classList.toggle("hidden");
         });
         if(visible)
           recherche.focus();
-      });
-  
-    }
+      })
   })
 </script>
