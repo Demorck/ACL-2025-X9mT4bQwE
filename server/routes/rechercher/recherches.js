@@ -29,11 +29,15 @@ routeRecherche.post("/recherche", async (req, res, next) => {
  */
 async function rechercheRendezVous(str, agendaIds, next) {
   try {
-    const appointments = await AppointmentModel.find({
-        agenda: { $in: agendaIds },
-        nom: { $regex: new RegExp(`^${str}`, 'i') }
-    })
-    return appointments;
+    if(!str) {
+      return "";
+    } else {
+      const appointments = await AppointmentModel.find({
+          agenda: { $in: agendaIds },
+          nom: { $regex: new RegExp(`^${str}`, 'i') }
+      })
+      return appointments;
+    }
   } catch (error) {
     next(error);
   } 

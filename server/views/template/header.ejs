@@ -6,9 +6,9 @@
     <nav class="space-x-4 flex items-center">
       <% if (user) {
        %>
-       <div>
+       <div class="relative">
         <input type="text" name="recherche" id="recherche" placeholder=" recherche" class="hover:border-white-300 hover:border-1 rounded-sm hidden test" size="30">
-        <div id="resultats"></div>
+        <div id="resultats" class="absolute bg-white border border-gray-300 w-full mt-1 max-h-60 overflow-auto z-10 text-gray-500 hidden test"></div>
        </div>
         <i class="fa-solid fa-magnifying-glass hover:text-amber-300"></i>
         <a href="/agendas/list" class="hover:text-amber-300 test">Mes agendas</a>
@@ -62,11 +62,22 @@
           }
           return response.json();
         }) 
-        .then(data => { // utilisation du résultat ici (!!! mettre les res dans la div de input)
+        .then(data => { // utilisation des données résultats
           let newTextResultat="";
-          data.forEach(element => {
-            newTextResultat += `<div>${element.nom}<div>`
-          });
+          if (data && data.length > 0) {
+            data.forEach(element => {
+              const date = new Date(element.date_Debut);
+              const day = date.getUTCDate();             
+              const month = date.getUTCMonth();
+              const year = date.getUTCFullYear();
+            
+              // création d’un lien cliquable
+              newTextResultat += `
+                <div class="p-2 hover:bg-gray-200 cursor-pointer" onclick="window.location.href='/calendar/day?day=${day}&month=${month}&year=${year}'">
+                  ${element.nom} - ${day}/${month}/${year}
+                </div>`;
+            });
+          }
           resultats.innerHTML=newTextResultat;
         }).catch(err => console.error(err));
     });
