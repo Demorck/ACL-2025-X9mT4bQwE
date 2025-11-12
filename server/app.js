@@ -20,6 +20,7 @@ import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
 import { routeRecherche } from "./routes/rechercher/recherches.js";
 
+import { editUserProfile, routeShowProfile } from "./routes/accounts/userProfile.js";
 
 
 export const app = express();
@@ -38,7 +39,7 @@ app.locals._layoutFile = "template/layout";
 app
     .use(express.static(publicPath))
     .use(express.json())
-    .use(express.urlencoded({ extended: false }));
+    .use(express.urlencoded({ extended: true }));
 
 // Middlewares
 app.use(mergeRenderOptionsMiddleware);
@@ -78,6 +79,9 @@ app.get("/notifications", routeNotification);
 app.post("/appointment/del", routeDelete);
 app.post("/appointment/modif", routeModif);
 app.post("/notifications/all-seen", routeMarkAllNotificationsSeen);
+
+app.get("/profile", routeShowProfile)
+app.use(editUserProfile)
 
 app.post("/modif", routeAddModif);
 

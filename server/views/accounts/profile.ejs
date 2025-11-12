@@ -1,0 +1,103 @@
+<div class="h-fit w-3/4 my-16 bg-stone-800 mx-auto max-w-md p-6 shadow-lg rounded-xl text-stone-100">
+  <div class="flex flex-col items-center mb-6">
+    <h1 class="text-2xl font-bold mb-2">Profil utilisateur</h1>
+    <% if (user.profile_picture) { %>
+      <img 
+        src="<%= user.profile_picture %>" 
+        alt="Photo de profil" 
+        class="w-24 h-24 rounded-full object-cover border-2 border-stone-600"
+      >
+    <% } else { %>
+      <div class="w-24 h-24 flex items-center justify-center rounded-full bg-stone-700 text-stone-400 border-2 border-stone-600">
+        <i class="fa-solid fa-user text-3xl"></i>
+      </div>
+    <% } %>
+  </div>
+
+  <form method="POST" action="/api/accounts/edit" enctype="multipart/form-data" class="space-y-5">
+    <!-- Username -->
+    <div>
+      <label for="username" class="font-semibold block mb-1">Nom d’utilisateur</label>
+      <input 
+        id="username" 
+        type="text" 
+        name="username" 
+        placeholder="Nom d'utilisateur" 
+        required 
+        disabled
+        class="border border-stone-600 w-full px-3 py-2 rounded text-gray-600"
+        value="<%= user.username %>"
+      >
+    </div>
+
+    <!-- Nom -->
+    <div>
+      <label for="last_name" class="font-semibold block mb-1">Nom</label>
+      <input 
+        id="last_name" 
+        type="text" 
+        name="last_name" 
+        placeholder="Nom" 
+        class="border border-stone-600 bg-stone-700 w-full px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+        value="<%= user.last_name %>"
+      >
+    </div>
+
+    <!-- Prénom -->
+    <div>
+      <label for="first_name" class="font-semibold block mb-1">Prénom</label>
+      <input 
+        id="first_name" 
+        type="text" 
+        name="first_name" 
+        placeholder="Prénom" 
+        class="border border-stone-600 bg-stone-700 w-full px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+        value="<%= user.first_name %>"
+      >
+    </div>
+
+    <!-- Bio -->
+    <div>
+      <label for="bio" class="font-semibold block mb-1">Biographie</label>
+      <textarea 
+        id="bio" 
+        name="bio" 
+        placeholder="Parlez-moi un peu de vous plutôt... 
+Odile. Moi c'est Odile. Pluto c'est le chien de Mickey." 
+        class="border border-stone-600 bg-stone-700 w-full px-3 py-2 rounded h-32 resize-none focus:outline-none focus:ring-2 focus:ring-amber-500"><%= user.bio || "" %></textarea>
+    </div>
+
+    <!-- Image de profil -->
+    <div>
+      <label for="profile_picture" class="font-semibold block mb-1">Photo de profil</label>
+      <input 
+        id="profile_picture" 
+        type="file" 
+        name="profile_picture" 
+        accept="image/*"
+        class="block w-full text-sm text-stone-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-amber-500 file:text-stone-900 hover:file:bg-amber-600"
+      >
+    </div>
+
+    <!-- Thème -->
+    <div>
+      <label for="theme" class="font-semibold block mb-1">Thème</label>
+      <select 
+        id="theme" 
+        name="theme" 
+        class="border border-stone-600 bg-stone-700 w-full px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-amber-500">
+        <option value="dark" <%= user.theme === "dark" ? "selected" : "" %>>Sombre</option>
+        <option value="light" <%= user.theme === "light" ? "selected" : "" %>>Clair</option>
+      </select>
+    </div>
+
+    <!-- Bouton submit -->
+    <div class="flex justify-end">
+      <input 
+        type="submit" 
+        value="Sauvegarder" 
+        class="px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700 cursor-pointer font-semibold text-white transition"
+      >
+    </div>
+  </form>
+</div>

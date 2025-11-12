@@ -12,7 +12,7 @@
 
   <%- include("header") %>
 
-  <div class="flex-1 flex w-full mx-auto border-t-4 border-green-50">
+  <div class="flex-1 flex w-full mx-auto border-t-4 border-green-50 <%= user ? user.theme : 'dark' %>">
     <%- body %>
   </div>
 </body>
