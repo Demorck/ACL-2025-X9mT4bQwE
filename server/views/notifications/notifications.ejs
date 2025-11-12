@@ -22,8 +22,6 @@
             <span>Nouveau rendez-vous : <b><%= n.appointment?.nom || "?" %></b></span>
           <% } else if (n.type === 2) { %>
             <span>Rendez-vous modifié : <b><%= n.appointment?.nom || "?" %></b></span>
-          <% } else if (n.type === 3) { %>
-            <span>Rendez-vous supprimé</span>
           <% } %>
 
           <% if (!n.seen) { %>
