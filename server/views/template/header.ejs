@@ -6,8 +6,10 @@
     <nav class="space-x-4 flex items-center">
       <% if (user) {
        %>
+       <div>
         <input type="text" name="recherche" id="recherche" placeholder=" recherche" class="hover:border-white-300 hover:border-1 rounded-sm hidden test" size="30">
         <div id="resultats"></div>
+       </div>
         <i class="fa-solid fa-magnifying-glass hover:text-amber-300"></i>
         <a href="/agendas/list" class="hover:text-amber-300 test">Mes agendas</a>
         <a href="/calendar/week" class="hover:text-amber-300 test">Calendrier</a>
@@ -61,14 +63,11 @@
           return response.json();
         }) 
         .then(data => { // utilisation du résultat ici (!!! mettre les res dans la div de input)
-          console.log("reponse : ", data);
-        /*  
           let newTextResultat="";
           data.forEach(element => {
-            newTextResultat += `<div>${element}<div>`
+            newTextResultat += `<div>${element.nom}<div>`
           });
           resultats.innerHTML=newTextResultat;
-        */
         }).catch(err => console.error(err));
     });
   })

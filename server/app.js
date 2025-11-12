@@ -18,6 +18,7 @@ import { routeMarkAllNotificationsSeen, routeNotification } from "./routes/notif
 import { routeAddModif, routeModif, routeDelete } from "./routes/appointmentModif.js";
 import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
+import { routeRecherche } from "./routes/rechercher/recherches.js";
 
 
 
@@ -81,6 +82,9 @@ app.post("/notifications/all-seen", routeMarkAllNotificationsSeen);
 app.post("/modif", routeAddModif);
 
 app.get("/calendar/:view", routeCalendar);
+
+app.use("/api/rechercher", routeRecherche);
+
 
 app.get("/", (req, res) => {
     res.render("index");
