@@ -58,7 +58,10 @@
     --color-pink-950: oklch(28.4% 0.109 3.907);
     --color-rose-400: oklch(71.2% 0.194 13.428);
     --color-rose-500: oklch(64.5% 0.246 16.439);
+    --color-gray-200: oklch(92.8% 0.006 264.531);
+    --color-gray-300: oklch(87.2% 0.01 258.338);
     --color-gray-400: oklch(70.7% 0.022 261.325);
+    --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-gray-600: oklch(44.6% 0.03 256.802);
     --color-neutral-50: oklch(98.5% 0 0);
     --color-neutral-200: oklch(92.2% 0 0);
@@ -337,9 +340,6 @@
   .mt-1 {
     margin-top: calc(var(--spacing) * 1);
   }
-  .mt-2 {
-    margin-top: calc(var(--spacing) * 2);
-  }
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }
@@ -360,6 +360,9 @@
   }
   .ml-1 {
     margin-left: calc(var(--spacing) * 1);
+  }
+  .ml-2 {
+    margin-left: calc(var(--spacing) * 2);
   }
   .ml-4 {
     margin-left: calc(var(--spacing) * 4);
@@ -396,6 +399,9 @@
   }
   .h-full {
     height: 100%;
+  }
+  .max-h-60 {
+    max-height: calc(var(--spacing) * 60);
   }
   .min-h-screen {
     min-height: 100vh;
@@ -509,6 +515,13 @@
       margin-block-end: calc(calc(var(--spacing) * 5) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
+  .space-x-4 {
+    :where(& > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline-start: calc(calc(var(--spacing) * 4) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-x-reverse)));
+    }
+  }
   .truncate {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -570,8 +583,8 @@
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 4px;
   }
-  .border-neutral-200 {
-    border-color: var(--color-neutral-200);
+  .border-gray-300 {
+    border-color: var(--color-gray-300);
   }
   .border-red-500 {
     border-color: var(--color-red-500);
@@ -654,6 +667,9 @@
   .bg-violet-500 {
     background-color: var(--color-violet-500);
   }
+  .bg-white {
+    background-color: var(--color-white);
+  }
   .bg-yellow-500 {
     background-color: var(--color-yellow-500);
   }
@@ -707,9 +723,6 @@
   }
   .pr-8 {
     padding-right: calc(var(--spacing) * 8);
-  }
-  .pb-4 {
-    padding-bottom: calc(var(--spacing) * 4);
   }
   .text-center {
     text-align: center;
@@ -783,6 +796,9 @@
   }
   .text-gray-400 {
     color: var(--color-gray-400);
+  }
+  .text-gray-500 {
+    color: var(--color-gray-500);
   }
   .text-gray-600 {
     color: var(--color-gray-600);
@@ -988,6 +1004,13 @@
       }
     }
   }
+  .hover\:bg-gray-200 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-200);
+      }
+    }
+  }
   .hover\:bg-green-500 {
     &:hover {
       @media (hover: hover) {
@@ -1108,11 +1131,6 @@
       flex-direction: column;
     }
   }
-  .md\:visible {
-    @media (width >= 48rem) {
-      visibility: visible;
-    }
-  }
   .md\:static {
     @media (width >= 48rem) {
       position: static;
@@ -1131,11 +1149,6 @@
   .md\:hidden {
     @media (width >= 48rem) {
       display: none;
-    }
-  }
-  .md\:w-fit {
-    @media (width >= 48rem) {
-      width: fit-content;
     }
   }
   .md\:flex-1 {
@@ -1697,6 +1710,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   inherits: false;
   initial-value: 0;
 }
+@property --tw-space-x-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
@@ -1786,6 +1804,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       --tw-translate-y: 0;
       --tw-translate-z: 0;
       --tw-space-y-reverse: 0;
+      --tw-space-x-reverse: 0;
       --tw-border-style: solid;
       --tw-leading: initial;
       --tw-font-weight: initial;
