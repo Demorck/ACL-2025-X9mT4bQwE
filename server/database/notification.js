@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {ajouterNotification} from "./users.js";
+import { ajouterNotification } from "./users.js";
 
 const Schema = mongoose.Schema;
 
@@ -21,15 +21,41 @@ export const NotificationModel = mongoose.model("Notification", notificationSche
  * @param {Number} type 
  */
 export async function creerNotification(user, appointment, agenda, type) {
-    const notification = new NotificationModel({
-        user: user,
-        appointment: appointment,
-        agenda: agenda,
-        type: type,
-    });
-    await notification.save();
+    if(agenda)
+    {
+        const userIds = new Set();
+        if (agenda.user) {
+            const ownerId = agenda.user._id ? agenda.user._id.toString() : agenda.user.toString();
+            userIds.add(ownerId);
+        }
+        if (agenda.invites && agenda.invites.length > 0) {
+            agenda.invites.forEach(id => userIds.add(id.toString()));
+        }
 
-    await ajouterNotification(user, notification);
+        const usersToNotify = await mongoose.model("User").find({ _id: { $in: Array.from(userIds) } });
+
+        for (const userDoc of usersToNotify) {
+            const notification = new NotificationModel({
+                user: userDoc,
+                appointment: appointment,
+                agenda: agenda,
+                type: type,
+            });
+            await notification.save();
+            await ajouterNotification(userDoc, notification);
+        }
+    }else
+    {
+        // Cas où il n'y a pas d'agenda (ne devrait pas arriver pour les rdv, mais par sécurité)
+        const notification = new NotificationModel({
+                user: user,
+                appointment: appointment,
+                agenda: agenda,
+                type: type,
+            });
+        await notification.save();
+        await ajouterNotification(user, notification);
+    }
 }
 
 /**

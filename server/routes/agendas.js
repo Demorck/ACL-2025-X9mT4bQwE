@@ -53,7 +53,6 @@ export async function routeEditAgenda(req, res, next) {
 
 export async function routeFormEditAgenda(req, res, next){  
     const agenda = await getAgendasById(req.params.id)
-    console.log(agenda);
     res.render('agendas/editAgenda', { agenda });
 }
 
@@ -71,7 +70,7 @@ export async function routeAjouterAgendaPartage(req, res, bext){
         return res.redirect("/agendas/testAgendasPartages");
     }
 
-    await addInvite(req.body.agendaId, req.body.userId);
+    await addInvite(req.body.agendaID, req.body.userID);
     return res.redirect("/agendas/testAgendasPartages");
 }
 
@@ -85,6 +84,6 @@ export async function routeSupprimerAgendaPartage(req, res, bext){
         return res.redirect("/agendas/testAgendasPartages");
     }
 
-    await removeInvite(req.body.agendaId, req.body.userId);
+    await removeInvite(req.body.agendaID, req.body.userID);
     return res.redirect("/agendas/testAgendasPartages");
 }

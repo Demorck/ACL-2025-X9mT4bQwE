@@ -2,33 +2,51 @@ import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
 import { AppointmentModel } from "../database/appointment.js";
 import { toLocalDateHours } from "../utils/date.js";
 import { creerNotification } from "../database/notification.js";
-
+import { UserModel } from "../database/users.js";
 /**
  * Fonction qui permet l'affichage du rdv que l'on souhaite modifier
  * @param {*} req 
  * @param {*} res 
  */
-export async function routeModif(req, res) {
-    const {id, day, month, year, agendaId} = req.body;
+export async function routeModif(req, res, next) {
+    try {
+        if (!res.locals.user) {
+            return res.redirect("/login");
+        }
 
-    const appointment = await AppointmentModel.findById(id);
-    
-    const agenda = AgendaModel.findById(agendaId);
-    const agendaName = agenda.nom;
+        const {id, day, month, year, agendaId} = req.body;
 
-    const validAgendas = await getAgendasForUser(res.locals.user)
+        const appointment = await AppointmentModel.findById(id);
+        if (!appointment) {
+            return res.status(404).send("Rendez-vous introuvable");
+        }
+        
+        const agenda = await AgendaModel.findById(agendaId).populate('user');
+        if (!agenda) {
+            return res.status(404).send("Agenda introuvable");
+        }
 
-    if (appointment) {
+        const createurUser = await UserModel.findById(appointment.createur);        
+        if (!createurUser) {
+            return res.status(404).send("Utilisateur introuvable");
+        }
+
+        const validAgendas = await getAgendasForUser(res.locals.user);
+
+        const isTheOwner = res.locals.user._id.toString() !== agenda.user._id.toString();
+
         res.render('appointments/modifAppointment', {
             rendezVous: appointment,
-            agendaName: agendaName,
+            agenda: agenda,
             day: day,
             month: month,
             year: year,
             agendas: validAgendas,
+            isTheOwner: isTheOwner,
+            createur: createurUser,
         });
-    } else {
-        res.status(404).send("Rendez-vous introuvable");
+    } catch (error) {
+        next(error);
     }
 }
 
@@ -47,7 +65,8 @@ export async function routeDelete(req,res, next){
             return res.status(400).send("Rendez-vous introuvable");
         }
 
-        const userAgenda = await AgendaModel.findById(agendaId).populate('user');
+        const userAgenda = await AgendaModel.findById(agendaId);
+        await userAgenda.populate('user');
         const userObject = userAgenda.user._id;
 
         if(res.locals.user._id.toString() != userObject.toString()){
@@ -55,7 +74,7 @@ export async function routeDelete(req,res, next){
         }
 
         // Sauvegarde la notification de suppression dans la base de données
-        await creerNotification(userAgenda.user, id, undefined, 3);
+        await creerNotification(userAgenda.user, id, userAgenda, 3);
 
         // Supprime le rendez-vous
         await AppointmentModel.findByIdAndDelete(id); 
@@ -76,6 +95,11 @@ export async function routeAddModif(req,res, next){
     try{
         const {id, nom, date_debut, heure_debut, date_fin, heure_fin, day, month, year, agendas} = req.body;
 
+        const appointment = await AppointmentModel.findById(id);
+        if (!appointment) {
+            return res.status(400).send("Rendez-vous introuvable");
+        }
+
         const startDateTime = toLocalDateHours(date_debut, parseInt(heure_debut.split(":")[0]), parseInt(heure_debut.split(":")[1]));
         const endDateTime = toLocalDateHours(date_fin, parseInt(heure_fin.split(":")[0]), parseInt(heure_fin.split(":")[1]));
 
@@ -85,7 +109,21 @@ export async function routeAddModif(req,res, next){
         const dateDebut = new Date(str_debut);
         const dateFin = new Date(str_fin);
 
-        const agenda = await AgendaModel.findById(agendas);
+        let agenda = await AgendaModel.findById(agendas);
+        if(agenda===null)
+        {
+            agenda = appointment.agenda;
+        }
+
+
+        // Tester si le user veut changer l'agenda sans qu'il n'y soit autorisé
+        const ancienAgenda = await AgendaModel.findById(appointment.agenda);
+        const chgtAgenda = agenda.toString() !== appointment.agenda.toString();
+
+        if(res.locals.user._id.toString() !== ancienAgenda.user._id.toString() && chgtAgenda){
+            return res.status(400).send("Vous ne pouvez pas changer l'agenda d'un rendez-vous qui ne vous appartient pas");
+        }
+
 
         // Modifie tous les champs du rdv en conséquence
         const modifAppointment = await AppointmentModel.findByIdAndUpdate(
@@ -99,7 +137,7 @@ export async function routeAddModif(req,res, next){
         ) 
 
         // Sauvegarde la notification de modification dans la base de données
-        await creerNotification(res.locals.user, id, undefined, 2);
+        await creerNotification(res.locals.user, id, agenda, 2);
 
         res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
     } catch (error) {
