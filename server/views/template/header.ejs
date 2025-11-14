@@ -7,7 +7,7 @@
       <% if (user) {
        %>
        <div class="relative">
-        <input type="text" name="recherche" id="recherche" placeholder=" recherche" class="hover:border-white-300 hover:border-1 rounded-sm hidden test" size="30">
+        <input type="text" name="recherche" id="recherche" placeholder=" Recherche..." class="hover:border-white-300 hover:border-1 rounded-sm hidden test" autocomplete="off" size="30">
         <div id="resultats" class="absolute bg-white border border-gray-300 w-full mt-1 max-h-60 overflow-auto z-10 text-gray-500 hidden test"></div>
        </div>
         <i class="fa-solid fa-magnifying-glass hover:text-amber-300"></i>
@@ -47,15 +47,30 @@
     let visible = document.querySelectorAll(".test");
     let resultats = document.querySelector("#resultats");
 
-    variableI.addEventListener("click", () => {
+    // permet le bon affichage de la barre de recherche
+    const afficherCacherRecherche = () => {
         visible.forEach(element => {
             element.classList.toggle("hidden");
         });
-        if(visible)
-          recherche.focus();
-      })
+    }
 
-    recherche.addEventListener("input", () => { // utiliser recherche.value pour avoir la valeur à l'intérieur du input
+    // listener pour afficher la barre de recherche et mettre le focus dessus
+    variableI.addEventListener("click", () => {
+        afficherCacherRecherche();
+        if(visible){
+          recherche.focus();
+        }
+    })
+
+    // permet d'enlever l'affichage de la barre de recherche lorsqu'on enleve le focus
+    recherche.addEventListener("blur", () => {
+        recherche.value="";
+        resultats.innerHTML="";
+        afficherCacherRecherche();
+    })
+
+    // Permet la recherche dans la bdd des rendez vous et l'affichage du jour du rdv si on clique dessus
+    recherche.addEventListener("input", () => { 
         let str = recherche.value;
         fetch("/api/rechercher/recherche", {
           method: "POST",
