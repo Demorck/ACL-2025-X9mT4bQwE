@@ -11,3 +11,24 @@ const invitationsSchema = new Schema({
 });
 
 export const invitationsModel = mongoose.model("invitations", invitationsSchema);
+
+export async function creerInvitation(agendaId, utilisationsMax) {
+    const token = new mongoose.Types.ObjectId().toString();
+
+    const invitation = await invitationsModel.create({
+        agenda: agendaId,
+        token,
+        utilisationsMax
+    });
+
+    return invitation;
+}
+
+
+export async function ajouterUtilisation(token) {
+    const invitation = await invitationsModel.findOneAndUpdate(
+        { token },
+        { $inc: { nbUtilisation: 1 } },
+        { new: true }
+    );
+}
