@@ -1,7 +1,7 @@
 import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
 import { AppointmentModel } from "../database/appointment.js";
 import { toLocalDateHours } from "../utils/date.js";
-import { creerNotification } from "../database/notification.js";
+import { creerNotification, supprimerNotification } from "../database/notification.js";
 
 /**
  * Fonction qui permet l'affichage du rdv que l'on souhaite modifier
@@ -54,8 +54,8 @@ export async function routeDelete(req,res, next){
             return res.status(400).send("Ce rendez-vous ne vous appartient pas");
         }
 
-        // Sauvegarde la notification de suppression dans la base de données
-        await creerNotification(userAgenda.user, id, undefined, 3);
+        // Supprime les notifications en rapport au rendez-vous dans la base de données
+        await supprimerNotification(id);
 
         // Supprime le rendez-vous
         await AppointmentModel.findByIdAndDelete(id); 

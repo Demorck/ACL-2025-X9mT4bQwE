@@ -1,11 +1,19 @@
 <div class="w-3/4 h-fit mx-auto p-6 mt-4 bg-stone-800 rounded-xl">
   <h1 class="text-2xl font-bold mb-4">Mes notifications</h1>
 
-  <form action="/notifications/all-seen" method="POST" class="mb-4">
-    <button type="submit" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
-      Marquer comme lues
-    </button>
-  </form>
+  <div class="flex gap-4 mb-4">
+    <form action="/notifications/all-seen" method="POST" class="mb-4">
+      <button type="submit" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
+        Marquer comme lues
+      </button>
+    </form>
+    <form action="/notifications/all-delete" method="POST" class="mb-4">
+        <button type="submit" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
+        Supprimer les notifications
+      </button>
+    </form>
+  </div>
+
 
   <% if (notifications.length === 0) { %>
     <p class="text-gray-400">Aucune notification</p>
@@ -17,13 +25,11 @@
        %>
         <li class="p-3 rounded bg-stone-700 flex justify-between items-center">
           <% if (n.type === 0) { %>
-            <span>Nouvel agenda : <b><%= n.agenda?.nom || "?" %></b></span>
+            <span>L'agenda <b><%= n.agenda?.nom || "?" %></b> a été créé</span>
           <% } else if (n.type === 1) { %>
-            <span>Nouveau rendez-vous : <b><%= n.appointment?.nom || "?" %></b></span>
+            <span>Le nouveau rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été enregistré</span>
           <% } else if (n.type === 2) { %>
-            <span>Rendez-vous modifié : <b><%= n.appointment?.nom || "?" %></b></span>
-          <% } else if (n.type === 3) { %>
-            <span>Rendez-vous supprimé</span>
+            <span>Le rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été modifié</span>
           <% } %>
 
           <% if (!n.seen) { %>
