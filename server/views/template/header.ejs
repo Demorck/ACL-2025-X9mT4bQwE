@@ -37,11 +37,14 @@
     })
 
     // permet d'enlever l'affichage de la barre de recherche lorsqu'on enleve le focus
-    recherche.parentElement.addEventListener("blur", () => {
-        recherche.value="";
-        resultats.innerHTML="";
-        afficherCacherRecherche();
-    })
+    document.addEventListener("click", (event) => {
+        if (recherche.classList.contains("hidden")) return;
+        if(!(recherche.parentElement.contains(event.target) || variableI.contains(event.target))){
+          recherche.value="";
+          resultats.innerHTML="";        
+          afficherCacherRecherche();
+      }
+    });
 
     // Permet la recherche dans la bdd des rendez vous et l'affichage du jour du rdv si on clique dessus
     recherche.addEventListener("input", () => { 
