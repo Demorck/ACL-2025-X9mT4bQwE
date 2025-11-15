@@ -1226,6 +1226,7 @@ header {
   background-color: var(--bg-calendar);
   color: var(--text-calendar);
 }
+<<<<<<< HEAD
 .random {
   background-color: var(--color-amber-500);
   background-color: var(--color-blue-500);
@@ -1237,6 +1238,43 @@ header {
   background-color: var(--color-red-500);
   background-color: var(--color-rose-500);
   background-color: var(--color-violet-500);
+=======
+.calendar-header, #agenda-filter {
+  background-color: var(--bg-calendar-header);
+  border-color: var(--border-calendar-header);
+}
+.calendar-header-button {
+  background-color: var(--btn-bg);
+  border-color: var(--btn-border);
+  border-style: var(--tw-border-style);
+  border-width: 1px;
+  --tw-border-style: solid;
+  border-style: solid;
+}
+.calendar-header-button:hover {
+  background-color: var(--btn-bg-hover);
+}
+.calendar-header-button--active {
+  background-color: var(--btn-active-bg);
+}
+.calendar-header-button--active:hover {
+  background-color: var(--btn-active-bg-hover);
+}
+.calendar-hours-background, .calendar-hours-background-today {
+  background-size: auto calc(100%/24);
+}
+.inner-container, .inner-container input, .inner-container textarea, .inner-container select {
+  background-color: var(--inner-bg);
+  color: var(--inner-text);
+}
+input[type='submit'] {
+  background-color: var(--input-submit-bg);
+  color: var(--input-submit-text);
+}
+input[type='submit']:hover {
+  background-color: var(--input-submit-hover-bg);
+  color: var(--input-submit-hover-text);
+>>>>>>> 3e7e8fdfabf2646297a0c7e60655e7c07d774e72
 }
 body, header, .inner-container, .calendar-container, .calendar-header, .calendar-header-button, .calendar-header-button--active, .calendar-hours-background, .calendar-hours-background-today, .day-hours-background, .month-day, .not-month-day {
   transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
