@@ -1,17 +1,17 @@
 <% layout('template/layout') %>
 
-<div class="flex flex-1 flex-col bg-stone-900 text-stone-100">
+<div class="flex flex-1 flex-col calendar-container ">
 
   <div class="flex flex-1 overflow-hidden">
 
-    <div class="w-54 border-r border-stone-700 bg-stone-800 p-4 overflow-y-auto" id="agenda-filter">
+    <div class="w-54 border-r p-4 overflow-y-auto absolute md:static h-full" id="agenda-filter">
       <%- include("components/agenda_filter", { view }) %>
     </div>
 
     <div class="flex flex-1 flex-col">
         <%- include("components/header", { title, view }) %>
 
-        <div class="flex-1 relative overflow-auto">
+        <div class="flex-1 relative overflow-auto calendar-inner-container">
             
             <%- body %>
 
@@ -25,13 +25,16 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        let btn_collapseAgenda = document.querySelector('[data-action="agendas-filter"]');
+        let btn_collapseAgenda = document.querySelector('[data-action="agendas-filter"]'); 
+        let el_agendaFilter = document.querySelector("#agenda-filter");
+        let hidden = true
+
 
         btn_collapseAgenda?.addEventListener("click", (event) => {
             let el = event.target;
-            let el_agendaFilter = document.querySelector("#agenda-filter");
             
             el_agendaFilter.classList.toggle("hidden");
+            
             let child = el.querySelector("span");
             if (child) {
                 child.classList.toggle("fa-angle-double-left");
@@ -40,7 +43,21 @@
                 el.classList.toggle("fa-angle-double-left");
                 el.classList.toggle("fa-angle-double-right");
             }
-
         });
+
+        document.addEventListener("click", (e) => {
+            
+            if (window.screen.width < 768) {
+                if (!el_agendaFilter.contains(e.target) && !btn_collapseAgenda.contains(e.target) && !el_agendaFilter.classList.contains("hidden")) {
+                    btn_collapseAgenda.click();
+                }
+            }
+        });
+
+
+        // 768 c'est le media queries "md" de tailwind
+        if (window.screen.width < 768) {
+            btn_collapseAgenda.click();
+        }
     });
 </script>

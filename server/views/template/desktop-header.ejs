@@ -1,0 +1,49 @@
+<nav class="gap-2 hidden md:items-center flex-col w-full md:w-fit md:flex md:flex-row">
+    <% if (user) {
+    %>
+    <div class="relative">
+        <input type="text" name="recherche" id="recherche" placeholder="Recherche..." class="hover:border-white-300 hover:border rounded-sm hidden test" autocomplete="off" size="30">
+        <div id="resultats" class="absolute bg-white border border-gray-300 w-full mt-1 max-h-60 overflow-auto z-10 text-gray-500 hidden test"></div>
+    </div>
+    <i class="fa-solid fa-magnifying-glass hover:text-amber-300"></i>
+    <a href="/agendas/list" class="hover:text-amber-300 test">Mes agendas</a>
+    <a href="/calendar/week" class="hover:text-amber-300 test">Calendrier</a>
+    <a href="/appointment/new" class="hover:text-amber-300 test">Nouveau RDV</a>
+    <a href="/notifications" class="relative">
+        <div class="hidden md:flex md:visible">
+            <i class="fa fa-bell text-xl"></i>
+            <% if (notificationCount > 0) { %>
+            <span class="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                <%= notificationCount %>
+            </span>
+            <% } %>
+        </div>
+
+        <div class="md:hidden flex flex-row gap-4 items-center">
+            Notification
+            <% if (notificationCount > 0) { %>
+            <span class=" bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                <%= notificationCount %>
+            </span>
+            <% } %>
+        </div>
+    </a>
+    <% } %>
+
+    <%- include("theme-menu") %>
+
+    <% if (!user) {%>
+        <a href="/login" class="px-3 py-1 bg-amber-500 text-stone-900 rounded hover:bg-amber-600">Connexion</a>
+        <a href="/register" class="px-3 py-1 bg-amber-400 text-stone-900 rounded hover:bg-amber-500">Inscription</a>
+        <% } else { %>
+        <a href="/logout" class="px-3 py-1 flex-1 text-center w-full md:w-fit bg-red-400 text-stone-900 rounded hover:bg-red-500">Déconnexion</a>
+        <a href="/profile" class="rounded-full items-center justify-center hidden md:flex border-2 border-stone-500 w-12 h-12 cursor-pointer">
+            <% if (!user.profile_picture) { %>
+            <i class="fa fa-user text-2xl"></i>
+            <% } else { %>
+            <img src="<%=user.profile_picture%>" alt="" class="w-full h-full rounded-full">
+            <% }%>
+        </a>
+        <a href="/profile" class="rounded py-1 w-full md:hidden text-center border border-neutral-200">Profil</a>
+    <% } %>
+</nav>

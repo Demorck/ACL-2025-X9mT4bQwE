@@ -1,25 +1,16 @@
 <% layout('calendar/layout_calendar') %>
-
+<% let isToday = new Date().toLocaleDateString("fr-FR") == data.dayLabel %>
 <div class="flex relative" style="height: 1500px;">
-  <div class="absolute left-0 top-0 w-16 h-full border-r border-stone-600 bg-stone-800">
+  <div class="absolute day-hours-background flex flex-col">
     <% for (let h = 0; h < 24; h++) { %>
-      <div 
-        class="absolute text-stone-300 text-xs text-right pr-2"
-        style="top: calc(<%= (h / 24) * 100 %>%); height: calc(100% / 24); width: 100%;">
-        <%= h.toString().padStart(2, "0") %>h
+      <div class="flex flex-1 w-full items-center justify-center">
+        <%= h.toString().padStart(2, "0") %>:00
       </div>
     <% } %>
   </div>
 
-  <div class="absolute left-16 top-0 right-0 h-full"
-       style="background: linear-gradient(
-         to bottom,
-         transparent 0%,
-         transparent calc(100%/24 - 1px),
-         rgba(255, 255, 255, 0.1) calc(100%/24 - 1px),
-         rgba(44, 44, 44, 0.2) calc(100%/24)
-       );
-       background-size: auto calc(100%/24);">
+  <div class="absolute left-16 top-0 right-0 h-full calendar-hours-background<%= isToday ? "-today" : "" %>"
+       style="background-size: auto calc(100%/24);">
 
     <% data.appointments.forEach(app => { %>
       <%- include('../components/appointment', { app, day: data.day, month: data.month, year: data.year }) %>

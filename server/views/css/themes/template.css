@@ -1,0 +1,97 @@
+/*
+  Voici un template pour ajouter des thèmes. Tout se fait avec des variables css (préfixé par --).
+  Avec tailwind, il y a également des variables de couleurs, utilisée comme ceci:
+    theme(colors.stone.800);
+  Pour voir les couleurs par défaut de tailwind: https://tailwindcss.com/docs/colors
+
+  On peut utiliser des couleurs hexadécimales, rgb(a), hsl, oklch (jsp ce que c'est mais tailwind l'utilise), etc.
+  Si vous ne mettez pas de valeur, ça sera les valeurs du fallback (voir base.css)
+*/
+
+@layer base {
+    body.template {
+        --bg-page      : theme(colors.stone.700);         /* Le background de la page. */
+        --text-main    : theme(colors.stone.200);         /* Le texte par défaut si la couleur n'est pas remplacée de la page */
+        --bg-header    : theme(colors.stone.800);         /* La couleur du background du header (la bar en haut) */
+        --text-header  : theme(colors.stone.200);         /* Le texte du header */
+        --border-header: theme(colors.stone.50);          /* La bordure du bas du header */
+
+        --bg-calendar           : theme(colors.stone.900);         /* Le background du calendrier (attention, y a second background qui est utilisé plus loin) */
+        --text-calendar         : theme(colors.stone.100);         /* Le texte du calendrier */
+        --bg-calendar-header    : theme(colors.stone.800);         /* Le background du header du calendrier (là où c'est écrit "aujourd'hui" avec les flèches et autre bouton */
+        --border-calendar-header: theme(colors.stone.700);         /* Le texte du header du calendrier */
+
+        /* Actuellement, les boutons là sont les boutons du header du calendrier */
+        --btn-bg             : theme(colors.stone.700);     /* Le background d'un bouton */
+        --btn-bg-hover       : theme(colors.stone.600);     /* Le background au sruvol d'un bouton */
+        --btn-border         : transparent                  /* Le border d'un bouton */
+        --btn-active-bg      : theme(colors.pink.700);      /* Le background d'un bouton actif (comme "semaine") */
+        --btn-active-bg-hover: theme(colors.pink.600);      /* Le background  au survol d'un bouton actif (comme "semaine") */
+
+        --inner-bg  : theme(colors.stone.800); /* Le background du div dans le body (genre la boîte "Connexion") */
+        --inner-text: theme(colors.stone.50);  /* La couleur du texte du div dans le body */
+
+        /* Comme les boutons précédents mais spécialement pour les submits */
+        --input-submit-bg        : theme(colors.stone.400); 
+        --input-submit-text      : theme(colors.stone.100);
+        --input-submit-hover-bg  : theme(colors.stone.700);
+        --input-submit-hover-text: theme(colors.stone.400);
+    }
+
+    /* La couleur de l'icône du thème quand elle est active */
+    body.template .theme-active i {
+        color: theme(--color-blue-400) !important;
+    }
+
+    /* Les deux prochains background, c'est un peu différent. Ce sont les tranches horaires sur les vues de la semaine/jour.
+    Déjà, c'est divisé par 24 et y a 2 couleurs à chaque fois.
+        - La première est la couleur de la bordure du bas de chaque plage horaire (la délimitation)
+        - La seconde est la couleur de l'arrière plan
+
+    Comme dit précédemment, y a déjà une couleur de l'arrière plan, c'est pour avoir une cohérence entre les couleurs
+
+    Là, c'est divisé en 24 cases (car par défaut, voir base.css, le background-size est en : "auto calc(100%/24)"
+        - auto = sur x c'est automatique
+        - calc(100%/24), on fait en sorte que la hauteur prennent 24 fois le background.
+
+    Si vous voulez avoir des stries (genre une alternance de couleur), le plus "simple" c'est de c/c le commentaire tout en bas du fichier et remplacer le truc suivant par le commentaire
+    et p'tet faire pareil pour le "today"
+    */
+    body.template .calendar-hours-background {
+        background: linear-gradient(to bottom,
+                rgba(58, 62, 65, 0.85) calc(100% / 24 - 1px),
+                rgba(51, 51, 44, 0.7) calc(100% / 24));
+    }
+
+    body.template .calendar-hours-background-today {
+        background: linear-gradient(to bottom,
+                rgba(58, 62, 65, 0.85) calc(100% / 24 - 1px),
+                rgba(54, 53, 5, 0.7) calc(100% / 24));
+    }
+
+    /* Pour les jours du mois demandé */
+    body.template .month-day {
+        @apply border-stone-800 bg-stone-800/50;
+    }
+
+    /* Pour les jours qui ne sont PAS dans le mois demandé (genre avant la première semaine du mois/après la dernière semaine du mois) */
+    body.template .not-month-day {
+        @apply bg-stone-900/60;
+    }
+}
+
+
+/* 
+La première couleur est la couleur de la première ligne
+La seconde la bordure
+La troisième, la ligne d'après
+
+body.template .calendar-hours-background {
+        background: linear-gradient(to bottom,
+                rgba(255, 0, 0, 1) 49%,
+                rgba(0, 255, 0, 1) 50%;
+                rgba(0, 0, 255, 1) 51%);
+        background-size: auto calc(100%/12);
+} 
+                
+*/
