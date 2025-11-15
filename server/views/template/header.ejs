@@ -37,7 +37,7 @@
     })
 
     // permet d'enlever l'affichage de la barre de recherche lorsqu'on enleve le focus
-    recherche.addEventListener("blur", () => {
+    recherche.parentElement.addEventListener("blur", () => {
         recherche.value="";
         resultats.innerHTML="";
         afficherCacherRecherche();

@@ -1,7 +1,10 @@
 <nav class="gap-2 hidden md:items-center flex-col w-full md:w-fit md:flex md:flex-row">
     <% if (user) {
     %>
-    <input type="text" name="recherche" id="recherche" placeholder=" recherche" class="hover:border-white-300 hover:border rounded-sm hidden test">
+    <div class="relative">
+        <input type="text" name="recherche" id="recherche" placeholder="Recherche..." class="hover:border-white-300 hover:border rounded-sm hidden test" autocomplete="off" size="30">
+        <div id="resultats" class="absolute bg-white border border-gray-300 w-full mt-1 max-h-60 overflow-auto z-10 text-gray-500 hidden test"></div>
+    </div>
     <i class="fa-solid fa-magnifying-glass hover:text-amber-300"></i>
     <a href="/agendas/list" class="hover:text-amber-300">Mes agendas</a>
     <a href="/calendar/week" class="hover:text-amber-300">Calendrier</a>
