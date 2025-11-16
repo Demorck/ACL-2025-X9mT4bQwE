@@ -24,11 +24,14 @@ export async function creerInvitation(agendaId, utilisationsMax) {
     return invitation;
 }
 
-
 export async function ajouterUtilisation(token) {
-    const invitation = await invitationsModel.findOneAndUpdate(
+    await invitationsModel.findOneAndUpdate(
         { token },
         { $inc: { nbUtilisation: 1 } },
         { new: true }
     );
+}
+
+export async function getInvitationByAgendaId(agendaId) {
+    return await invitationsModel.findOne({ agenda: agendaId });
 }

@@ -22,6 +22,7 @@ import { routeRecherche } from "./routes/rechercher/recherches.js";
 
 import { editUserProfile, routeShowProfile } from "./routes/accounts/userProfile.js";
 
+import { utiliserlien, routeCreationInvitation} from "./routes/invitations.js"
 
 export const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -93,6 +94,11 @@ app.get("/calendar/:view", routeCalendar);
 
 app.use("/api/rechercher", routeRecherche);
 
+// app.post("/invitation/creer", creerLien);
+app.get("/invitation/:token", utiliserlien);
+
+app.get("/invitation/:idAgenda/creer", routeCreationInvitation);
+
 
 app.get("/", (req, res) => {
     res.render("index");
@@ -102,3 +108,5 @@ app.use(function(req, res, next) {
     res.status(404);
     res.render('errors/404', { url: req.url });
 });
+
+

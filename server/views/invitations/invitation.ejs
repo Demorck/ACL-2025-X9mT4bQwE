@@ -1,0 +1,43 @@
+<div class="h-fit my-16 bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
+
+    <div class="flex items-center justify-between mb-6">
+        <a href="/agendas/list" class="px-3 py-2 bg-stone-700 rounded hover:bg-stone-600">Retour</a>
+    </div>
+
+    <div class="text-center font-semibold">
+        <form action="" method="POST">
+
+
+            <div class="mb-6 flex flex-col gap-4">
+                <div class="flex-1 text-left">
+                    <% if (lien) { %>
+                        <span class="font-semibold mr-2">Lien :</span>
+                        <span class="break-all text-sm">
+                            <%= lien %>
+                        </span>
+                    <% } %>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <label for="utilisationsMax" class="font-semibold mb-0">
+                        utilisation maximum :
+                    </label>
+                    <input
+                        id="utilisationsMax"
+                        type="number"
+                        name="utilisationsMax"
+                        min="1"
+                        class="px-2 py-1 rounded bg-stone-900 w-20 text-right"
+                    >
+                </div>
+            </div>
+
+            <input
+                type="submit"
+                value="Générer le lien"
+                class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer"
+            >
+        </form>
+    </div>
+
+</div>
