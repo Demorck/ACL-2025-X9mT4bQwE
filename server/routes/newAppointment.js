@@ -80,14 +80,15 @@ export async function routeAddAppointmentToDatabase(req, res, next) {
             nom: nom,
             date_Debut: dateDebut,
             date_Fin: dateFin,
+            createur: res.locals.user,
         });
 
         // Sauvegarde le nouveau rendez-vous dans la base de données
         await newAppointment.save();
 
         // Sauvegarde la notification de création dans la base de données
-        await creerNotification(res.locals.user, newAppointment, undefined, 1);
-
+        await creerNotification(res.locals.user, newAppointment, res.locals.user, agenda, 1);
+        
         // Rediriger l'utilisateur vers la page journalière où le RDV a été ajouté
         res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
     } catch (error) {

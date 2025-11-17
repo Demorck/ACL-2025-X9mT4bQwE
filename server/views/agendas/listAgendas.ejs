@@ -9,13 +9,21 @@
       <% agendas.forEach(a => { %>
         <div class="flex items-center justify-between bg-stone-800 rounded-xl px-4 py-3">
           <div>
-            <p class="font-semibold"><%= a.nom %></p>
+            <p class="font-semibold"><%= a.nom %>
+            <% if(user._id.toString() !== a.user._id.toString()) { %>
+                (Partagé avec vous)
+                <% } %></p>
             <% if (a.description) { %>
               <p class="text-sm text-stone-300"><%= a.description %></p>
             <% } %>
           </div>
 
           <div class="flex gap-2">
+            <% if(user._id.toString() === a.user._id.toString()) { %>
+            <a href="/invitation/<%= a._id %>/manage"
+               class="px-3 py-1 rounded bg-sky-500 text-sm hover:bg-green-400">
+              Invitation
+            </a>
             <a href="/agendas/edit/<%= a._id %>"
                class="px-3 py-1 rounded bg-amber-500 text-sm hover:bg-amber-400">
               Modifier
@@ -24,6 +32,16 @@
                class="px-3 py-1 rounded bg-red-500 text-sm hover:bg-red-400">
               Supprimer
             </a>
+            <% } else { %>
+                <form action="/invitation/<%= a._id %>/remove/<%= user._id %>" method="GET">
+                        <button
+                            type="submit"
+                            class="px-3 py-1 rounded bg-red-500 text-sm hover:bg-red-400"
+                        >
+                        Quitter
+                        </button>
+                    </form>
+            <% } %>
           </div>
         </div>
       <% }) %>
