@@ -33,7 +33,12 @@ export async function routeAddAgendaToDatabase(req, res, next) {
 }
 export async function routeListeAgendas(req, res, next) {
     const agendas = await listAgendas(res.locals.user);
-    res.render('agendas/listAgendas', { agendas });
+    res.render('agendas/listAgendas', 
+        { 
+            agendas : agendas,
+            user : res.locals.user,
+        }
+    );
 }
 
 export async function routeDeleteAgenda(req, res, next) {

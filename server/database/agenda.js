@@ -58,7 +58,12 @@ export async function getAgendasById(id){
 }
 
 export async function listAgendas(user) {
-    const agendas = await AgendaModel.find({ user: user._id });
+    const agendas = await AgendaModel.find({
+        $or: [
+            { user: user._id },
+            { invites: user._id }
+        ]
+    });
     return agendas;
 }
 

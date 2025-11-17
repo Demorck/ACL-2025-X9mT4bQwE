@@ -68,6 +68,6 @@ export async function routeCalendar(req, res) {
         data,
         requestedDate,
         previous_url,
-        after_url
+        after_url,
     });
 }
