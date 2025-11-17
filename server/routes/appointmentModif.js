@@ -1,7 +1,6 @@
 import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
 import { AppointmentModel } from "../database/appointment.js";
 import { toLocalDateHours } from "../utils/date.js";
-import { creerNotification } from "../database/notification.js";
 import { UserModel } from "../database/users.js";
 import { creerNotification, supprimerNotification } from "../database/notification.js";
 
