@@ -28,3 +28,13 @@ export async function routeMarkAllNotificationsSeen(req, res) {
 
     res.redirect("/notifications");
 }
+
+export async function routeDeleteAllNotifications(req, res) {
+    if(!res.locals.user)
+        return res.redirect("/login");
+
+    await NotificationModel.deleteMany(
+        { user: res.locals.user._id}
+    )
+    res.redirect("/notifications");
+}
