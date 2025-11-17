@@ -8,7 +8,7 @@
       </button>
     </form>
     <form action="/notifications/all-delete" method="POST" class="mb-4">
-        <button type="submit" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
+      <button type="submit" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
         Supprimer les notifications
       </button>
     </form>
@@ -23,7 +23,7 @@
       <% notifications.forEach(n => {
       
        %>
-        <li class="p-3 rounded bg-stone-700 flex justify-between items-center">
+        <li class="p-3 rounded bg-stone-700 flex justify-between items-center group">
           <% if (n.type === 0) { %>
             <span>L'agenda <b><%= n.agenda?.nom || "?" %></b> a été créé</span>
           <% } else if (n.type === 1) { %>
@@ -31,7 +31,16 @@
           <% } else if (n.type === 2) { %>
             <span>Le rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été modifié</span>
           <% } %>
-
+          <span>
+            <div class="inline-flex invisible group-hover:visible">
+              <form action="/notifications/single-delete" method="POST" class="mb-4">
+                <input type="hidden" name="id" value="<%= n.id %>">
+                <button type="submit" title="Supprimer notification" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
+                  Supprimer notification 
+                </button>
+              </form>
+            </div>
+          </span>
           <% if (!n.seen) { %>
             <span class="text-xs text-red-400 font-semibold">Non lu</span>
           <% } %>
