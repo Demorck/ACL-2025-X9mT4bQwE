@@ -29,7 +29,6 @@ export async function routeWeekly(req, res, next) {
     endOfWeek.setHours(23, 59, 59, 999);
 
     let appointments = await getAppointmentsByUserAndDateRange(res.locals.user, startOfWeek, endOfWeek);
-    
 
     let appointmentsByDay = normalizeAppointment(appointments, startOfWeek, endOfWeek);
     
