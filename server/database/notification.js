@@ -33,6 +33,18 @@ export async function creerNotification(user, appointment, agenda, type) {
 }
 
 /**
+ * Supprime toute les notifications en lien avec l'appointement en paramètre
+ * @param {id de l'appointment qui a été supprimé} appointmentId 
+ */
+export async function supprimerNotification(appointmentId) {
+    try {
+        await NotificationModel.deleteMany({appointment: appointmentId});
+    } catch (err) {
+        console.error("Erreurs lors de la suppresion des notifications : ", err);
+    }
+}
+
+/**
  * Renvoie la liste des notifications d'un user
  * @param {User} user 
  * @returns 
