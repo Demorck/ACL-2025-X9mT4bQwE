@@ -24,8 +24,8 @@
       <% const concerneEqualConnecte = n.user_concerned && n.user_concerned._id.toString() == user._id.toString() %>
         <li class="p-3 rounded bg-stone-700 flex justify-between items-center">
           <span>
-            <% const userText = concerneEqualConnecte ? "vous" : n.user_concerned.username; %>
-            <% const userTextSujet = concerneEqualConnecte ? "Vous avez" : `${n.user_concerned.username} a` ; %>
+            <% const userText = n.user_concerned ? (concerneEqualConnecte ? "vous" : n.user_concerned.username) : "un utilisateur"; %>
+            <% const userTextSujet = n.user_concerned ? (concerneEqualConnecte ? "Vous avez" : `${n.user_concerned.username} a`) : "Quelqu'un a"; %>
             <% if (n.type === 0) { %>
               L'agenda <b><%= n.agenda?.nom || "?" %></b> a été créé par <b> <%= userText %> </b>.
             <% } else if (n.type === 1) { %>

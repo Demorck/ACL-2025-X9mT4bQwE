@@ -77,7 +77,7 @@ export async function routeDelete(req,res, next){
         }
 
         // Sauvegarde la notification de suppression dans la base de données
-        await creerNotification(userAgenda.user, id, res.locals.user, userAgenda, 3);
+        await creerNotification(userAgenda.user, appointment, res.locals.user, userAgenda, 3);
         // Supprime les notifications en rapport au rendez-vous dans la base de données
         await supprimerNotification(id);
 
@@ -142,7 +142,7 @@ export async function routeAddModif(req,res, next){
         ) 
 
         // Sauvegarde la notification de modification dans la base de données
-        await creerNotification(res.locals.user, id,res.locals.user, agenda, 2);
+        await creerNotification(res.locals.user, modifAppointment, res.locals.user, agenda, 2);
 
         res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
     } catch (error) {
