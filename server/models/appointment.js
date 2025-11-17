@@ -73,6 +73,21 @@ export function getWeekData(startDate, endDate, user) {
 export function getMonthData(year, month, user) {
     let startISODate = new TZDate(year, month, 1);
     let endISODate = new TZDate(year, month + 1, 1);
+
+    // expand range to include full weeks (week starts Monday, ends Sunday)
+    // start: move back to Monday on/before the 1st of month
+    let startLocal = toLocalDate(startISODate);
+    let startDow = startLocal.getDay(); // 0 = Sun ... 6 = Sat
+    let startOffset = (startDow + 6) % 7; // days to go back to Monday
+    startLocal.setDate(startLocal.getDate() - startOffset);
+    startISODate = new TZDate(startLocal);
+
+    // end: move forward to the next Monday after the last day of month (end is exclusive)
+    let endLocal = toLocalDate(endISODate); // this is the 1st of the next month
+    let endDow = endLocal.getDay();
+    let endOffset = (7 - ((endDow + 6) % 7)) % 7; // days to add to reach next Monday
+    endLocal.setDate(endLocal.getDate() + endOffset);
+    endISODate = new TZDate(endLocal);
     
     let appointments = getAppointments(user, startISODate, endISODate).then(app => {
         let startLabel = formatDate(toLocalDate(startISODate), "LLLL yyyy");

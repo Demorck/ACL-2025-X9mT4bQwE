@@ -21,7 +21,7 @@
                             <%= day.getDate() %>
                         </div>
                         <div class="flex md:flex-1 flex-col gap-1 mt-1">
-                        <% let appointments = data.appointments.filter(a => a.start.getDate() == day.getDate()); 
+                        <% let appointments = data.appointments.filter(a => a.start.getDate() == day.getDate() && a.start.getMonth() == day.getMonth()); 
                             appointments.forEach(app => {
                             %>
                             <a href="/calendar/day" class="text-xs truncate px-2 py-1 rounded appointment-color-<%=app.color%> transition appointment-month"
@@ -30,7 +30,9 @@
                             </a>
                         <% }) %>
                         </div>
-                        <% if (day.getMonth() != data.requestedMonth) { %>
+                        <% if (day.getMonth() != data.requestedMonth) { 
+                            let appointments = data.appointments.filter(a => a.start.getDate() == day.getDate() && a.start.getMonth() != day.getMonth()); 
+                            %>
                         <div class="absolute inset-0 pointer-events-none not-month-day"></div>
                         <% } %>
                     </div>
