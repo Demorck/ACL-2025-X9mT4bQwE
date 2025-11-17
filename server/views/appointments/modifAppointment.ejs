@@ -1,5 +1,5 @@
 <div class=" h-fit my-16 bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
-    <% const date = new Date(year,month, day);
+    <% 
     const dateDeb = new Date(rendezVous.date_Debut);
     const formMonth = (dateDeb.getMonth() + 1).toString().padStart(2, '0');
     const formDay = (dateDeb.getDate()).toString().padStart(2, '0');
@@ -17,6 +17,25 @@
 
     const name = rendezVous.nom;
     const rdvId = rendezVous._id.toString();
+
+    const valideRecurrence = recurrence;
+
+    let frequenceRegle = '';
+    let regleId = '';
+    let date_fin_ap = null;
+
+
+    if(valideRecurrence){
+        regleId = regle._id.toString();
+        frequenceRegle = frequence;
+        if(date_fin != null){
+            const date_fin_av = new Date(date_fin);
+            const formMonthFinRec = (date_fin_av.getMonth() + 1).toString().padStart(2, '0');
+            const formDayFinRec = (date_fin_av.getDate()).toString().padStart(2, '0');
+            const formYearFinRec = date_fin_av.getFullYear();
+            date_fin_ap = `${formYearFinRec}-${ formMonthFinRec }-${formDayFinRec}`;
+        }
+    }
     
     %>
 
@@ -78,6 +97,38 @@
             </div>
 
             <input type="hidden" name="id" value="<%= rdvId %>">
+            <% if(valideRecurrence){%>
+                <input type="hidden" name="idRegle" value="<%= regleId %>">
+            <%} %>
+
+            <div>
+                <input type="checkbox" id="recurrence" name="recurrence" <% if(valideRecurrence){%> checked <%} %>/>
+                <label for="recurrence">Récurrence du rendez-vous</label>
+            </div>
+
+            <div class="flex items-center justify-between mb-6" id="contenuCache" style="display: <% if(valideRecurrence){%> block <%}else{%> none <%}%>;">
+                <div class="flex items-center justify-between mb-6">
+                    <label class="bloc font-semibold mb-1" for="frequence">Récurrence :</label>
+                    <select id="frequenceId" name="frequenceId" class="bg-stone-800 border px-3 py-2 rounded">
+                        <option value="day1" <% if(frequenceRegle === 'day1'){%> selected <%}%> >Tous les jours</option>
+                        <option value="month1" <% if(frequenceRegle === 'month1'){%> selected <%}%> >Tous les mois</option>
+                        <option value="year1" <% if(frequenceRegle === 'year1'){%> selected <%}%> >Tous les ans</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-between mb-6">
+                    <label class="bloc font-semibold mb-1" for="fin_rec">Fin de la réccurrence :</label>
+                    <select id="fin_rec" name="fin_rec" class="bg-stone-800 border px-3 py-2 rounded" onchange="afficherCalendar()">
+                        <option value="never" <% if(date_fin_ap === null){%> selected <%}%> >Jamais</option>
+                        <option value="specificalDate" <% if(date_fin_ap != null){%> selected <%}%> >Jusqu'au</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-between mb-6" id="contenuCacheDateFin" style="display: <% if(date_fin_ap != null){%> block <%}else{%> none <%}%>">
+                    <label class="bloc font-semibold mb-1" for="date_fin_rec">Sélectionnez la date de fin :</label>
+                    <input id="date_fin_rec" type="date" name="date_fin_rec" value="<%= date_fin_ap %>" class="w-full border px-3 py-2 rounded">
+                </div>
+            </div>
 
             
 
@@ -85,3 +136,33 @@
         </form>
     </div>
 </div>
+
+<script>
+    const checkRecurrence = document.getElementById('recurrence');
+    const contenuCache = document.getElementById('contenuCache');
+
+    checkRecurrence.addEventListener('change', function() {
+        if(this.checked){
+            contenuCache.style.display = 'block';
+        }else{
+            contenuCache.style.display = 'none';
+        }
+    });
+
+    const selectionSpecialDate = document.getElementById('fin_rec');
+    const contenuCacheDateFin = document.getElementById('contenuCacheDateFin');
+
+    function afficherCalendar(){
+        const selectionSpecialDate = document.getElementById('fin_rec');
+        const contenuCacheDateFin = document.getElementById('contenuCacheDateFin');
+        const dateFinRecInput = document.getElementById('date_fin_rec');
+
+        if(selectionSpecialDate.value == 'specificalDate'){
+            contenuCacheDateFin.style.display = 'block';
+            dateFinRecInput.required = true;
+        }else{
+            contenuCacheDateFin.style.display = 'none';
+            dateFinRecInput.required = false;
+        }
+    }
+</script>
