@@ -1,29 +1,39 @@
 import mongoose from "mongoose";
 import { ajouterNotification } from "./users.js";
+import { app } from "../app.js";
 
 const Schema = mongoose.Schema;
 
 const notificationSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref:"User", required: true}, // user lié à la notification
-    appointment: { type: Schema.Types.ObjectId, ref:"Appointment", required: false}, // à renseigner quand c'est une notification en rapport avec un rdv
-    user_concerned: { type: Schema.Types.ObjectId, ref:"User", required: false}, // à renseigner quand cela concerne un user
-    agenda: { type: Schema.Types.ObjectId, ref:"Agenda", required: false}, // à renseigner quand c'est une notification en rapport avec la création d'un agenda
-    type: { type: Number, required: true}, // quel type de notification c'est 0 = création d'un agenda, 1 = ajout d'un rdv, 2 = modif rdv, 3 = supprimer rdv, 4 = ajout à un nouvel agenda partagé, 5 = retiré d'un agenda partagé
-    seen: { type: Boolean, default: false } // si la notification a été vue par l'utilisateur
+    user: { type: Schema.Types.ObjectId, ref:"User", required: true }, // user lié à la notification
+    appointment: { type: Schema.Types.ObjectId, ref:"Appointment", required: false }, // à renseigner quand c'est une notification en rapport avec un rdv
+    user_concerned: { type: Schema.Types.ObjectId, ref:"User", required: false }, // à renseigner quand cela concerne un user
+    agenda: { type: Schema.Types.ObjectId, ref:"Agenda", required: false} , // à renseigner quand c'est une notification en rapport avec la création d'un agenda
+    type: { type: Number, required: true }, // quel type de notification c'est 0 = création d'un agenda, 1 = ajout d'un rdv, 2 = modif rdv, 3 = supprimer rdv, 4 = ajout à un nouvel agenda partagé, 5 = retiré d'un agenda partagé
+    seen: { type: Boolean, default: false }, // si la notification a été vue par l'utilisateur
+    nom: { type: String, required: false } // Utilisable pour l'affichage des notifications, surtout de suppression, parce que on perd le nom sinon
+
 }, { timestamps: true });
 
 export const NotificationModel = mongoose.model("Notification", notificationSchema);
 
 /**
- * Cette fonction créée un notification et l'ajoute d'une notification
+ * Cette fonction créée une notification et l'ajoute dans la bdd
  * @param {User} user 
  * @param {Appointment} appointment 
  * @param {User} user_concerned
  * @param {Agenda} agenda 
  * @param {Number} type 
  */
-export async function creerNotification(user, appointment, user_concerned ,agenda, type) {
-
+export async function creerNotification(user, appointment, user_concerned ,agenda, type) {   
+    // permet d'avoir le nom de l'agenda ou du rdv
+    let nomGenerique; 
+    if(appointment !== undefined) {
+        nomGenerique = appointment.nom;
+    } else {
+        nomGenerique = agenda.nom;
+    }
+    
     if(agenda)
     {
         const userIds = new Set();
@@ -45,6 +55,7 @@ export async function creerNotification(user, appointment, user_concerned ,agend
                 user_concerned: user_concerned,
                 agenda: agenda,
                 type: type,
+                nom: nomGenerique,
             });
             await notification.save();
             await ajouterNotification(userDoc, notification);
@@ -58,6 +69,7 @@ export async function creerNotification(user, appointment, user_concerned ,agend
                 user_concerned: user_concerned,
                 agenda: agenda,
                 type: type,
+                nom: nomGenerique,
             });
         await notification.save();
         await ajouterNotification(user, notification);
