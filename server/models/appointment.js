@@ -43,6 +43,15 @@ export function getDayData(day, month, year, user) {
 }
 
 
+/**
+ * Obtient les données pour une semaine spécifique.
+ * 
+ * @export
+ * @param {Date} startDate 
+ * @param {Date} endDate 
+ * @param {User} user 
+ * @returns {{dayLabel: string, appointments: Array}}
+ */
 export function getWeekData(startDate, endDate, user) {
     let appointments = getAppointments(user, startDate, endDate).then(app => {
         let startLabel = formatDate(toLocalDate(startDate), "dd/MM/yyyy");
@@ -70,6 +79,15 @@ export function getWeekData(startDate, endDate, user) {
 }
 
 
+/**
+ * Obtient les données pour un mois spécifique.
+ * 
+ * @export
+ * @param {Number} year 
+ * @param {Number} month 
+ * @param {User} user 
+ * @returns {{dayLabel: string, appointments: Array}}
+ */
 export function getMonthData(year, month, user) {
     let startISODate = new TZDate(year, month, 1);
     let startOfMonth = new TZDate(startISODate);
