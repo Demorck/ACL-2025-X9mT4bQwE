@@ -1,43 +1,75 @@
-<div class="h-fit my-16 bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
+<div class="h-fit my-16 bg-stone-800 mx-auto max-w-3xl p-8 shadow rounded-xl">
 
-    <div class="flex items-center justify-between mb-6">
-        <a href="/agendas/list" class="px-3 py-2 bg-stone-700 rounded hover:bg-stone-600">Retour</a>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+        <a href="/agendas/list" class="px-3 py-2 bg-stone-700 rounded hover:bg-stone-600">
+            Retour
+        </a>
     </div>
 
-    <div class="text-center font-semibold">
-        <form action="" method="POST">
+    <form action="/invitation/modifier" method="POST" class="flex items-center gap-4 mb-10">
 
+        <!-- On envoie maintenant l'ID de l'invitation -->
+        <input type="hidden" name="idInvitation" value="<%= invitation._id %>">
 
-            <div class="mb-6 flex flex-col gap-4">
-                <div class="flex-1 text-left">
-                    <% if (lien) { %>
-                        <span class="font-semibold mr-2">Lien :</span>
-                        <span class="break-all text-sm">
-                            <%= lien %>
-                        </span>
-                    <% } %>
-                </div>
+        <!-- Lien affiché -->
+        <div class="flex-1">
+            <% if (lien) { %>
+                <span class="font-semibold mr-2">Lien :</span>
+                <span class="break-all text-sm text-green-400"><%= lien %></span>
+            <% } %>
+        </div>
 
-                <div class="flex items-center gap-2">
-                    <label for="utilisationsMax" class="font-semibold mb-0">
-                        utilisation maximum :
-                    </label>
-                    <input
-                        id="utilisationsMax"
-                        type="number"
-                        name="utilisationsMax"
-                        min="1"
-                        class="px-2 py-1 rounded bg-stone-900 w-20 text-right"
-                    >
-                </div>
-            </div>
-
+        <!-- Modification du max -->
+        <div class="flex items-center gap-2">
+            <label for="utilisationsMax" class="font-semibold whitespace-nowrap">
+                Max :
+            </label>
             <input
-                type="submit"
-                value="Générer le lien"
-                class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer"
+                id="utilisationsMax"
+                type="number"
+                name="utilisationsMax"
+                min="1"
+                value="<%= invitation.utilisationsMax %>"
+                class="px-2 py-1 rounded bg-stone-900 w-20 text-right"
             >
-        </form>
-    </div>
+        </div>
+
+        <input
+            type="submit"
+            value="modifier"
+            class="px-4 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer whitespace-nowrap"
+        >
+    </form>
+
+
+<div class="text-left">
+    <h3 class="text-xl font-semibold mb-2">Invités <%= invites.length %>/<%= invitation.utilisationsMax %></h3>
+    <% if (invites && invites.length > 0) { %>
+        <ul class="space-y-3">
+            <% invites.forEach(u => { %>
+                <li class="bg-stone-700 p-3 rounded flex justify-between items-center">
+
+                    <div>
+                        <span class="font-semibold"><%= u.username %></span>
+                    </div>
+
+                    <form action="/invitation/<%= invitation.agenda %>/remove/<%= u._id %>" method="GET">
+                        <button
+                            type="submit"
+                            class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-sm"
+                        >
+                            Supprimer
+                        </button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p class="text-stone-400">Aucun invité pour le moment.</p>
+    <% } %>
+</div>
+
+
 
 </div>

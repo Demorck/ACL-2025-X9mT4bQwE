@@ -63,3 +63,8 @@ export function ajouterAgendaParDefaut(user)
     agenda.save();
     ajouterAgenda(user, agenda);
 }
+
+export async function getUserById(id) {
+    const user = await UserModel.findById(id).exec();
+    return user;
+}

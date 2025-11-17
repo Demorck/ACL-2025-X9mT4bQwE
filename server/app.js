@@ -22,7 +22,7 @@ import { routeRecherche } from "./routes/rechercher/recherches.js";
 
 import { editUserProfile, routeShowProfile } from "./routes/accounts/userProfile.js";
 
-import { utiliserlien, routeCreationInvitation} from "./routes/invitations.js"
+import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation} from "./routes/invitations.js"
 
 export const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -94,10 +94,11 @@ app.get("/calendar/:view", routeCalendar);
 
 app.use("/api/rechercher", routeRecherche);
 
-// app.post("/invitation/creer", creerLien);
-app.get("/invitation/:token", utiliserlien);
-
-app.get("/invitation/:idAgenda/creer", routeCreationInvitation);
+// app.post("/invitation/modifier", modifierLien);
+app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite)
+app.get("/invitation/:idAgenda/manage", routeCreationInvitation);
+app.get("/invitation/:id", utiliserlien);
+app.post("/invitation/modifier", modifierInvitation);
 
 
 app.get("/", (req, res) => {
