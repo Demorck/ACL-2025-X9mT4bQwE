@@ -83,7 +83,10 @@ export async function creerNotification(user, appointment, user_concerned ,agend
  */
 export async function supprimerNotification(appointmentId) {
     try {
-        await NotificationModel.deleteMany({appointment: appointmentId});
+        await NotificationModel.deleteMany({  
+            appointment: appointmentId,
+            type: { $ne: 3 }
+        });
     } catch (err) {
         console.error("Erreurs lors de la suppresion des notifications : ", err);
     }

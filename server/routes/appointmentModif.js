@@ -76,14 +76,11 @@ export async function routeDelete(req,res, next){
             return res.status(400).send("Ce rendez-vous ne vous appartient pas");
         }
 
-        // Permet d'avoir le titre du rendez-vous (utile lorsque le rendez-vous est supprimé)
-        //let NameAppointment = await AppointmentModel.findById(id);
-
         // Sauvegarde la notification de suppression dans la base de données
         await creerNotification(userAgenda.user, appointment, res.locals.user, userAgenda, 3);
 
         // Supprime les notifications en rapport au rendez-vous dans la base de données
-        //await supprimerNotification(id);
+        await supprimerNotification(id);
 
         // Supprime le rendez-vous
         await AppointmentModel.findByIdAndDelete(id); 
@@ -144,9 +141,6 @@ export async function routeAddModif(req,res, next){
             date_Fin : dateFin
             }
         ) 
-
-        // Permet d'avoir le titre du rendez-vous (utile lorsque le rendez-vous est supprimé)
-        //let NameAppointment = await AppointmentModel.findById(id);
 
         // Sauvegarde la notification de modification dans la base de données
         await creerNotification(res.locals.user, modifAppointment, res.locals.user, agenda, 2);
