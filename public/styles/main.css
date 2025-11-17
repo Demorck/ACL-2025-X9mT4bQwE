@@ -361,9 +361,6 @@
   .ml-1 {
     margin-left: calc(var(--spacing) * 1);
   }
-  .ml-2 {
-    margin-left: calc(var(--spacing) * 2);
-  }
   .ml-4 {
     margin-left: calc(var(--spacing) * 4);
   }
@@ -515,13 +512,6 @@
       margin-block-end: calc(calc(var(--spacing) * 5) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
-  .space-x-4 {
-    :where(& > :not(:last-child)) {
-      --tw-space-x-reverse: 0;
-      margin-inline-start: calc(calc(var(--spacing) * 4) * var(--tw-space-x-reverse));
-      margin-inline-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-x-reverse)));
-    }
-  }
   .truncate {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -586,8 +576,14 @@
   .border-gray-300 {
     border-color: var(--color-gray-300);
   }
+  .border-neutral-200 {
+    border-color: var(--color-neutral-200);
+  }
   .border-red-500 {
     border-color: var(--color-red-500);
+  }
+  .border-stone-300 {
+    border-color: var(--color-stone-300);
   }
   .border-stone-400 {
     border-color: var(--color-stone-400);
@@ -1131,6 +1127,11 @@
       flex-direction: column;
     }
   }
+  .md\:visible {
+    @media (width >= 48rem) {
+      visibility: visible;
+    }
+  }
   .md\:static {
     @media (width >= 48rem) {
       position: static;
@@ -1149,6 +1150,11 @@
   .md\:hidden {
     @media (width >= 48rem) {
       display: none;
+    }
+  }
+  .md\:w-fit {
+    @media (width >= 48rem) {
+      width: fit-content;
     }
   }
   .md\:flex-1 {
@@ -1226,19 +1232,6 @@ header {
   background-color: var(--bg-calendar);
   color: var(--text-calendar);
 }
-<<<<<<< HEAD
-.random {
-  background-color: var(--color-amber-500);
-  background-color: var(--color-blue-500);
-  background-color: var(--color-cyan-500);
-  background-color: var(--color-emerald-500);
-  background-color: var(--color-lime-500);
-  background-color: var(--color-pink-500);
-  background-color: var(--color-purple-500);
-  background-color: var(--color-red-500);
-  background-color: var(--color-rose-500);
-  background-color: var(--color-violet-500);
-=======
 .calendar-header, #agenda-filter {
   background-color: var(--bg-calendar-header);
   border-color: var(--border-calendar-header);
@@ -1274,7 +1267,6 @@ input[type='submit'] {
 input[type='submit']:hover {
   background-color: var(--input-submit-hover-bg);
   color: var(--input-submit-hover-text);
->>>>>>> 3e7e8fdfabf2646297a0c7e60655e7c07d774e72
 }
 body, header, .inner-container, .calendar-container, .calendar-header, .calendar-header-button, .calendar-header-button--active, .calendar-hours-background, .calendar-hours-background-today, .day-hours-background, .month-day, .not-month-day {
   transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
@@ -1724,11 +1716,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   inherits: false;
   initial-value: 0;
 }
-@property --tw-space-x-reverse {
-  syntax: "*";
-  inherits: false;
-  initial-value: 0;
-}
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
@@ -1818,7 +1805,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       --tw-translate-y: 0;
       --tw-translate-z: 0;
       --tw-space-y-reverse: 0;
-      --tw-space-x-reverse: 0;
       --tw-border-style: solid;
       --tw-leading: initial;
       --tw-font-weight: initial;
