@@ -20,23 +20,26 @@
   <% } else {
    %>
     <ul class="space-y-2">
-      <% notifications.forEach(n => {
-      
-       %>
+      <% notifications.forEach(n => { %>
+      <% const concerneEqualConnecte = n.user_concerned && n.user_concerned._id.toString() == user._id.toString() %>
         <li class="p-3 rounded bg-stone-700 flex justify-between items-center">
-          <% if (n.type === 0) { %>
-            <span>L'agenda <b><%= n.agenda?.nom || "?" %></b> a été créé</span>
-          <% } else if (n.type === 1) { %>
-            <span>Le nouveau rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été enregistré</span>
-          <% } else if (n.type === 2) { %>
-            <span>Le rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été modifié</span>
-          <% } else if (n.type === 3) { %>
-            <span>Le rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été supprimé</span>
-          <% } else if (n.type === 4) { %>
-            <span>Vous avez été ajouté à l'agenda partagé <b><%= n.agenda?.nom || "?" %></b></span>
-          <% } else if (n.type === 5) { %>
-            <span>Vous avez été retiré de l'agenda partagé <b><%= n.agenda?.nom || "?" %></b></span>
-          <% } %>
+          <span>
+            <% const userText = concerneEqualConnecte ? "vous" : n.user_concerned.username; %>
+            <% const userTextSujet = concerneEqualConnecte ? "Vous avez" : `${n.user_concerned.username} a` ; %>
+            <% if (n.type === 0) { %>
+              L'agenda <b><%= n.agenda?.nom || "?" %></b> a été créé par <b> <%= userText %> </b>.
+            <% } else if (n.type === 1) { %>
+              Le nouveau rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été créé par <b> <%= userText %> </b>.
+            <% } else if (n.type === 2) { %>
+              Le rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été modifié par <b> <%= userText %></b>.
+            <% } else if (n.type === 3) { %>
+              Le rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été supprimé par <b> <%= userText %></b>.
+            <% } else if (n.type === 4) { %>
+             <b> <%= userTextSujet %>  </b> été ajouté à l'agenda partagé <b><%= n.agenda?.nom || "?" %></b>.
+            <% } else if (n.type === 5) { %>
+             <b> <%= userTextSujet %> </b> été retiré de l'agenda partagé <b><%= n.agenda?.nom || "?" %></b>.
+            <% } %>
+          </span>
 
           <% if (!n.seen) { %>
             <span class="text-xs text-red-400 font-semibold">Non lu</span>

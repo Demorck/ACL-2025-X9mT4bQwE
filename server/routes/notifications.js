@@ -1,19 +1,16 @@
-import { NotificationModel } from "../database/notification.js";
+import { NotificationModel, getNotificationsForUser } from "../database/notification.js";
 
 export async function routeNotification(req, res) {
     if(!res.locals.user)
         return res.redirect("/login");
 
     // populations des notifications de l'utilisateur depuis mongoose
-    const notifications = await NotificationModel.find({
-        user: res.locals.user._id
-    })
-        .populate("appointment agenda")
-        .sort({ createdAt: -1 });
+    const notifications = await getNotificationsForUser(res.locals.user);
 
     // renvoie vers la page des notifications avec toute les notifications en parametre
     res.render("notifications/notifications", {
         notifications,
+        user : res.locals.user
     });
 }
 

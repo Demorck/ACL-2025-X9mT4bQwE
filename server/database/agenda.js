@@ -35,7 +35,7 @@ export async function creerAgenda(user, nom, description, couleur)
 
     await ajouterAgenda(user, agenda); 
     // sauvegarder la notification dans la bdd
-    await creerNotification(user, undefined, agenda, 0);
+    await creerNotification(user, undefined, undefined,agenda, 0);
 }
 
 /**
@@ -100,7 +100,7 @@ export async function addInvite(agendaId, userId) {
 
     agenda.invites.push(userId);
     await agenda.save();
-    await creerNotification(user, undefined, agenda, 4);
+    await creerNotification(user, undefined, undefined,agenda, 4);
     user.agendas.push(agendaId);
     await user.save();
 }
@@ -114,7 +114,7 @@ export async function removeInvite(agendaId, userId){
     agenda.invites.pull(userId);
     await agenda.save();
     const user = await mongoose.model("User").findById(userId);
-    await creerNotification(user, undefined, agenda, 5);
+    await creerNotification(user, undefined, undefined,agenda, 5);
     user.agendas.pull(agendaId);
     await user.save();
 }

@@ -66,16 +66,18 @@ export async function routeDelete(req,res, next){
             return res.status(400).send("Rendez-vous introuvable");
         }
 
+        const appointment = await AppointmentModel.findById(id);
+
         const userAgenda = await AgendaModel.findById(agendaId);
         await userAgenda.populate('user');
         const userObject = userAgenda.user._id;
 
-        if(res.locals.user._id.toString() != userObject.toString()){
+        if(res.locals.user._id.toString() != userObject.toString() && res.locals.user._id!= appointment.createur._id.toString() ){
             return res.status(400).send("Ce rendez-vous ne vous appartient pas");
         }
 
         // Sauvegarde la notification de suppression dans la base de données
-        await creerNotification(userAgenda.user, id, userAgenda, 3);
+        await creerNotification(userAgenda.user, id, res.locals.user, userAgenda, 3);
         // Supprime les notifications en rapport au rendez-vous dans la base de données
         await supprimerNotification(id);
 
@@ -140,7 +142,7 @@ export async function routeAddModif(req,res, next){
         ) 
 
         // Sauvegarde la notification de modification dans la base de données
-        await creerNotification(res.locals.user, id, agenda, 2);
+        await creerNotification(res.locals.user, id,res.locals.user, agenda, 2);
 
         res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
     } catch (error) {
