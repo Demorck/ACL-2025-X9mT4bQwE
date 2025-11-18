@@ -1,5 +1,12 @@
 <div class=" h-fit my-16 bg-stone-800 mx-auto max-w-md p-6 shadow rounded-xl">
+    <% const date = new Date(year,month, day);%>
     <% 
+    const dayName = date.toLocaleDateString('fr-FR', { weekday: 'long' }).toUpperCase(); 
+    const formattedMonth = (month + 1).toString().padStart(2, '0');
+    const formattedDay = (day).toString().padStart(2, '0');
+    const formattedDate = `${year}-${formattedMonth}-${formattedDay}`;
+
+
     const dateDeb = new Date(rendezVous.date_Debut);
     const formMonth = (dateDeb.getMonth() + 1).toString().padStart(2, '0');
     const formDay = (dateDeb.getDate()).toString().padStart(2, '0');
@@ -60,7 +67,7 @@
             <div class="flex gap-4 mb-4">
                 <div class="flex-1">
                     <label class="block font-semibold mb-1" for="date_debut">Date début</label>
-                    <input id="date_debut" type="date" name="date_debut" value="<%= formDate %>" required class="w-full border px-3 py-2 rounded">
+                    <input id="date_debut" type="date" name="date_debut" value="<%= formDate %>" required class="w-full border px-3 py-2 rounded" min="<%= formattedDate %>"">
                 </div>
                 <div class="flex-1"> 
                     <label class="block font-semibold mb-1" for="heure_debut">Heure début</label>
@@ -72,7 +79,7 @@
                 <div class="flex-1">
                     <label class="block font-semibold mb-1" for="date_fin">Date fin</label>
                     <input id="date_fin" type="date" name="date_fin" value="<%= formDateFin %>" required
-                        class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" min="<%= formattedDate %>"">
                 </div>
                 <div class="flex-1">
                     <label class="block font-semibold mb-1" for="heure_fin">Heure fin</label>
@@ -180,4 +187,54 @@
             dateFinRecInput.required = false;
         }
     }
+
+    const dateDebAppointment = document.getElementById('date_debut');
+    const dateFinAppointment = document.getElementById('date_fin');
+    let heureDebut = document.querySelector("#heure_debut");
+    let heureFin = document.querySelector("#heure_fin");
+    
+
+    //permet de vérifier si la date de fin est antérieur à la date de debut
+    function validiteDateFin(){
+        const valueDateDeb = dateDebAppointment.value;
+        const valueDateFin = dateFinAppointment.value;
+
+        if(valueDateFin && valueDateDeb && valueDateFin < valueDateDeb){
+            dateFinAppointment.value = valueDateDeb;
+        }
+    }
+
+    //permet de changer la date de fin en fonction de la date de debut
+    function updateDateFin(){
+        const valueDateDeb = dateDebAppointment.value;
+
+        if(valueDateDeb){
+            dateFinAppointment.setAttribute('min', valueDateDeb);
+        }else {
+            dateFinInput.removeAttribute('min');
+        }
+        validiteDateFin();
+    }
+
+    // Permet de ne pas avoir d'heure de fin antérieur à l'heure de début (sur le même jour)
+    function updateHeureFin() {
+        // Même jour
+        if (dateDebAppointment.value === dateFinAppointment.value) {
+            if (heureDebut.value > heureFin.value)
+                heureFin.value = heureDebut.value;
+        }
+    }
+
+    
+
+    dateDebAppointment.addEventListener('change', updateDateFin);
+    heureDebut.addEventListener("change", updateHeureFin)
+
+    //appel la fonction quand le focus n'est plus sur dateFinAppointment
+    dateFinAppointment.addEventListener('blur', validiteDateFin);
+    heureFin.addEventListener("blur", updateHeureFin);
+
+
+
+    
 </script>
