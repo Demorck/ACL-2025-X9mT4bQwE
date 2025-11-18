@@ -60,6 +60,7 @@
     --color-pink-950: oklch(28.4% 0.109 3.907);
     --color-rose-400: oklch(71.2% 0.194 13.428);
     --color-rose-500: oklch(64.5% 0.246 16.439);
+    --color-slate-900: oklch(20.8% 0.042 265.755);
     --color-gray-200: oklch(92.8% 0.006 264.531);
     --color-gray-300: oklch(87.2% 0.01 258.338);
     --color-gray-400: oklch(70.7% 0.022 261.325);
@@ -276,6 +277,9 @@
   .absolute {
     position: absolute;
   }
+  .fixed {
+    position: fixed;
+  }
   .relative {
     position: relative;
   }
@@ -312,6 +316,12 @@
   .z-10 {
     z-index: 10;
   }
+  .z-20 {
+    z-index: 20;
+  }
+  .z-30 {
+    z-index: 30;
+  }
   .container {
     width: 100%;
     @media (width >= 40rem) {
@@ -329,9 +339,6 @@
     @media (width >= 96rem) {
       max-width: 96rem;
     }
-  }
-  .m-0 {
-    margin: calc(var(--spacing) * 0);
   }
   .mx-auto {
     margin-inline: auto;
@@ -384,14 +391,8 @@
   .inline-flex {
     display: inline-flex;
   }
-  .h-4 {
-    height: calc(var(--spacing) * 4);
-  }
   .h-5 {
     height: calc(var(--spacing) * 5);
-  }
-  .h-10 {
-    height: calc(var(--spacing) * 10);
   }
   .h-12 {
     height: calc(var(--spacing) * 12);
@@ -417,14 +418,8 @@
   .w-3\/4 {
     width: calc(3/4 * 100%);
   }
-  .w-4 {
-    width: calc(var(--spacing) * 4);
-  }
   .w-5 {
     width: calc(var(--spacing) * 5);
-  }
-  .w-10 {
-    width: calc(var(--spacing) * 10);
   }
   .w-12 {
     width: calc(var(--spacing) * 12);
@@ -681,6 +676,12 @@
   .bg-sky-500 {
     background-color: var(--color-sky-500);
   }
+  .bg-slate-900\/60 {
+    background-color: color-mix(in srgb, oklch(20.8% 0.042 265.755) 60%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-slate-900) 60%, transparent);
+    }
+  }
   .bg-stone-700 {
     background-color: var(--color-stone-700);
   }
@@ -701,9 +702,6 @@
   }
   .object-cover {
     object-fit: cover;
-  }
-  .p-0 {
-    padding: calc(var(--spacing) * 0);
   }
   .p-2 {
     padding: calc(var(--spacing) * 2);
@@ -797,10 +795,6 @@
   .text-xs {
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
-  }
-  .leading-none {
-    --tw-leading: 1;
-    line-height: 1;
   }
   .font-bold {
     --tw-font-weight: var(--font-weight-bold);
@@ -1170,11 +1164,6 @@
       --tw-ring-color: var(--color-amber-500);
     }
   }
-  .focus\:ring-blue-400 {
-    &:focus {
-      --tw-ring-color: var(--color-blue-400);
-    }
-  }
   .focus\:outline-none {
     &:focus {
       --tw-outline-style: none;
@@ -1319,6 +1308,27 @@ header {
   background-color: var(--inner-bg);
   color: var(--inner-text);
 }
+#modal-container > div {
+  background-color: var(--bg-calendar-header);
+  margin-inline: calc(var(--spacing) * 6);
+  @media (width >= 48rem) {
+    margin-inline: calc(var(--spacing) * 0);
+  }
+}
+#modal-container [data-close-modal] {
+  position: absolute;
+  top: calc(var(--spacing) * -2);
+  right: calc(var(--spacing) * -2);
+  display: flex;
+  height: calc(var(--spacing) * 8);
+  width: calc(var(--spacing) * 8);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: calc(infinity * 1px);
+  background-color: var(--color-red-400);
+  text-align: center;
+}
 input[type='submit'] {
   background-color: var(--input-submit-bg);
   color: var(--input-submit-text);
@@ -1326,6 +1336,9 @@ input[type='submit'] {
 input[type='submit']:hover {
   background-color: var(--input-submit-hover-bg);
   color: var(--input-submit-hover-text);
+}
+option::picker {
+  background-color: var(--btn-active-bg);
 }
 body, header, .inner-container, .calendar-container, .calendar-header, .calendar-header-button, .calendar-header-button--active, .calendar-hours-background, .calendar-hours-background-today, .day-hours-background, .month-day, .not-month-day {
   transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
@@ -1780,10 +1793,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   inherits: false;
   initial-value: solid;
 }
-@property --tw-leading {
-  syntax: "*";
-  inherits: false;
-}
 @property --tw-font-weight {
   syntax: "*";
   inherits: false;
@@ -1865,7 +1874,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       --tw-translate-z: 0;
       --tw-space-y-reverse: 0;
       --tw-border-style: solid;
-      --tw-leading: initial;
       --tw-font-weight: initial;
       --tw-shadow: 0 0 #0000;
       --tw-shadow-color: initial;

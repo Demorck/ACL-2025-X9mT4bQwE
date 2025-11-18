@@ -43,8 +43,14 @@ export async function routeCalendar(req, res) {
             let startOfWeek = getFirstDayOfWeek(requestedDate, { weekStartsOn: 1 });
             let endOfWeek = new TZDate(startOfWeek);
             endOfWeek.setDate(endOfWeek.getDate() + 6);
+            endOfWeek.setHours(23, 59, 59, 999);
 
             data = await getWeekData(startOfWeek, endOfWeek, res.locals.user);
+            data.appointments.forEach(element => {
+                console.log(element.start);
+                
+            });
+            
             title = "Semaine du " +  data.startLabel + " au " + data.endLabel;
             previous_url = `/calendar/week?day=${startOfWeek.getDate() - 7}&month=${startOfWeek.getMonth()}&year=${startOfWeek.getFullYear()}`;
             after_url = `/calendar/week?day=${startOfWeek.getDate() + 7}&month=${startOfWeek.getMonth()}&year=${startOfWeek.getFullYear()}`;

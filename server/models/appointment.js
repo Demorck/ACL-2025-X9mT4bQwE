@@ -1,7 +1,7 @@
 import { TZDate } from "@date-fns/tz";
 import { getAppointmentsByUserAndDateRange } from "../database/appointment.js";
 import { normalizeAppointment, arrangeAppointmentsInColumns } from "../utils/appointment.js";
-import { formatDate, getMonthDateArraysByWeeks, parseDate, toLocalDate } from "../utils/date.js";
+import { formatDate, getMonthDateArraysByWeeks, toLocalDate } from "../utils/date.js";
 
 async function getAppointments(user, startDate, endDate) {
     let appointments = await getAppointmentsByUserAndDateRange(user, startDate, endDate);
@@ -10,8 +10,6 @@ async function getAppointments(user, startDate, endDate) {
 
     return appointments;
 }
-
-
 
 /**
  * Obtient les données pour une journée spécifique.
@@ -32,6 +30,7 @@ export function getDayData(day, month, year, user) {
 
         return {
             dayLabel,
+            requestedDay: startISODate,
             appointments: app
         }
 
