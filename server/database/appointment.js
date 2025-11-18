@@ -9,6 +9,7 @@ const appointmentSchema = new Schema({
     nom: { type: String, required: true },
     date_Debut: { type: Date, required: true },
     date_Fin: { type: Date, required: true },
+    recurrenceRule: { type: Schema.Types.ObjectId, ref: "RegleOccurrence", required: false },
     createur: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 

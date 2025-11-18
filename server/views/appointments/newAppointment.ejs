@@ -61,8 +61,67 @@
                 </select>
             </div>
 
+            <div>
+                <input type="checkbox" id="recurrence" name="recurrence"/>
+                <label for="recurrence">Récurrence du rendez-vous</label>
+            </div>
+
+            <div class="flex items-center justify-between mb-6" id="contenuCache" style="display: none;">
+                <div class="flex items-center justify-between mb-6">
+                    <label class="bloc font-semibold mb-1" for="frequence">Récurrence :</label>
+                    <select id="frequenceId" name="frequenceId" class="bg-stone-800 border px-3 py-2 rounded">
+                        <option value="day1">Tous les jours</option>
+                        <option value="month1">Tous les mois</option>
+                        <option value="year1">Tous les ans</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-between mb-6">
+                    <label class="bloc font-semibold mb-1" for="fin_rec">Fin de la réccurrence :</label>
+                    <select id="fin_rec" name="fin_rec" class="bg-stone-800 border px-3 py-2 rounded" onchange="afficherCalendar()">
+                        <option value="never">Jamais</option>
+                        <option value="specificalDate">Jusqu'au</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-between mb-6" id="contenuCacheDateFin" style="display: none;">
+                    <label class="bloc font-semibold mb-1" for="date_fin_rec">Sélectionnez la date de fin :</label>
+                    <input id="date_fin_rec" type="date" name="date_fin_rec" value="<%= formattedDate %>" class="w-full border px-3 py-2 rounded">
+                </div>
+            </div>
+
             <input type="submit" value="Ajouter" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
         </form>
     </div>
 
 </div>
+
+<script>
+    const checkRecurrence = document.getElementById('recurrence');
+    const contenuCache = document.getElementById('contenuCache');
+
+    checkRecurrence.addEventListener('change', function() {
+        if(this.checked){
+            contenuCache.style.display = 'block';
+        }else{
+            contenuCache.style.display = 'none';
+        }
+    });
+
+    const selectionSpecialDate = document.getElementById('fin_rec');
+    const contenuCacheDateFin = document.getElementById('contenuCacheDateFin');
+
+    function afficherCalendar(){
+        const selectionSpecialDate = document.getElementById('fin_rec');
+        const contenuCacheDateFin = document.getElementById('contenuCacheDateFin');
+        const dateFinRecInput = document.getElementById('date_fin_rec');
+
+        if(selectionSpecialDate.value == 'specificalDate'){
+            contenuCacheDateFin.style.display = 'block';
+            dateFinRecInput.required = true;
+        }else{
+            contenuCacheDateFin.style.display = 'none';
+            dateFinRecInput.required = false;
+        }
+    }
+</script>

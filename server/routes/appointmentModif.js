@@ -1,6 +1,7 @@
 import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
 import { AppointmentModel } from "../database/appointment.js";
 import { toLocalDateHours } from "../utils/date.js";
+import { RegleOccurrenceModel } from "../database/regle_occurrence.js";
 import { UserModel } from "../database/users.js";
 import { creerNotification, supprimerNotification } from "../database/notification.js";
 
@@ -26,6 +27,7 @@ export async function routeModif(req, res, next) {
         if (!agenda) {
             return res.status(404).send("Agenda introuvable");
         }
+        const agendaName = agenda.nom;
 
         const createurUser = await UserModel.findById(appointment.createur);        
         if (!createurUser) {
@@ -36,19 +38,46 @@ export async function routeModif(req, res, next) {
 
         const isTheOwner = res.locals.user._id.toString() !== agenda.user._id.toString();
 
-        res.render('appointments/modifAppointment', {
-            rendezVous: appointment,
-            agenda: agenda,
-            day: day,
-            month: month,
-            year: year,
-            agendas: validAgendas,
-            isTheOwner: isTheOwner,
-            createur: createurUser,
-        });
-    } catch (error) {
-        next(error);
-    }
+        if(appointment){
+            if(appointment.recurrenceRule){
+                const regleOccurenceModif = await RegleOccurrenceModel.findById(appointment.recurrenceRule);
+            
+                const frequenceModif = regleOccurenceModif.frequence;
+                const date_finModif = regleOccurenceModif.date_fin;
+            
+                res.render('appointments/modifAppointment', {
+                    rendezVous: appointment,
+                    agendaName: agendaName,
+                    day: day,
+                    month: month,
+                    year: year,
+                    agendas: validAgendas,
+                    regle: regleOccurenceModif,
+                    recurrence: true,
+                    frequence: frequenceModif,
+                    date_fin: date_finModif,
+                    isTheOwner: isTheOwner,
+                    createur: createurUser,
+                });
+            }else{
+                res.render('appointments/modifAppointment', {
+                    rendezVous: appointment,
+                    agendaName: agendaName,
+                    day: day,
+                    month: month,
+                    year: year,
+                    agendas: validAgendas,
+                    recurrence: false,
+                    isTheOwner: isTheOwner,
+                    createur: createurUser,
+                });
+            }
+        } else {
+            res.status(404).send("Rendez-vous introuvable");
+        }
+    }  catch (error) {
+            next(error);
+        }
 }
 
 /**
@@ -99,7 +128,7 @@ export async function routeDelete(req,res, next){
  */
 export async function routeAddModif(req,res, next){
     try{
-        const {id, nom, date_debut, heure_debut, date_fin, heure_fin, day, month, year, agendas} = req.body;
+        const {id, idRegle, nom, date_debut, heure_debut, date_fin, heure_fin, day, month, year, agendas, recurrence, frequenceId, fin_rec, date_fin_rec} = req.body;
 
         const appointment = await AppointmentModel.findById(id);
         if (!appointment) {
@@ -131,20 +160,90 @@ export async function routeAddModif(req,res, next){
         }
 
 
-        // Modifie tous les champs du rdv en conséquence
-        const modifAppointment = await AppointmentModel.findByIdAndUpdate(
-            id,
-            {
-            agenda :  agenda,
-            nom : nom,
-            date_Debut : dateDebut,
-            date_Fin : dateFin
-            }
-        ) 
+        if(agenda === null)
+        {
+            return res.status(400).send("Aucun agenda trouvé");
+        }
 
-        // Sauvegarde la notification de modification dans la base de données
-        await creerNotification(res.locals.user, modifAppointment, res.locals.user, agenda, 2);
+        //const appointment = await AppointmentModel.findById(id);
 
+        if(recurrence === 'on' && appointment.recurrenceRule){
+            let dateFinRec = '';
+
+            if(fin_rec == 'never'){
+                dateFinRec = null;
+            }else{
+                dateFinRec = new Date(date_fin_rec);
+            }     
+
+            const modifRegleOccurrence = await RegleOccurrenceModel.findByIdAndUpdate(
+                idRegle,
+                {
+                frequence: frequenceId,
+                date_fin: dateFinRec,
+                }
+            );
+
+            const modifAppointment = await AppointmentModel.findByIdAndUpdate(
+                id,
+                {
+                agenda :  agenda,
+                nom : nom,
+                date_Debut : dateDebut,
+                date_Fin : dateFin,
+                recurrenceRule: modifRegleOccurrence,
+                }
+            ); 
+
+            // Sauvegarde la notification de modification dans la base de données
+            await creerNotification(res.locals.user, modifAppointment, res.locals.user, agenda, 2);
+
+        }else if(recurrence ==='on'){
+            let dateFinRec = '';
+
+            if(fin_rec == 'never'){
+                dateFinRec = null;
+            }else{
+                dateFinRec = new Date(date_fin_rec);
+            }     
+
+            const newRegle = new RegleOccurrenceModel({
+                frequence: frequenceId,
+                date_fin: dateFinRec,
+            });
+            
+            await newRegle.save();
+
+            const regleOccId = newRegle._id;
+
+            const modifAppointment = await AppointmentModel.findByIdAndUpdate(
+                id,
+                {
+                agenda :  agenda,
+                nom : nom,
+                date_Debut : dateDebut,
+                date_Fin : dateFin,
+                recurrenceRule: regleOccId,
+                }
+            ); 
+
+            // Sauvegarde la notification de modification dans la base de données
+            await creerNotification(res.locals.user, modifAppointment, res.locals.user, agenda, 2);
+        }else{
+            // Modifie tous les champs du rdv en conséquence
+            const modifAppointment = await AppointmentModel.findByIdAndUpdate(
+                id,
+                {
+                agenda :  agenda,
+                nom : nom,
+                date_Debut : dateDebut,
+                date_Fin : dateFin,
+                $unset: { recurrenceRule: 1 },
+                }
+            );
+            // Sauvegarde la notification de modification dans la base de données
+            await creerNotification(res.locals.user, modifAppointment, res.locals.user, agenda, 2);
+        }
         res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
     } catch (error) {
         next(error);
