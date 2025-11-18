@@ -55,14 +55,13 @@ routeProfile.post("/api/accounts/edit", (req, res, next) => {
                 return res.redirect("/login");
 
             let user = req.user;        
-            let { first_name, last_name, bio, profile_picture, theme } = req.body;
+            let { first_name, last_name, bio, profile_picture } = req.body;
 
             let updatedData = {
                 first_name: first_name,
                 last_name: last_name,
                 bio: bio,
-                profile_picture: profile_picture,
-                theme: theme
+                profile_picture: profile_picture
             };
 
             if (req.file) {

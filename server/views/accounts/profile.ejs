@@ -79,18 +79,6 @@ Odile. Moi c'est Odile. Pluto c'est le chien de Mickey."
       >
     </div>
 
-    <!-- Thème -->
-    <div>
-      <label for="theme" class="font-semibold block mb-1">Thème</label>
-      <select 
-        id="theme" 
-        name="theme" 
-        class="border border-stone-600 bg-stone-700 w-full px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-amber-500">
-        <option value="dark" <%= user.theme === "dark" ? "selected" : "" %>>Sombre</option>
-        <option value="light" <%= user.theme === "light" ? "selected" : "" %>>Clair</option>
-      </select>
-    </div>
-
     <!-- Bouton submit -->
     <div class="flex justify-end">
       <input 
