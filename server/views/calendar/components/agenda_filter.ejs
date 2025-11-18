@@ -105,7 +105,7 @@ function layoutAppointments() {
 <script>
     function setLocalStorageFilter(checkboxes)
     {
-        localStorage.setItem("agenda-filter", Array.from(checkboxes).filter(e => e.checked).map(e => e.value))
+        localStorage.setItem("agenda-filter", Array.from(checkboxes).filter(e => !e.checked).map(e => e.value))
     }
 
 </script>
@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (default_visibleID != null) {
             let exist = default_visibleID.includes(toggle.value)
-            if (!exist)
+            if (exist)
             {
                 toggle.click();
             }

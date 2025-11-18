@@ -70,7 +70,7 @@ function generateOccurrences(appointment, rangeStart, rangeEnd) {
         // occurrence suivante
         switch (freq) {
             case "day1":
-                current.setDate(current.getDate() + 2);
+                current.setDate(current.getDate() + interval);
                 break;
             case "week1":
                 current.setDate(current.getDate() + 7 * interval);
