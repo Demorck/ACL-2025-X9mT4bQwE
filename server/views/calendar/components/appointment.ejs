@@ -27,7 +27,7 @@
                 ✎
             </button>
         </form>
-        <form method="POST" action="/rdv/supp" class="m-0 p-0 leading-none">
+        <form method="POST" action="/rdv/supp" class="m-0 p-0 leading-none" onsubmit="return confirm('Supprimer le rendez-vous ?');">
             <input type="hidden" name="id" value="<%= app.id %>">
             <input type="hidden" name="day" value="<%= day %>">
             <input type="hidden" name="month" value="<%= month %>">
