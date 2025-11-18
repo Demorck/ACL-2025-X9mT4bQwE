@@ -55,5 +55,10 @@ L’application repose sur une **architecture client-serveur unique** :
 git clone https://github.com/Demorck/ACL-2025-X9mT4bQwE.git
 cd ACL-2025-X9mT4bQwE
 npm install
-npm start dev
+npm start
 ```
+
+Si vous faîtes des modifications, faites plutôt:
+`npm run watch:css`
+
+Le CSS doit être compilé. Si vous avez des souci d'affichages, normalement `npm start` ou `npm run watch:css` le compile automatiquement. Si ça ne marche pas, il y a cette commande: `npx postcss server/views/css/main.css -o public/styles/main.css`
