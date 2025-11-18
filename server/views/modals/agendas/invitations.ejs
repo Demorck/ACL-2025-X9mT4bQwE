@@ -1,0 +1,69 @@
+<% layout("modals/template"); %>
+<form action="/invitation/modifier" method="POST" class="flex flex-col items-center gap-4 mb-10">
+
+    <!-- On envoie maintenant l'ID de l'invitation -->
+    <input type="hidden" name="idInvitation" value="<%= invitation._id %>">
+
+    <!-- Lien affiché -->
+    <div class="flex-1 relative">
+        <% if (lien) { %>
+            <span class="font-semibold mr-2 link">Lien :</span><br>
+            <span class="break-all text-sm cursor-pointer hover:opacity-75" onclick="
+                navigator.clipboard.writeText('<%= lien %>');
+                document.querySelector('.link').textContent = 'Lien copié !'
+                setTimeout(() => {
+                    document.querySelector('.link').textContent = 'Lien :'
+                }, 1500);
+                "><%= lien %></span>
+        <% } %>
+    </div>
+
+    <!-- Modification du max -->
+    <div class="flex items-center gap-2">
+        <label for="utilisationsMax" class="font-semibold whitespace-nowrap">
+            Max :
+        </label>
+        <input
+            id="utilisationsMax"
+            type="number"
+            name="utilisationsMax"
+            min="1"
+            value="<%= invitation.utilisationsMax %>"
+            class="px-2 py-1 rounded bg-stone-900 w-20 text-right"
+        >
+    </div>
+
+    <input
+        type="submit"
+        value="Modifier"
+        class="px-4 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer whitespace-nowrap"
+    >
+</form>
+
+
+<div class="text-left">
+<h3 class="text-xl font-semibold mb-2">Invités <%= invites.length %>/<%= invitation.utilisationsMax %></h3>
+<% if (invites && invites.length > 0) { %>
+    <ul class="space-y-3">
+        <% invites.forEach(u => { %>
+            <li class="bg-stone-700 p-3 rounded flex justify-between items-center">
+
+                <div>
+                    <span class="font-semibold"><%= u.username %></span>
+                </div>
+
+                <form action="/invitation/<%= invitation.agenda %>/remove/<%= u._id %>" method="GET">
+                    <button
+                        type="submit"
+                        class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-sm"
+                    >
+                        Supprimer
+                    </button>
+                </form>
+            </li>
+        <% }) %>
+    </ul>
+<% } else { %>
+    <p class="text-stone-400">Aucun invité pour le moment.</p>
+<% } %>
+</div>

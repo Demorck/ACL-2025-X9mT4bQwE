@@ -38,11 +38,15 @@ export async function routeCalendar(req, res) {
             title = "Jour du " + data.dayLabel;
             previous_url = `/calendar/day?day=${day - 1}&month=${month}&year=${year}`;
             after_url = `/calendar/day?day=${day + 1}&month=${month}&year=${year}`;
+            data.day = day;
+            data.month = month;
+            data.year = year;
             break;
         case "week":
             let startOfWeek = getFirstDayOfWeek(requestedDate, { weekStartsOn: 1 });
             let endOfWeek = new TZDate(startOfWeek);
             endOfWeek.setDate(endOfWeek.getDate() + 6);
+            endOfWeek.setHours(23, 59, 59, 999);
 
             data = await getWeekData(startOfWeek, endOfWeek, res.locals.user);
             title = "Semaine du " +  data.startLabel + " au " + data.endLabel;

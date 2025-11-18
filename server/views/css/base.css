@@ -93,6 +93,27 @@ header {
     color: var(--inner-text);
 }
 
+.inner-container .list-agendas > :nth-child(2n + 1),
+.inner-container  ul > li:nth-child(2n + 1) {
+    background-color: --alpha(var(--inner-text)/15%);
+}
+
+.inner-container .list-agendas > :nth-child(2n),
+.inner-container  ul > li:nth-child(2n) {
+    background-color: --alpha(var(--inner-text)/10%);
+}
+
+
+/* Modaux */
+#modal-container > div {
+    background-color: var(--bg-calendar-header);
+    @apply mx-6 md:mx-0
+}
+
+#modal-container [data-close-modal] {
+    @apply cursor-pointer bg-red-400 absolute -top-2 -right-2 rounded-full w-8 h-8 text-center flex items-center justify-center
+}
+
 input[type='submit'] {
     background-color: var(--input-submit-bg);
     color: var(--input-submit-text);
@@ -101,6 +122,11 @@ input[type='submit'] {
 input[type='submit']:hover {
     background-color: var(--input-submit-hover-bg);
     color: var(--input-submit-hover-text);
+}
+
+
+option {
+    background-color: var(--bg-page);
 }
 
 /* Fin de la base des thèmes */

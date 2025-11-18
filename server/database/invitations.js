@@ -34,7 +34,7 @@ export async function getInvitationByAgendaId(agendaId) {
 }
 
 export async function getInvitation(id) {
-    return await invitationsModel.findById(id);
+    return await invitationsModel.findById(id).populate('agenda');
 }
 
 export async function updateInvitation(idInvitation, data) {

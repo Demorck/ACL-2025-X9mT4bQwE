@@ -1,52 +1,95 @@
-<div class="container mx-auto max-w-4xl px-4 py-6">
-  <div class="flex flex-row items-baseline">
+<% layout('template/layout') %>
+<div class="inner-container mx-auto md:w-1/2 w-full rounded-xl my-4 py-6">
+  <div class="flex flex-row items-baseline mx-4">
     <h1 class="text-2xl font-bold mb-4">Mes agendas</h1>
-    <a href="/agendas/new" class="ml-4 px-3 py-1 bg-green-500 text-stone-900 rounded hover:bg-green-600 items-center">Nouvel agenda</a>
+    <div data-action="new" class="ml-4 px-3 py-1 cursor-pointer bg-green-500 text-stone-900 rounded hover:bg-green-600 items-center">Nouvel agenda</div>
   </div>
 
   <% if (agendas && agendas.length) { %>
-    <div class="space-y-2">
+    <div class="list-agendas">
       <% agendas.forEach(a => { %>
-        <div class="flex items-center justify-between bg-stone-800 rounded-xl px-4 py-3">
+        <div class="flex items-center justify-between px-4 py-3"
+            data-agenda="<%= a._id %>">
           <div>
             <p class="font-semibold"><%= a.nom %>
             <% if(user._id.toString() !== a.user._id.toString()) { %>
                 (Partagé avec vous)
                 <% } %></p>
             <% if (a.description) { %>
-              <p class="text-sm text-stone-300"><%= a.description %></p>
+              <p class="text-sm"><%= a.description %></p>
             <% } %>
           </div>
 
           <div class="flex gap-2">
             <% if(user._id.toString() === a.user._id.toString()) { %>
-            <a href="/invitation/<%= a._id %>/manage"
-               class="px-3 py-1 rounded bg-sky-500 text-sm hover:bg-green-400">
+            <div class="px-3 py-1 rounded cursor-pointer bg-sky-500 text-sm hover:bg-sky-400" data-action="invite">
               Invitation
-            </a>
-            <a href="/agendas/edit/<%= a._id %>"
-               class="px-3 py-1 rounded bg-amber-500 text-sm hover:bg-amber-400">
+            </div>
+            <div href="/agendas/edit/<%= a._id %>"
+               class="px-3 py-1 rounded cursor-pointer bg-amber-500 text-sm hover:bg-amber-400" data-action="edit">
               Modifier
-            </a>
-            <a href="/agendas/delete/<%= a._id %>"
-               class="px-3 py-1 rounded bg-red-500 text-sm hover:bg-red-400">
-              Supprimer
-            </a>
+            </div>
             <% } else { %>
                 <form action="/invitation/<%= a._id %>/remove/<%= user._id %>" method="GET">
-                        <button
-                            type="submit"
-                            class="px-3 py-1 rounded bg-red-500 text-sm hover:bg-red-400"
-                        >
-                        Quitter
-                        </button>
-                    </form>
+                  <button
+                      type="submit"
+                      class="px-3 py-1 rounded cursor-pointer bg-red-500 text-sm hover:bg-red-400"
+                  >
+                  Quitter
+                  </button>
+                </form>
             <% } %>
           </div>
         </div>
       <% }) %>
     </div>
   <% } else { %>
-    <p class="text-stone-200">Aucun agenda pour le moment.</p>
+    <p class="text-center">Aucun agenda pour le moment.</p>
   <% } %>
 </div>
+
+<script>
+function updateColorPreview() {
+    let select = document.getElementById('couleur');
+    let preview = document.getElementById('color-preview');
+
+    const selected = select.options[select.selectedIndex];
+    const colorClass = selected.dataset.color;
+    preview.className = `absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full border border-stone-400 ${colorClass}`;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  let new_element = document.querySelector("[data-action='new']");
+  new_element.addEventListener("click", async e => {
+    await openModal(`/agendas/new`);
+
+    updateColorPreview()
+  });
+
+  let invit_elements = document.querySelectorAll("[data-action='invite']");
+  invit_elements.forEach(el => {
+    el.addEventListener("click", async e => {
+      let agenda_el = e.target.closest("[data-agenda]");
+      await openModal(`/invitation/${agenda_el.dataset.agenda}/manage`)
+    })
+  });
+
+
+  let edit_elements = document.querySelectorAll("[data-action='edit']");
+  edit_elements.forEach(el => {
+    el.addEventListener("click", async e => {
+      let agenda_el = e.target.closest("[data-agenda]");
+
+      await openModal(`/agendas/edit/${agenda_el.dataset.agenda}`);
+
+      updateColorPreview()
+    });
+  })
+});
+
+document.addEventListener("change", function (e) {
+    if (e.target.id === "couleur") {
+        updateColorPreview();
+    }
+});
+</script>

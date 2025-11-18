@@ -16,9 +16,56 @@
     document.body.classList.add(theme);
   })
 </script>
+<script>
+async function openModal(url, script, options = {}) {
+  let overlay = document.getElementById("modal-overlay");
+  let container = document.getElementById("modal-container");
+
+  let fetchOptions = {
+      method: options.method || "GET",
+      headers: options.headers || {},
+  };
+
+  if (options.method === "POST" && options.body) {
+    fetchOptions.headers["Content-Type"] = "application/json";
+    fetchOptions.body = JSON.stringify(options.body);
+  }
+
+  overlay.classList.toggle("hidden");
+  overlay.classList.toggle("flex");
+
+  let html = await fetch(url, fetchOptions).then(res => res.text());
+
+  container.innerHTML = html;
+
+
+
+  if (script && !document.querySelector(`script[src="${script}"]`)) {
+    let s = document.createElement("script");
+    s.src = script;
+    s.defer = true;
+    s.dataset.scriptModal = true
+    document.body.appendChild(s);
+  }
+}
+
+document.addEventListener("click", e => {
+    if (e.target.matches("#modal-overlay") || e.target.closest("[data-close-modal]")) {
+        document.querySelector("#modal-overlay").classList.toggle("hidden");
+        document.querySelector("#modal-overlay").classList.toggle("flex");
+        document.querySelector("#modal-container").innerHTML = "";
+    }
+});
+</script>
 <body>
 
   <%- include("header") %>
+
+  <div class="fixed w-full h-full top-0 left-0 z-30 bg-slate-900/60 items-center justify-center hidden" id="modal-overlay">
+    <div id="modal-container">
+
+    </div>
+  </div>
 
   <div class="flex-1 flex w-full mx-auto">
     <%- body %>

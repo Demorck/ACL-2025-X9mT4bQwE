@@ -6,8 +6,15 @@ export async function routeNewAgenda(req, res) {
     if(!res.locals.user)
         return res.redirect("/login");
 
-    res.render("agendas/newAgenda", {
-        
+    res.render("modals/agendas/form", {
+        title: "Créer un nouvel agenda",
+        agenda: {
+            nom: "",
+            description: "",
+            couleur: "red"
+        },
+        buttonText: "Créer",
+        action: "/agendas/add"
     });
 }
 
@@ -52,13 +59,25 @@ export async function routeDeleteAgenda(req, res, next) {
 }
 
 export async function routeEditAgenda(req, res, next) {
+    if (!res.locals.user)
+        return res.redirect("/login");
+
+    if (req.body.actionType === "Supprimer") {
+        return res.redirect(`/agendas/delete/${req.params.id}`);
+    }
+
     await editAgenda(req.params.id, req.body.nom, req.body.description, req.body.couleur);
     return res.redirect("/agendas/list");
 }
 
 export async function routeFormEditAgenda(req, res, next){  
     const agenda = await getAgendasById(req.params.id)
-    res.render('agendas/editAgenda', { agenda });
+    res.render('modals/agendas/form', { 
+        agenda,
+        title: "Modifier l'agenda",
+        buttonText: "Modifier",
+        action: `/agendas/edit/${req.params.id}`
+    });
 }
 
 export async function routeTestAgendasPartages(req, res){

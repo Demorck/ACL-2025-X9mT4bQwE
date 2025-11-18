@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { ajouterAgenda } from "./users.js";
-import { validateHeaderName } from "http";
-import { creerNotification } from "./notification.js";
+import { creerNotification } from "../services/notificationService.js";
 
 const Schema = mongoose.Schema;
 
