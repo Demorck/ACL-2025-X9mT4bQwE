@@ -8,7 +8,7 @@
       </button>
     </form>
     <form action="/notifications/all-delete" method="POST" class="mb-4">
-        <button type="submit" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
+      <button type="submit" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
         Supprimer les notifications
       </button>
     </form>
@@ -22,25 +22,34 @@
     <ul class="space-y-2">
       <% notifications.forEach(n => { %>
       <% const concerneEqualConnecte = n.user_concerned && n.user_concerned._id.toString() == user._id.toString() %>
-        <li class="p-3 rounded bg-stone-700 flex justify-between items-center">
+        <li class="p-3 rounded bg-stone-700 flex justify-between items-center group">
           <span>
             <% const userText = n.user_concerned ? (concerneEqualConnecte ? "vous" : n.user_concerned.username) : "un utilisateur"; %>
             <% const userTextSujet = n.user_concerned ? (concerneEqualConnecte ? "Vous avez" : `${n.user_concerned.username} a`) : "Quelqu'un a"; %>
             <% if (n.type === 0) { %>
-              L'agenda <b><%= n.agenda?.nom || "?" %></b> a été créé par <b> <%= userText %> </b>.
+              L'agenda <b><%= n.nom || "?" %></b> a été créé par <b> <%= userText %> </b>.
             <% } else if (n.type === 1) { %>
-              Le nouveau rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été créé par <b> <%= userText %> </b>.
+              Le nouveau rendez-vous <b><%= n.nom || "?" %></b> a été créé par <b> <%= userText %> </b>.
             <% } else if (n.type === 2) { %>
-              Le rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été modifié par <b> <%= userText %></b>.
+              Le rendez-vous <b><%= n.nom || "?" %></b> a été modifié par <b> <%= userText %></b>.
             <% } else if (n.type === 3) { %>
-              Le rendez-vous <b><%= n.appointment?.nom || "?" %></b> a été supprimé par <b> <%= userText %></b>.
+              Le rendez-vous <b><%= n.nom || "?" %></b> a été supprimé par <b> <%= userText %></b>.
             <% } else if (n.type === 4) { %>
-             <b> <%= userTextSujet %>  </b> été ajouté à l'agenda partagé <b><%= n.agenda?.nom || "?" %></b>.
+             <b> <%= userTextSujet %>  </b> été ajouté à l'agenda partagé <b><%= n.nom || "?" %></b>.
             <% } else if (n.type === 5) { %>
-             <b> <%= userTextSujet %> </b> été retiré de l'agenda partagé <b><%= n.agenda?.nom || "?" %></b>.
+             <b> <%= userTextSujet %> </b> été retiré de l'agenda partagé <b><%= n.nom || "?" %></b>.
             <% } %>
           </span>
-
+          <span>
+            <div class="inline-flex invisible group-hover:visible">
+              <form action="/notifications/single-delete" method="POST" class="mb-4">
+                <input type="hidden" name="id" value="<%= n.id %>">
+                <button type="submit" title="Supprimer notification" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
+                  Supprimer notification 
+                </button>
+              </form>
+            </div>
+          </span>
           <% if (!n.seen) { %>
             <span class="text-xs text-red-400 font-semibold">Non lu</span>
           <% } %>

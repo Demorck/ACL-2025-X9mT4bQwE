@@ -78,6 +78,7 @@ export async function routeDelete(req,res, next){
 
         // Sauvegarde la notification de suppression dans la base de données
         await creerNotification(userAgenda.user, appointment, res.locals.user, userAgenda, 3);
+
         // Supprime les notifications en rapport au rendez-vous dans la base de données
         await supprimerNotification(id);
 
