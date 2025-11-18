@@ -1,4 +1,4 @@
-import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda } from "../database/agenda.js";
+import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda, addInvite, removeInvite } from "../database/agenda.js";
 
 
 export async function routeNewAgenda(req, res) { 
@@ -33,7 +33,12 @@ export async function routeAddAgendaToDatabase(req, res, next) {
 }
 export async function routeListeAgendas(req, res, next) {
     const agendas = await listAgendas(res.locals.user);
-    res.render('agendas/listAgendas', { agendas });
+    res.render('agendas/listAgendas', 
+        { 
+            agendas : agendas,
+            user : res.locals.user,
+        }
+    );
 }
 
 export async function routeDeleteAgenda(req, res, next) {
@@ -53,11 +58,37 @@ export async function routeEditAgenda(req, res, next) {
 
 export async function routeFormEditAgenda(req, res, next){  
     const agenda = await getAgendasById(req.params.id)
-    console.log(agenda);
     res.render('agendas/editAgenda', { agenda });
 }
 
+export async function routeTestAgendasPartages(req, res){
+    res.render('agendas/testAgendaPartages');
+}
 
+export async function routeAjouterAgendaPartage(req, res, bext){
+    if(!res.locals.user)
+        return res.redirect("/login");
+    
+    if(!req.body.agendaID || !req.body.userID)
+    {
+        console.log("Manque agendaID ou userID pour ajout");
+        return res.redirect("/agendas/testAgendasPartages");
+    }
 
+    await addInvite(req.body.agendaID, req.body.userID);
+    return res.redirect("/agendas/testAgendasPartages");
+}
 
+export async function routeSupprimerAgendaPartage(req, res, bext){
+    if(!res.locals.user)
+        return res.redirect("/login");
+    
+    if(!req.body.agendaID || !req.body.userID)
+    {
+        console.log("Manque agendaID ou userID pour suppression");
+        return res.redirect("/agendas/testAgendasPartages");
+    }
 
+    await removeInvite(req.body.agendaID, req.body.userID);
+    return res.redirect("/agendas/testAgendasPartages");
+}

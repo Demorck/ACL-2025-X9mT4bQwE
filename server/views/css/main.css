@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+@import './base.css';
+
+/* Thèmes */
+/*
+    Pour créer un thème, il y a 3 choses à faire:
+        - Copier/coller le fichier template et le modifier
+        - Ajouter l'import ici
+        - Modifier le header pour que le thème soit disponible dans le dropdown.
+*/
+@import './themes/dark.css';
+@import './themes/light.css';
+@import './themes/forest.css';
+@import './themes/retro.css';
+@import './themes/frost.css';
+@import './themes/galaxy.css';
+@import './themes/hacker.css';
+@import './themes/kawaii.css';
+
+/* @import './themes/template.css'; */

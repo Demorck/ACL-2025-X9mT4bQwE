@@ -2,7 +2,7 @@
     <h2 class="text-lg font-semibold mb-2">Agendas</h2>
     <div class="flex flex-wrap flex-row sm:flex-col gap-3">
         <% data.agendas.forEach(a => { %>
-            <label class="flex items-center gap-2 text-stone-200 cursor-pointer">
+            <label class="flex items-center gap-2 cursor-pointer">
                 <input 
                     type="checkbox" 
                     class="agenda-toggle" 
@@ -10,7 +10,7 @@
                     checked
                 >
                 <span 
-                    class="inline-block w-3 h-3 rounded-full bg-<%= a.couleur %>-600"
+                    class="filter-color filter-color-<%= a.couleur %>"
                 ></span>
                 <span><%= a.nom %></span>
             </label>

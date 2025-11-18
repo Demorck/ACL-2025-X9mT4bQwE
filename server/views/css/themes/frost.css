@@ -1,0 +1,48 @@
+@layer base {
+	body.inoxtag {
+		--bg-page: theme(colors.sky.50);
+		--text-main: theme(colors.slate.800);
+		--bg-header: theme(colors.sky.100);
+		--text-header: theme(colors.slate.900);
+		--border-header: theme(colors.sky.200);
+
+		--bg-calendar: theme(colors.sky.100);
+		--text-calendar: theme(colors.slate.900);
+		--bg-calendar-header: theme(colors.sky.200);
+		--border-calendar-header: theme(colors.sky.300);
+
+		--btn-bg: theme(colors.sky.200);
+		--btn-bg-hover: theme(colors.sky.300);
+		--btn-border: theme(colors.sky.400);
+		--btn-active-bg: theme(colors.cyan.400);
+		--btn-active-bg-hover: theme(colors.cyan.500);
+
+		--inner-bg: theme(colors.sky.50);
+		--inner-text: theme(colors.slate.800);
+
+		--input-submit-bg: theme(colors.cyan.500);
+		--input-submit-text: white;
+		--input-submit-hover-bg: theme(colors.cyan.600);
+		--input-submit-hover-text: white;
+	}
+
+	body.inoxtag .calendar-hours-background {
+		background: linear-gradient(to bottom,
+				rgba(200, 230, 255, 0.85) calc(100% / 24 - 1px),
+				rgba(220, 240, 255, 0.7) calc(100% / 24));
+	}
+
+	body.inoxtag .calendar-hours-background-today {
+		background: linear-gradient(to bottom,
+				rgba(170, 220, 255, 0.85) calc(100% / 24 - 1px),
+				rgba(140, 210, 255, 0.7) calc(100% / 24));
+	}
+
+	body.inoxtag .month-day {
+		@apply border-sky-300 bg-sky-100/50;
+	}
+
+	body.inoxtag .not-month-day {
+		@apply bg-sky-50/70;
+	}
+}
