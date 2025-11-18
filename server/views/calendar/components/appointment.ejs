@@ -9,39 +9,13 @@
     data-agenda="<%= app.agendaId %>"
     data-start="<%= app.startHour %>"
     data-duration="<%= app.durationHours %>"
-    data-day="<%= app.start.getDay() %>"
+    data-day="<%= day %>"
+    data-month="<%= month %>"
+    data-year="<%= year %>"
+    data-id="<%= app.id %>"
+    data-appointment
 >
     <strong><%= app.nom %></strong>
-
-    <div class="inline-flex gap-3 rdv-actions invisible group-hover:visible">
-        <form method="POST" action="/rdv/modif" class="m-0 p-0 leading-none">
-            <input type="hidden" name="id" value="<%= app.id %>">
-            <input type="hidden" name="day" value="<%= day %>">
-            <input type="hidden" name="month" value="<%= month %>">
-            <input type="hidden" name="year" value="<%= year %>">
-            <input type="hidden" name="agendaId" value="<%= app.agendaId %>">
-            <button
-                type="submit"
-                class="bg-blue-600 hover:bg-blue-400 w-4 h-4 rounded flex items-center justify-center text-white text-xs font-semibold leading-none p-0 cursor-pointer"
-                title="Modifier le rendez-vous">
-                ✎
-            </button>
-        </form>
-        <form method="POST" action="/rdv/supp" class="m-0 p-0 leading-none">
-            <input type="hidden" name="id" value="<%= app.id %>">
-            <input type="hidden" name="day" value="<%= day %>">
-            <input type="hidden" name="month" value="<%= month %>">
-            <input type="hidden" name="year" value="<%= year %>">
-            <input type="hidden" name="agendaId" value="<%= app.agendaId %>">
-            <button
-                type="submit"
-                class="bg-red-600 hover:bg-red-400 w-4 h-4 rounded flex items-center justify-center text-white text-xs font-semibold leading-none p-0 cursor-pointer"
-                title="Supprimer le rendez-vous">
-                &times;
-            </button>
-        </form>
-    </div>
-
-    <br>
+    <br> 
     <%= app.startLabel %> - <%= app.endLabel %>
 </div>

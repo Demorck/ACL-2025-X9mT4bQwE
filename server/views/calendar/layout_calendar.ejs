@@ -61,3 +61,43 @@
         }
     });
 </script>
+<script>
+/** Ouvre le modal pour ajouter un rendez-vous avec en pré-remplissage le jour, mois, année, heure */
+document.addEventListener("click", function (e) {
+    let target = e.target.closest("[data-open-appointment]");
+    let app = e.target.closest("[data-agenda]");
+    
+    if (!target || app) return;
+
+    let year = target.dataset.year;
+    let month = target.dataset.month;
+    let day = target.dataset.day;
+    let hour = target.dataset.hour ?? 8;
+
+    let url = `/appointment/new?year=${year}&month=${month}&day=${day}&beginningHour=${hour}`;
+   
+    openModal(url, "/js/appointments.js");
+
+    e.preventDefault();
+});
+
+document.addEventListener("DOMContentLoaded", function(e) {
+    let allApp = document.querySelectorAll("[data-appointment]");
+    allApp.forEach(app => {
+        app.addEventListener("click", (e) => {
+            let options = {
+                method: "POST",
+                body: { 
+                    day: app.dataset.day,
+                    month: app.dataset.month,
+                    year: app.dataset.year, 
+                    agendaId: app.dataset.agenda,
+                    id: app.dataset.id
+                }
+            }
+            openModal("/appointment/edit", "/js/appointments.js", options)
+        })
+    })
+    
+});
+</script>

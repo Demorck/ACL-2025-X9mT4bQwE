@@ -16,7 +16,12 @@
         <div class="flex flex-row flex-1">
             <% week.forEach(day => { %>
                 <div class="flex flex-1">
-                    <div class="relative w-full border-r flex-1 border-b p-2 month-day">
+                    <div class="relative w-full border-r flex-1 border-b p-2 month-day" 
+                            data-open-appointment
+                            data-year="<%= day.getFullYear() %>"
+                            data-month="<%= day.getMonth() %>"
+                            data-day="<%= day.getDate() %>"
+                        >
                         <div class="text-sm ">
                             <%= day.getDate() %>
                         </div>

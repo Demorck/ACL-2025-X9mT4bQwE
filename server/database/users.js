@@ -32,7 +32,7 @@ export const UserModel = mongoose.model("User", UserSchema);
  * @param {User} user 
  * @param {Agenda} agenda 
  */
-export function ajouterAgenda(user, agenda)
+export async function ajouterAgenda(user, agenda)
 {
     user.agendas.push(agenda);
     return user.save();
@@ -52,7 +52,7 @@ export function ajouterNotification(user, notification) {
  * Cette fonction crée un agenda par defaut à un user
  * @param {User} user le user à qui on crée un agenda par défaut
  */
-export function ajouterAgendaParDefaut(user)
+export async function ajouterAgendaParDefaut(user)
 {
     const agenda = new AgendaModel({
         user: user,
@@ -60,8 +60,8 @@ export function ajouterAgendaParDefaut(user)
         description: "Un agenda créée par défaut",
         couleur: "orange",
     });
-    agenda.save();
-    ajouterAgenda(user, agenda);
+    await agenda.save();
+    await ajouterAgenda(user, agenda);
 }
 
 export async function getUserById(id) {

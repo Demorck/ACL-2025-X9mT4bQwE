@@ -1,9 +1,8 @@
+import { TZDate } from "@date-fns/tz";
 import mongoose from "mongoose";
-import { AgendaModel } from "./agenda.js";
 
 const Schema = mongoose.Schema;
 
-// TODO: Ajouter les dates en index pour accélérer les recherches.
 const appointmentSchema = new Schema({
     agenda : { type: Schema.Types.ObjectId, ref: "Agenda", required: true },
     nom: { type: String, required: true },
@@ -23,11 +22,66 @@ export async function getAppointmentsByUserAndDateRange(user, startDate, endDate
     
     let appointments = await AppointmentModel.find({
         agenda: { $in: agendaIds },
-        date_Debut: { $lt: endDate },
-        date_Fin: { $gte: startDate },
     })
         .populate("agenda")
+        .populate("recurrenceRule")
         .sort({ date_Debut: 1 });
 
-    return appointments;
+    let final = [];
+
+    for (let app of appointments) {
+        let occurrences = generateOccurrences(app, startDate, endDate);
+        final.push(...occurrences);
+    }
+    
+    return final.sort((a, b) => a.date_Debut - b.date_Debut);
+}
+
+function generateOccurrences(appointment, rangeStart, rangeEnd) {
+    const rule = appointment.recurrenceRule;
+    if (!rule) return [appointment]; // pas récurrent
+
+    const occurrences = [];
+
+    let current = new TZDate(appointment.date_Debut);
+    let duration = appointment.date_Fin - appointment.date_Debut;
+
+    const freq = rule.frequence;
+    const interval = parseInt(rule.intervale || "1");
+    const recurrenceEnd = rule.date_fin ? new TZDate(rule.date_fin) : null;
+
+    // Tant qu’on n’est pas après la plage
+    while (current <= rangeEnd) {
+
+        if (recurrenceEnd && current > recurrenceEnd) break;
+
+        const currentEnd = new TZDate(current.getTime() + duration);
+
+        // si l’occurrence est dans la plage => on garde
+        if (currentEnd >= rangeStart && current <= rangeEnd) {
+            occurrences.push({
+                ...appointment.toObject(),
+                date_Debut: new TZDate(current),
+                date_Fin: new TZDate(currentEnd),
+                isOccurrence: true
+            });
+        }
+
+        // occurrence suivante
+        switch (freq) {
+            case "day1":
+                current.setDate(current.getDate() + 2);
+                break;
+            case "week1":
+                current.setDate(current.getDate() + 7 * interval);
+                break;
+            case "month1":
+                current.setMonth(current.getMonth() + interval);
+                break;
+            default:
+                return occurrences;
+        }
+    }
+
+    return occurrences;
 }
