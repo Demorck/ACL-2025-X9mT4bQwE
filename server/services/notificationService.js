@@ -16,11 +16,18 @@ export async function getNotificationsForUser(user) {
 /**
  * Marque toutes les notifications comme vues
  */
-export async function markAllNotificationsSeen(userId) {
-    return await NotificationModel.updateMany(
-        { user: userId, seen: false },
-        { $set: { seen: true } }
-    );
+export async function markAllNotificationsSeen(userId, notificationId = null) {
+    if (notificationId) {
+        return await NotificationModel.updateOne(
+            { _id: notificationId, user: userId, seen: false },
+            { $set: { seen: true } }
+        );
+    } else {
+        return await NotificationModel.updateMany(
+            { user: userId, seen: false },
+            { $set: { seen: true } }
+        );
+    }
 }
 
 /**

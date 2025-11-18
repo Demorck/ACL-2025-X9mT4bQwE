@@ -7,15 +7,15 @@ export async function utiliserlien(req, res) {
     const userId = res.locals.user._id;
     const invitation = await getInvitation(invitationId);
     const agenda = invitation.agenda;
-
-    if (agenda.user && agenda.user.toString() === userId.toString()) {
-        return res.status(400).send("Vous etes le proprietaire de cet agenda");
+    
+    if (agenda.user && agenda.user._id.toString() === userId.toString()) {
+        return res.render('errors/generic', { message: "Vous êtes le propriétaire de cet agenda", statusCode: 400 });
     }
 
     const isInAgenda = await isInviteInAgenda(agenda, userId);
     
     if (isInAgenda) {
-        return res.status(400).send("Vous etes deja dans cet agenda");
+        return res.render('errors/generic', { message: "Vous êtes déjà dans cet agenda", statusCode: 400 });
     }
     
     await addInvite(agenda._id, userId);
@@ -40,10 +40,11 @@ export async function routeCreationInvitation(req, res){
         )
     );
 
-    res.render("invitations/invitation", { 
+    res.render("modals/agendas/invitations", { 
         lien,
         invitation,
-        invites
+        invites,
+        title: "Gérer les invitations",
     });
 }
 

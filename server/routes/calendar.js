@@ -38,6 +38,9 @@ export async function routeCalendar(req, res) {
             title = "Jour du " + data.dayLabel;
             previous_url = `/calendar/day?day=${day - 1}&month=${month}&year=${year}`;
             after_url = `/calendar/day?day=${day + 1}&month=${month}&year=${year}`;
+            data.day = day;
+            data.month = month;
+            data.year = year;
             break;
         case "week":
             let startOfWeek = getFirstDayOfWeek(requestedDate, { weekStartsOn: 1 });

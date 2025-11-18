@@ -72,8 +72,8 @@
             
               // création d’un lien cliquable
               newTextResultat += `
-                <div class="p-2 hover:bg-gray-200 cursor-pointer" onclick="window.location.href='/calendar/day?day=${day}&month=${month - 1}&year=${year}'">
-                  ${element.nom} - ${day}/${month}/${year}
+                <div class="p-2 hover:bg-gray-200 cursor-pointer" onclick="window.location.href='/calendar/day?day=${day}&month=${month}&year=${year}'">
+                  ${element.nom} - ${day}/${month + 1}/${year}
                 </div>`;
             });
           }

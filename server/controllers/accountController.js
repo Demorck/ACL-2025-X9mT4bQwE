@@ -40,7 +40,14 @@ export async function createAccount(req, res, next) {
 
         res.redirect("/login");
     } catch(err) {
-        next(err);
+        // 11000 est le code d'erreur pour les doublons de clé dans MongoDB
+        if (err.code === 11000) {
+            return res.render("accounts/register", {
+                error: "Ce nom d'utilisateur existe déjà."
+            });
+        }
+
+        return next(err);
     }
 }
 

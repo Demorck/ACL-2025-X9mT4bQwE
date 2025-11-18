@@ -12,6 +12,16 @@ export async function routeNotification(req, res) {
     });
 }
 
+export async function routeMarkSingleNotificationsSeen(req, res) {
+    if (!res.locals.user)
+        return res.redirect("/login");
+
+    const { id } = req.body;
+
+    await markAllNotificationsSeen(res.locals.user._id, id);
+    res.redirect("/notifications");
+}
+
 export async function routeMarkAllNotificationsSeen(req, res) {
     if (!res.locals.user)
         return res.redirect("/login");

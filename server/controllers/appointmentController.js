@@ -25,11 +25,12 @@ export async function renderNewAppointment(req, res) {
         beginningHour
     });
     
-    res.render("modals/appointments/_form", {
+    res.render("modals/appointments/form", {
         ...formData,
         agendas: validAgendas,
         action: "/appointment/add",
         submitText: "Ajouter",
+        title: "Nouveau rendez-vous",
         isTheOwner: false,
         createur: null
     });
@@ -77,11 +78,12 @@ export async function renderEditAppointment(req, res,  next) {
             selectedAgenda: appointment.agenda.toString()
         });
 
-        res.render("modals/appointments/_form", {
+        res.render("modals/appointments/form", {
             ...formData,
             agendas: validAgendas,
             action: "/appointment/update",
             submitText: "Modifier",
+            title: "Modifier le rendez-vous",
             isTheOwner,
             createur: createurUser
         });
@@ -94,6 +96,12 @@ export async function renderEditAppointment(req, res,  next) {
 
 export async function handleUpdateAppointment(req, res, next) {
     try {
+        if(!res.locals.user) return res.redirect("/login");
+
+        if (req.body.actionType === "Supprimer") {
+            return handleDeleteAppointment(req, res, next);
+        }
+
         await updateAppointment(res.locals.user, req.body);
 
         const { day, month, year } = req.body;

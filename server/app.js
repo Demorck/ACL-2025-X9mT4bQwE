@@ -59,12 +59,6 @@ app.get("/agendas/list", routeListeAgendas);
 app.get("/agendas/delete/:id", routeDeleteAgenda);
 app.get("/agendas/edit/:id", routeFormEditAgenda);
 app.post("/agendas/edit/:id", routeEditAgenda);
-app.get("/agendas/testAgendasPartages", routeTestAgendasPartages);
-app.post("/AjoutAgendaPartage", routeAjouterAgendaPartage);
-app.post("/RemoveAgendaPartage", routeSupprimerAgendaPartage);
-
-
-
 
 app.get("/calendar/:view", routeCalendar);
 
@@ -76,6 +70,9 @@ app.get("/invitation/:idAgenda/manage", routeCreationInvitation);
 app.get("/invitation/:id", utiliserlien);
 app.post("/invitation/modifier", modifierInvitation);
 
+app.post("/erreur", (req, res) => {
+    res.render("errors/generic", { message: req.body.message || "Une erreur est survenue." });
+});
 
 app.get("/", (req, res) => {
     res.render("index");

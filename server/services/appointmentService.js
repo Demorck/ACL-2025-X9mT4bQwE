@@ -160,12 +160,12 @@ export async function updateAppointment(user, body) {
  * Suppression d’un rendez-vous
  */
 export async function deleteAppointment(user, body) {
-    const { id, agendaId } = body;
+    const { id, agendas } = body;
 
     const appointment = await AppointmentModel.findById(id);
     if (!appointment) throw new Error("Rendez-vous introuvable");
 
-    const agenda = await AgendaModel.findById(agendaId).populate("user");
+    const agenda = await AgendaModel.findById(agendas).populate("user");
 
     const ownerId = agenda.user._id.toString();
     const creatorId = appointment.createur.toString();
