@@ -24,11 +24,6 @@
          data-hour="<%= hour %>">
     </div>
     <% } %>  
-    <% data.appointments.forEach(element => {
-        console.log(element.start.getDay());
-        
-    }); %>
-      
         <% data.appointments.filter(a => a.start.getDay()=== i % 7).forEach(app => { 
             let day = app.start.getDay()
             let month = app.start.getMonth()
