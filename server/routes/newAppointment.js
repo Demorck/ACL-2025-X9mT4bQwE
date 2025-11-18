@@ -106,7 +106,7 @@ export async function routeAddAppointmentToDatabase(req, res, next) {
             await newAppointment.save();  
 
             // Sauvegarde la notification de création dans la base de données
-            await creerNotification(res.locals.user, newAppointment, undefined, 1);
+            await creerNotification(res.locals.user, newAppointment, res.locals.user, undefined, 1);
 
         }else{
             // Créer une nouvelle instance du modèle Appointment sans regle de recurrence
@@ -122,7 +122,7 @@ export async function routeAddAppointmentToDatabase(req, res, next) {
             await newAppointment.save();
 
             // Sauvegarde la notification de création dans la base de données
-            await creerNotification(res.locals.user, newAppointment, undefined, 1);
+            await creerNotification(res.locals.user, newAppointment, res.locals.user, undefined, 1);
         }
 
         // Sauvegarde la notification de création dans la base de données
