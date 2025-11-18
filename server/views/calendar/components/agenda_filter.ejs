@@ -103,9 +103,21 @@ function layoutAppointments() {
 
 </script>
 <script>
+    function setLocalStorageFilter(checkboxes)
+    {
+        localStorage.setItem("agenda-filter", Array.from(checkboxes).filter(e => e.checked).map(e => e.value))
+    }
+
+</script>
+<script>
 document.addEventListener("DOMContentLoaded", () => {
     let toggles = document.querySelectorAll(".agenda-toggle");
     let view = document.querySelector('#container-filter');
+    let default_visibleID = localStorage.getItem("agenda-filter");
+    if (default_visibleID != null) {
+        default_visibleID = default_visibleID.split(",");
+    }
+
     view = view.dataset.view
     
     toggles.forEach(toggle => {
@@ -127,7 +139,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     layoutAppointments();
                     break;
             }
+
+            setLocalStorageFilter(toggles);
         });
+
+        if (default_visibleID != null) {
+            let exist = default_visibleID.includes(toggle.value)
+            if (!exist)
+            {
+                toggle.click();
+            }
+        }
     });
 
     layoutAppointments();
