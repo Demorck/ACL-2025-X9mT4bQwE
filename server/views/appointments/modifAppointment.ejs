@@ -14,7 +14,7 @@
     const formDateFin = `${formYearFin}-${ formMonthFin }-${formDayFin}`;
     const heureFin = (dateFin.getUTCHours() + 1).toString().padStart(2, '0');
 
-
+    
     const name = rendezVous.nom;
     const rdvId = rendezVous._id.toString();
 
@@ -83,17 +83,32 @@
 
             <div class="flex items-center justify-between mb-6">
                 <label class="bloc font-semibold mb-1" for="agendas">Agendas</label>
-                <select id="agendaId" name="agendas" required class="bg-stone-800 border px-3 py-2 rounded">
-                    <% agendas.forEach(agenda => { 
-                        let currentAgendaId = agenda.id;
+                <select id="agendaId" name="agendas" required class="bg-stone-800 border px-3 py-2 rounded" 
+                <% if(isTheOwner) {%> disabled <%}%>
+                >
+                    <% agendas.forEach(loopAgenda => { 
+                        let currentAgendaId = loopAgenda.id;
                         let isSelected = '';
                         if (rendezVous.agenda.toString() === currentAgendaId) {
                             isSelected = 'selected';
                         }
                     %>
-                    <option id="agendaId" name="agendaId" value="<%= currentAgendaId %>" <%= isSelected %>><%= agenda.nom %></option>
+                    <option value="<%= currentAgendaId %>" <%= isSelected %>><%= loopAgenda.nom %></option>
                     <% }); %>
                 </select>
+
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                <label class="bloc font-semibold mb-1">Créateur</label>
+                <% if (createur) { %>
+                    <%= createur.username %>
+                    <% if (!createur.profile_picture) { %>
+                        <i class="fa fa-user text-2xl"></i>
+                    <% } else { %>
+                        <img src="<%=createur.profile_picture%>" alt="Photo de profil du créateur" class="w-10 h-10 rounded-full object-cover">
+                    <% } %>
+                <% }%>
             </div>
 
             <input type="hidden" name="id" value="<%= rdvId %>">

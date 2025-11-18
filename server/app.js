@@ -12,14 +12,17 @@ import { routeDaily } from "./routes/daily.js";
 import { routeNewAppointment, routeAddAppointmentToDatabase } from "./routes/newAppointment.js";
 import { authMiddleware } from "./middlewares/auth.js";
 import { routeLogOut } from "./routes/logout.js";
-import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda} from "./routes/agendas.js";
+import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda, routeTestAgendasPartages, routeAjouterAgendaPartage, routeSupprimerAgendaPartage } from "./routes/agendas.js";
 import { routeWeekly } from "./routes/weekly.js";
-import { routeMarkAllNotificationsSeen, routeNotification } from "./routes/notifications.js";
+import { routeMarkAllNotificationsSeen, routeNotification, routeDeleteAllNotifications } from "./routes/notifications.js";
 import { routeAddModif, routeModif, routeDelete } from "./routes/appointmentModif.js";
 import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
+import { routeRecherche } from "./routes/rechercher/recherches.js";
+
 import { editUserProfile, routeShowProfile } from "./routes/accounts/userProfile.js";
 
+import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation} from "./routes/invitations.js"
 
 export const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -56,6 +59,10 @@ app.get("/agendas/list", routeListeAgendas);
 app.get("/agendas/delete/:id", routeDeleteAgenda);
 app.get("/agendas/edit/:id", routeFormEditAgenda);
 app.post("/agendas/edit/:id", routeEditAgenda);
+app.get("/agendas/testAgendasPartages", routeTestAgendasPartages);
+app.post("/AjoutAgendaPartage", routeAjouterAgendaPartage);
+app.post("/RemoveAgendaPartage", routeSupprimerAgendaPartage);
+
 
 app.get("/register", routeRegister);
 app.post("/register", routesCreateAccount);
@@ -77,6 +84,7 @@ app.get("/notifications", routeNotification);
 app.post("/appointment/del", routeDelete);
 app.post("/appointment/modif", routeModif);
 app.post("/notifications/all-seen", routeMarkAllNotificationsSeen);
+app.post("/notifications/all-delete", routeDeleteAllNotifications);
 
 app.get("/profile", routeShowProfile)
 app.use(editUserProfile)
@@ -84,6 +92,15 @@ app.use(editUserProfile)
 app.post("/modif", routeAddModif);
 
 app.get("/calendar/:view", routeCalendar);
+
+app.use("/api/rechercher", routeRecherche);
+
+// app.post("/invitation/modifier", modifierLien);
+app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite)
+app.get("/invitation/:idAgenda/manage", routeCreationInvitation);
+app.get("/invitation/:id", utiliserlien);
+app.post("/invitation/modifier", modifierInvitation);
+
 
 app.get("/", (req, res) => {
     res.render("index");
@@ -93,4 +110,5 @@ app.use(function(req, res, next) {
     res.status(404);
     res.render('errors/404', { url: req.url });
 });
+
 

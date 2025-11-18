@@ -1,0 +1,48 @@
+@layer base {
+    body.galaxy {
+        --bg-page: theme(colors.indigo.950);
+        --text-main: theme(colors.indigo.100);
+        --bg-header: theme(colors.indigo.900);
+        --text-header: theme(colors.indigo.100);
+        --border-header: theme(colors.violet.500);
+
+        --bg-calendar: theme(colors.indigo.950);
+        --text-calendar: theme(colors.violet.100);
+        --bg-calendar-header: theme(colors.indigo.900);
+        --border-calendar-header: theme(colors.violet.700);
+
+        --btn-bg: theme(colors.violet.800);
+        --btn-bg-hover: theme(colors.violet.700);
+        --btn-border: transparent;
+        --btn-active-bg: theme(colors.fuchsia.600);
+        --btn-active-bg-hover: theme(colors.fuchsia.500);
+
+        --inner-bg: theme(colors.indigo.900);
+        --inner-text: theme(colors.violet.50);
+
+        --input-submit-bg: theme(colors.fuchsia.600);
+        --input-submit-text: white;
+        --input-submit-hover-bg: theme(colors.fuchsia.500);
+        --input-submit-hover-text: white;
+    }
+
+    body.galaxy .calendar-hours-background {
+        background: linear-gradient(to bottom,
+                rgba(35, 20, 50, 0.9) calc(100% / 24 - 1px),
+                rgba(45, 30, 70, 0.8) calc(100% / 24));
+    }
+
+    body.galaxy .calendar-hours-background-today {
+        background: linear-gradient(to bottom,
+                rgba(80, 30, 130, 0.9) calc(100% / 24 - 1px),
+                rgba(60, 20, 100, 0.8) calc(100% / 24));
+    }
+
+    body.galaxy .month-day {
+        @apply border-violet-800 bg-violet-900/50;
+    }
+
+    body.galaxy .not-month-day {
+        @apply bg-indigo-950/60;
+    }
+}

@@ -1,0 +1,57 @@
+@layer base {
+    body.kawaii {
+        --bg-page: theme(colors.pink.700);
+        --text-main: theme(colors.pink.50);
+
+        --bg-header: theme(colors.pink.500);
+        --text-header: theme(colors.pink.100);
+        --border-header: theme(colors.pink.600);
+
+        --bg-calendar: theme(colors.pink.700);
+        --text-calendar: theme(colors.pink.50);
+        --bg-calendar-header: theme(colors.pink.500);
+        --border-calendar-header: theme(colors.pink.700);
+
+        --btn-bg: theme(colors.pink.800);
+        --btn-bg-hover: theme(colors.pink.700);
+        --btn-border: transparent;
+        --btn-active-bg: theme(colors.rose.700);
+        --btn-active-bg-hover: theme(colors.rose.600);
+
+        --inner-bg: theme(colors.pink.500);
+        --inner-text: theme(colors.pink.50);
+
+        --input-submit-bg: theme(colors.rose.400);
+        --input-submit-text: theme(colors.pink.700);
+        --input-submit-hover-bg: theme(colors.pink.700);
+        --input-submit-hover-text: theme(colors.rose.300);
+    }
+
+    body.kawaii .theme-active i {
+        color: theme(--color-blue-800) !important;
+    }
+
+    body.kawaii .calendar-hours-background {
+        background: linear-gradient(
+            to bottom,
+            rgba(34, 70, 45, 0.85) calc(100% / 24 - 1px),
+            rgba(90, 57, 83, 0.8) calc(100% / 24)
+        );
+    }
+
+    body.kawaii .calendar-hours-background-today {
+    background: linear-gradient(
+            to bottom,
+            rgba(34, 70, 45, 0.85) calc(100% / 24 - 1px),
+            rgba(97, 53, 133, 0.8) calc(100% / 24)
+        );
+    }
+
+    body.kawaii .month-day {
+        @apply border-pink-800 bg-rose-500/50;
+    }
+
+    body.kawaii .not-month-day {
+        @apply bg-pink-950/60;
+    }
+}

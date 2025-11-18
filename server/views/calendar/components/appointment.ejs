@@ -1,5 +1,5 @@
 <div
-    class="absolute bg-<%= app.color %>-700 border border-<%= app.color %>-300 rounded px-3 py-2 text-sm text-white shadow-md overflow-hidden hover:bg-<%= app.color %>-600 group appointment"
+    class="text-clip appointment group appointment-color-<%= app.color %>"
     style="
         top: calc(<%= (app.startHour / 24) * 100%>%);
         height: calc((<%= app.durationHours %> / 24) * 100%>%);

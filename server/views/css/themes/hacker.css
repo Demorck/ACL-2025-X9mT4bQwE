@@ -1,0 +1,48 @@
+@layer base {
+    body.h4ck3r {
+        --bg-page: black;
+        --text-main: theme(colors.green.400);
+        --bg-header: theme(colors.gray.900);
+        --text-header: theme(colors.green.300);
+        --border-header: theme(colors.green.500);
+
+        --bg-calendar: black;
+        --text-calendar: theme(colors.green.400);
+        --bg-calendar-header: theme(colors.gray.950);
+        --border-calendar-header: theme(colors.green.700);
+
+        --btn-bg: theme(colors.gray.800);
+        --btn-bg-hover: theme(colors.gray.700);
+        --btn-border: theme(colors.green.600);
+        --btn-active-bg: theme(colors.green.600);
+        --btn-active-bg-hover: theme(colors.green.500);
+
+        --inner-bg: theme(colors.gray.950);
+        --inner-text: theme(colors.green.400);
+
+        --input-submit-bg: theme(colors.green.600);
+        --input-submit-text: black;
+        --input-submit-hover-bg: theme(colors.green.500);
+        --input-submit-hover-text: black;
+    }
+
+    body.h4ck3r .calendar-hours-background {
+        background: linear-gradient(to bottom,
+                rgba(0, 20, 0, 0.9) calc(100% / 24 - 1px),
+                rgba(0, 40, 0, 0.9) calc(100% / 24));
+    }
+
+    body.h4ck3r .calendar-hours-background-today {
+        background: linear-gradient(to bottom,
+                rgba(10, 60, 10, 0.9) calc(100% / 24 - 1px),
+                rgba(0, 50, 0, 0.9) calc(100% / 24));
+    }
+
+    body.h4ck3r .month-day {
+        @apply border-green-800 bg-green-950/50;
+    }
+
+    body.h4ck3r .not-month-day {
+        @apply bg-black/80;
+    }
+}

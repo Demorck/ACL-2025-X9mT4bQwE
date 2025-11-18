@@ -9,16 +9,18 @@ const appointmentSchema = new Schema({
     nom: { type: String, required: true },
     date_Debut: { type: Date, required: true },
     date_Fin: { type: Date, required: true },
-    recurrenceRule: { type: Schema.Types.ObjectId, ref: "RegleOccurrence", required: false }
+    recurrenceRule: { type: Schema.Types.ObjectId, ref: "RegleOccurrence", required: false },
+    createur: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 export const AppointmentModel = mongoose.model("Appointment", appointmentSchema);
 
 
 export async function getAppointmentsByUserAndDateRange(user, startDate, endDate) {
-    let agendas = await AgendaModel.find({user: user._id});
+    // let agendas = await AgendaModel.find({user: user._id}); 
+    let agendas = user.agendas;
     let agendaIds = agendas.map(agenda => agenda._id);
-
+    
     let appointments = await AppointmentModel.find({
         agenda: { $in: agendaIds },
         date_Debut: { $lt: endDate },
