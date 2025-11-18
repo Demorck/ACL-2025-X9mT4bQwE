@@ -65,7 +65,7 @@ export async function createAppointment(user, body) {
 
     await appointment.save();
 
-    await creerNotification(user, appointment, undefined, agenda, 1);
+    await creerNotification(user, appointment, user, undefined, 1);
 
     return appointment;
 }
@@ -149,7 +149,7 @@ export async function updateAppointment(user, body) {
         { new: true }
     );
 
-    await creerNotification(user, updated, user, newAgenda, 2);
+    await creerNotification(user, updated, user, undefined, 2);
 
     return updated;
 }
