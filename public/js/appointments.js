@@ -15,6 +15,7 @@ document.addEventListener("blur", function (e) {
     if (e.target.id === "date_fin") {
         validiteDateFin();
     } else if (e.target.id === "heure_fin") {
+        console.log("Heure de début changed");
         updateHeureFin();
     }
 });

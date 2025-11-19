@@ -1,11 +1,11 @@
-# Compte rendu du Sprint review 1
+# Compte rendu du Sprint review 2
 
 ## Etat 
 
 ### Rendez-vous
 | Item                  |  | Niveau de priorité  | Équipe | Status |
 |------------------------|--|-----------------|---|-|
-| rendez vous récurrents | | 1 | Équipe 1, Équipe 3 | Validé (la base est faite, pas les exceptions)
+| rendez vous récurrents | | 1 | Équipe 1, Équipe 3 | En cours (la base est faite, pas les exceptions)
 | rechercher un rdv | | 3 | Équipe 1 | Validé
 | Améliorer l'ajout d'un rdv | | 2 | Équipe 2 | Validé
 | Ajouter confirmation de suppression | | 3 | Équipe 1 | Validé
@@ -13,7 +13,7 @@
 ### Entre utilisateurs
 | Item                  |  | Niveau de priorité  | Équipe | Status
 |------------------------|--|-----------------|---|-|
-| Partage d'un agenda | | 1 | Équipe 2 | Validé
+| Partage d'un agenda | | 1 | Équipe 2 | Validé (à améliorer)
 | Révoquer le partage d'un agenda | | 2 | Équipe 2 | Validé
 | Ajout de notification lors d'une invitation à un agenda | | 2 | Équipe 2 | Validé
 
@@ -55,3 +55,4 @@
 - Améliorer les rendez-vous récurents
 - Modifier un rendez-vous en drag & drop (et faire un toast pour le rendu)
 - Pouvoir choisir une date directement sur le calendrier (le header du calendrier)
+- Améliorer l'expérience utilisateur

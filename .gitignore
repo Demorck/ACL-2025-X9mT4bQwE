@@ -29,3 +29,5 @@ coverage/
 .idea/
 *.swp
 *.swo
+
+/public/styles/main.css
