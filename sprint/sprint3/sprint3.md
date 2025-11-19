@@ -52,5 +52,5 @@ Priorité: 1 maximum - 5 minimum
 - Il pourra avoir un impact sur les RDV récurrents à l'unité. C-à-d qu'ils pourront créer des exceptions dans la récurrence, par exemple dire qu'un seul RDV sera annulé ou reporté sans que cela n'impacte les autres rdv de la récurrence. 
 - L'interface du calendrier sera plus lisible et facile à prendre en main/comprendre.
 - Les rôles dans les agendas partagés permettront de distinguer quel type d'invité l'utilisateur sera : il pourrait n'avoir accès qu'à la lecture du calendrier partagé, il pourrait être capable de créer sans modifier ou vice-versa, il pourrait finalement avoir le droit de supprimer les RDV.
-- On offre la possibilité aux utilisateurs d'exporter leur agenda sous la forme d'un fichier .json qui pourra être importé par n'importe qui. L'importer crééera un nouvel agenda avec les RDV du fichier .json ou pourrait être ajouté à un agenda existant de l'utilisateur
-- Les utilisateurs vont pouvoir faire des recherches plus précises, entre telle et telle date, dans quel agenda, rdv crée par qui...
+- On offre la possibilité aux utilisateurs d'exporter leur agenda sous la forme d'un fichier .ics qui pourra être importé par n'importe qui. L'importer crééera un nouvel agenda avec les RDV du fichier .ics ou pourrait être ajouté à un agenda existant de l'utilisateur
+- Les utilisateurs vont pouvoir faire des recherches plus précises : nom, date, agenda ...
