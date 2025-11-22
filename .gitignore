@@ -31,3 +31,4 @@ coverage/
 *.swo
 
 /public/styles/main.css
+/public/uploads/profiles
