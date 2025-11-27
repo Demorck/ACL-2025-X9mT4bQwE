@@ -29,6 +29,10 @@
                class="px-3 py-1 rounded cursor-pointer bg-amber-500 text-sm hover:bg-amber-400" data-action="edit">
               Modifier
             </div>
+            <div href="/agendas/export/<%= a._id %>"
+               class="px-3 py-1 rounded cursor-pointer bg-purple-500 text-sm hover:bg-purple-400" data-action="export">
+              Exporter
+            </div>
             <% } else { %>
                 <form action="/invitation/<%= a._id %>/remove/<%= user._id %>" method="GET">
                   <button
@@ -85,6 +89,14 @@ document.addEventListener("DOMContentLoaded", () => {
       updateColorPreview()
     });
   })
+
+  let export_elements = document.querySelectorAll("[data-action='export']");
+  export_elements.forEach(el => {
+    el.addEventListener("click", async e => {
+      let agenda_el = e.target.closest("[data-agenda]");
+      await openModal(`/agendas/export/${agenda_el.dataset.agenda}`)
+    })
+  });
 });
 
 document.addEventListener("change", function (e) {

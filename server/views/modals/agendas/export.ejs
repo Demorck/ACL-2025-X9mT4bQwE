@@ -1,0 +1,14 @@
+<% layout("modals/template") %>
+<div class="text-center font-semibold ">
+    <form method="POST" action="<%= action %>">
+
+        <div class="flex items-center justify-between mb-6">
+                <label class="flex-1 font-semibold mb-1 md-4" for="nom">Nom de l'agenda</label>
+                <input id="nom" type="text" name="nom" placeholder="Nom" required value="<%= agenda.nom %>" class="border px-3 py-2 rounded">
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-evenly">    
+            <input type="submit" value="<%= buttonText %>" name="actionType" class="px-3 py-2 rounded hover:cursor-pointer">
+        </div>
+    </form>
+</div>

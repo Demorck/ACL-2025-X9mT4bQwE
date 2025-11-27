@@ -1,4 +1,4 @@
-import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda, addInvite, removeInvite } from "../database/agenda.js";
+import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda, addInvite, removeInvite, creerIcal } from "../database/agenda.js";
 
 
 export async function routeNewAgenda(req, res) { 
@@ -110,4 +110,24 @@ export async function routeSupprimerAgendaPartage(req, res, bext){
 
     await removeInvite(req.body.agendaID, req.body.userID);
     return res.redirect("/agendas/testAgendasPartages");
+}
+
+export async function routeFormExportAgenda(req, res){
+    const agenda = await getAgendasById(req.params.id)
+    res.render('modals/agendas/export', { 
+        agenda,
+        title: "Exporter l'agenda",
+        buttonText: "Exporter",
+        action: `/agendas/export/${req.params.id}`
+    });
+}
+
+export async function routeExportAgenda(req, res, next) {
+    if (!res.locals.user)
+        return res.redirect("/login");
+
+    const ical = await creerIcal(req.params.id);
+    res.setHeader('Content-Disposition', 'attachment; filename="agenda.ics"');
+    res.send(ical);
+    return res.redirect("/agendas/list");
 }

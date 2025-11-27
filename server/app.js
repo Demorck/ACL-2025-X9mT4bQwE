@@ -9,7 +9,7 @@ import accountRoute from "./routes/account.js";
 import appointmentRoute from "./routes/appointments.js";
 import notificationRoute from "./routes/notifications.js";
 import { authMiddleware } from "./middlewares/auth.js";
-import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda, routeTestAgendasPartages, routeAjouterAgendaPartage, routeSupprimerAgendaPartage } from "./routes/agendas.js";
+import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda, routeFormExportAgenda, routeExportAgenda} from "./routes/agendas.js";
 
 import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
@@ -59,6 +59,8 @@ app.get("/agendas/list", routeListeAgendas);
 app.get("/agendas/delete/:id", routeDeleteAgenda);
 app.get("/agendas/edit/:id", routeFormEditAgenda);
 app.post("/agendas/edit/:id", routeEditAgenda);
+app.get("/agendas/export/:id", routeFormExportAgenda);
+app.post("/agendas/export/:id", routeExportAgenda);
 
 app.get("/calendar/:view", routeCalendar);
 
