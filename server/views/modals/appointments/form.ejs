@@ -63,6 +63,7 @@
                 <label for="frequence">Récurrence :</label>
                 <select id="frequenceId" name="frequenceId" class="border px-3 py-2 rounded">
                     <option value="day1" <%= frequenceRegle === 'day1' ? 'selected' : '' %>>Tous les jours</option>
+                    <option value="week1" <%= frequenceRegle === 'week1' ? 'selected' : '' %>>Toutes les semaines</option>
                     <option value="month1" <%= frequenceRegle === 'month1' ? 'selected' : '' %>>Tous les mois</option>
                     <option value="year1" <%= frequenceRegle === 'year1' ? 'selected' : '' %>>Tous les ans</option>
                 </select>
@@ -82,11 +83,36 @@
             </div>
         </div>
 
+        <% if (submitText == "Modifier") { %>
+            <% if (recurrence) { %>
+                <div class="flex items-center justify-between mb-6" id="contenuCacheReccurence">
+                    <div class="flex items-center justify-between mb-6">
+                        <label for="modifRec">Modification :</label>
+                        <select id="modifRec" name="modifRec" class="border px-3 py-2 rounded">
+                            <option value="only" <%= !date_fin_ap ? 'selected' : '' %>>Uniquement sur ce rdv</option>
+                            <option value="all" <%= date_fin_ap ? 'selected' : '' %>>Sur toute la récurrence</option>
+                        </select>
+                    </div>
+                </div>
+            <% } %>
+        <% } %>
         <div class="flex flex-col md:flex-row items-center justify-evenly">    
             <input type="submit" value="<%= submitText %>" name="actionType" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
             <% if (submitText == "Modifier") { %>
-                <input type="submit" value="Supprimer" name="actionType" onclick="return confirm('Voulez-vous vraiment supprimer ce rendez-vous ?')" class="px-3 py-2 rounded hover:cursor-pointer">
+                <div href="/appointment/delete" type="submit" value="Supprimer" name="actionType" class="px-3 py-2 rounded hover:cursor-pointer" data-action="confirmerSupprimer"> Supprimer </div>
             <% } %>
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log("oco")
+        let suppr_element = document.querySelector("[data-action='confirmerSupprimer']");
+        suppr_element.addEventListener("click", async e => {
+            await openModal(`/appointment/delete`);
+            
+
+        });
+    });
+</script>

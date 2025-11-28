@@ -76,6 +76,7 @@ export async function createAppointment(user, body) {
  * Modification d’un rendez-vous
  */
 export async function updateAppointment(user, body) {
+    //mettre ici comme quoi on recupère only ou all pour savoir ce qu'on a choisi
     const {
         id,
         idRegle,
@@ -89,6 +90,7 @@ export async function updateAppointment(user, body) {
         frequenceId,
         fin_rec,
         date_fin_rec,
+        modifRec,
     } = body;
 
     const appointment = await AppointmentModel.findById(id).populate("agenda");
@@ -111,6 +113,7 @@ export async function updateAppointment(user, body) {
     let updatedRecRule = null;
 
     if (recurrence === "on") {
+        //il faut ajouter un nouveau rdv si on dév=cide de modifier que cette occurrence valeur à "only" pour modifRec
         let dateFinRec = fin_rec === "never" ? null : new TZDate(date_fin_rec);
 
         // Si une règle existe -> update

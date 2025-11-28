@@ -9,6 +9,7 @@ const appointmentSchema = new Schema({
     date_Debut: { type: Date, required: true },
     date_Fin: { type: Date, required: true },
     recurrenceRule: { type: Schema.Types.ObjectId, ref: "RegleOccurrence", required: false },
+    exception: { type: Date, required: false },
     createur: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
@@ -77,6 +78,9 @@ function generateOccurrences(appointment, rangeStart, rangeEnd) {
                 break;
             case "month1":
                 current.setMonth(current.getMonth() + interval);
+                break;
+            case "year1":
+                current.setFullYear(current.getFullYear() + interval);
                 break;
             default:
                 return occurrences;

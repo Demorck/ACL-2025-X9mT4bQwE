@@ -37,6 +37,8 @@ export async function renderNewAppointment(req, res) {
 }
 
 
+
+
 export async function handleCreateAppointment(req, res, next) {
     try {
         const appointment = await createAppointment(res.locals.user, req.body);
@@ -93,6 +95,48 @@ export async function renderEditAppointment(req, res,  next) {
     }
 }
 
+export async function renderConfirmDeleteAppointment(req, res,  next) {
+    try {
+        if(!res.locals.user) return res.redirect("/login");
+
+        const { id, day, month, year, agendaId } = req.body;
+        
+        const appointment = await AppointmentModel.findById(id).populate('recurrenceRule');
+        if(!appointment) return res.status(404).send("Rendez-vous introuvable");
+
+        const agenda = await AgendaModel.findById(agendaId).populate('user');
+        if(!agenda) return res.status(404).send("Agenda introuvable");
+
+        const createurUser = await UserModel.findById(appointment.createur);
+        if(!createurUser) return res.status(404).send("Utilisateur introuvable");
+
+        const validAgendas = await getAgendasForUser(res.locals.user);
+        
+        const isTheOwner = res.locals.user._id.toString() !== agenda.user._id.toString();
+
+        const formData = buildAppointmentFormData({
+            user: res.locals.user,
+            appointment,
+            day,
+            month,
+            year,
+            selectedAgenda: appointment.agenda.toString()
+        });
+
+        res.render("modals/appointments/confirmDelete", {
+            ...formData,
+            agendas: validAgendas,
+            action: "/appointment/delete",
+            submitText: "Supprimer",
+            title: "Voulez-vous confirmer la suppression du RDV ?",
+            isTheOwner,
+            createur: createurUser
+        });
+
+    } catch (error) {
+        next(error);
+    }
+}
 
 export async function handleUpdateAppointment(req, res, next) {
     try {
