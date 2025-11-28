@@ -57,7 +57,7 @@
         .then(response => {
           // Traitement erreur 404
           if(!response.ok) {
-            throw new Error("Erreur 404 lors de la recherche de rendez-vous (header.js)");
+            throw new Error("Erreur 404 lors de la recherche de rendez-vous (header.ejs)");
           }
           return response.json();
         }) 
@@ -72,7 +72,7 @@
             
               // création d’un lien cliquable
               newTextResultat += `
-                <div class="p-2 hover:bg-gray-200 cursor-pointer" onclick="window.location.href='/calendar/day?day=${day}&month=${month}&year=${year}'">
+                <div class="px-3 py-2 hover:bg-blue-600 hover:text-white cursor-pointer select-none" onclick="window.location.href='/calendar/day?day=${day}&month=${month}&year=${year}'">
                   ${element.nom} - ${day}/${month + 1}/${year}
                 </div>`;
             });
