@@ -91,7 +91,18 @@ export async function updateAppointment(user, body) {
         fin_rec,
         date_fin_rec,
         modifRec,
+        day,
+        month,
+        year,
     } = body;
+ 
+    const jour = parseInt(day) +1; 
+    const dateException = new Date(year, month, jour);
+
+    // Affichage (exemple)
+    console.log(dateException);
+    console.log(modifRec);
+    console.log(recurrence);
 
     const appointment = await AppointmentModel.findById(id).populate("agenda");
     if (!appointment) throw new Error("Rendez-vous introuvable");
@@ -111,47 +122,70 @@ export async function updateAppointment(user, body) {
     const dateFin = buildDate(date_fin, heure_fin);
 
     let updatedRecRule = null;
+    let appointmentNew = null;
+    let updated = null;
 
     if (recurrence === "on") {
-        //il faut ajouter un nouveau rdv si on dév=cide de modifier que cette occurrence valeur à "only" pour modifRec
-        let dateFinRec = fin_rec === "never" ? null : new TZDate(date_fin_rec);
+        // Si on modifie que un seul rdv
+        if(modifRec === "only"){
+            appointmentNew = new AppointmentModel({
+                agenda: newAgenda._id,
+                nom,
+                date_Debut: dateDebut,
+                date_Fin: dateFin,
+                recurrenceRule: null,
+                createur: user._id,
+            });
+            await appointmentNew.save();
+        }else{
+            let dateFinRec = fin_rec === "never" ? null : new TZDate(date_fin_rec);
 
-        // Si une règle existe -> update
-        if (appointment.recurrenceRule) {
-            updatedRecRule = await RegleOccurrenceModel.findByIdAndUpdate(
-                idRegle,
-                {
+            // Si une règle existe -> update
+            if (appointment.recurrenceRule) {
+                updatedRecRule = await RegleOccurrenceModel.findByIdAndUpdate(
+                    idRegle,
+                    {
+                        frequence: frequenceId,
+                        date_fin: dateFinRec,
+                    },
+                    { new: true }
+                );
+            } else {
+                // Sinon créer une nouvelle règle
+                updatedRecRule = new RegleOccurrenceModel({
                     frequence: frequenceId,
                     date_fin: dateFinRec,
-                },
-                { new: true }
-            );
-        } else {
-            // Sinon créer une nouvelle règle
-            updatedRecRule = new RegleOccurrenceModel({
-                frequence: frequenceId,
-                date_fin: dateFinRec,
-            });
-            await updatedRecRule.save();
+                });
+                await updatedRecRule.save();
+            }
         }
     } else {
         // Suppression règle
         updatedRecRule = null;
     }
 
-    // Mise à jour RDV
-    const updated = await AppointmentModel.findByIdAndUpdate(
-        id,
-        {
-            agenda: newAgenda._id,
-            nom,
-            date_Debut: dateDebut,
-            date_Fin: dateFin,
-            recurrenceRule: updatedRecRule?._id || null,
-        },
-        { new: true }
-    );
-
+    if(modifRec === "only"){
+        updated = await AppointmentModel.findByIdAndUpdate(
+            id,
+            {
+                exception: dateException,
+            },
+            { new: true }
+        );
+    }else{
+        // Mise à jour RDV
+        updated = await AppointmentModel.findByIdAndUpdate(
+            id,
+            {
+                agenda: newAgenda._id,
+                nom,
+                date_Debut: dateDebut,
+                date_Fin: dateFin,
+                recurrenceRule: updatedRecRule?._id || null,
+            },
+            { new: true }
+        );
+    }
     await creerNotification(user, updated, user, undefined, 2);
 
     return updated;

@@ -27,6 +27,8 @@ document.addEventListener("change", function (e) {
 });
 
 
+
+
 //permet de vérifier si la date de fin est antérieur à la date de debut
 function validiteDateFin(){
     let dateDebAppointment = document.getElementById('date_debut');
