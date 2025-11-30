@@ -6,7 +6,8 @@ const router = express.Router();
 // GET
 router.get("/new", renderNewAppointment);
 router.post("/edit", renderEditAppointment);
-router.get("/delete", renderConfirmDeleteAppointment);
+router.get("/appointment/confirmationSuppression",renderConfirmDeleteAppointment)
+
 
 // POST
 router.post("/add", handleCreateAppointment);

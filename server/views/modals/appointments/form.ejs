@@ -96,25 +96,23 @@
                     </div>
                 <% } %>
             <% } %>
-            <div class="flex flex-col md:flex-row items-center justify-evenly">    
-                <input type="submit" value="<%= submitText %>" name="actionType" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
+            <div class="flex flex-col md:flex-row items-center justify-evenly gap-4">
+                <input type="submit" value="<%= submitText %>" name="actionType" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer text-white">
+        
                 <% if (submitText == "Modifier") { %>
-                    <div href="/appointment/delete" type="submit" value="Supprimer" name="actionType" class="px-3 py-2 rounded hover:cursor-pointer" data-action="confirmerSupprimer"> Supprimer </div>
+                    <button type="button" data-action="confirmerSupprimer" class="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 hover:cursor-pointer">Supprimer</button>
                 <% } %>
             </div>
         </form>
     </div>
-
+    
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            console.log("oco")
-            let suppr_element = document.querySelector("[data-action='confirmerSupprimer']");
-            suppr_element.addEventListener("click", async e => {
-                await openModal(`/appointment/delete`);
-                
-
-            });
+            const suppr_element = document.querySelector("[data-action='confirmerSupprimer']");
+            if (suppr_element) {
+                suppr_element.addEventListener("click", async e => {
+                    await openModal(`/appointment/confirmationSuppression?rdvId=<%= rdvId %>`);
+                });
+            }
         });
-
-        
     </script>
