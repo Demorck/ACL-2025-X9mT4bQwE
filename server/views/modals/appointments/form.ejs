@@ -1,4 +1,5 @@
 <% layout("/modals/template") %>
+
 <div class="text-center font-semibold">
     <form method="POST" action="<%= action %>">
         <input type="hidden" name="day" value="<%= day %>">
@@ -15,36 +16,36 @@
         <!-- Nom du rendez-vous -->
         <div class="flex items-stretch flex-1 mb-6 flex-col">
             <label for="nom" class="flex-1 font-semibold text-left mb-1 md-4">Nom du rendez-vous</label>
-            <input id="nom" type="text" name="nom" placeholder="Nom" value="<%= name || '' %>" required class="border px-3 py-2 rounded flex-1">
+            <input id="nom" type="text" name="nom" placeholder="Nom" value="<%= name || '' %>" required class="border px-3 py-2 rounded flex-1" <%= niveau < 2 ? 'disabled' : ''%> >
         </div>
 
         <!-- Date et heure début / fin -->
         <div class="flex gap-4 mb-4 flex-col md:flex-row">
             <div class="flex-1">
                 <label for="date_debut" class="block font-semibold mb-1">Date début</label>
-                <input id="date_debut" type="date" name="date_debut" value="<%= formDate || formattedDate %>" required class="w-full border px-3 py-2 rounded">
+                <input id="date_debut" type="date" name="date_debut" value="<%= formDate || formattedDate %>" required class="w-full border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
             </div>
             <div class="flex-1">
                 <label for="heure_debut" class="block font-semibold mb-1">Heure début</label>
-                <input id="heure_debut" type="time" name="heure_debut" value="<%= formattedBeginningHour %>" required class="w-full border px-3 py-2 rounded">
+                <input id="heure_debut" type="time" name="heure_debut" value="<%= formattedBeginningHour %>" required class="w-full border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
             </div>
         </div>
 
         <div class="flex gap-4 mb-4 flex-col md:flex-row">
             <div class="flex-1">
                 <label for="date_fin" class="block font-semibold mb-1">Date fin</label>
-                <input id="date_fin" type="date" name="date_fin" value="<%= formDateFin %>" required class="w-full border px-3 py-2 rounded">
+                <input id="date_fin" type="date" name="date_fin" value="<%= formDateFin %>" required class="w-full border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
             </div>
             <div class="flex-1">
                 <label for="heure_fin" class="block font-semibold mb-1">Heure fin</label>
-                <input id="heure_fin" type="time" name="heure_fin" value="<%= formattedEndHour %>:00" required class="w-full border px-3 py-2 rounded">
+                <input id="heure_fin" type="time" name="heure_fin" value="<%= formattedEndHour %>:00" required class="w-full border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
             </div>
         </div>
 
         <!-- Sélection de l’agenda -->
         <div class="flex items-center justify-between mb-6 flex-col md:flex-row">
             <label for="agendas" class="bloc font-semibold mb-1">Agendas</label>
-            <select id="agendaId" name="agendas" required class="border px-3 py-2 rounded" <%= isTheOwner ? 'disabled' : '' %>>
+            <select id="agendaId" name="agendas" required class="border px-3 py-2 rounded"  <%= niveau !== 4 ? 'disabled' : ''%>>
                 <% agendas.forEach(agenda => { 
                     const selected = (agenda.id === selectedAgenda) ? 'selected' : ''; %>
                     <option value="<%= agenda.id %>" <%= selected %>><%= agenda.nom %></option>
@@ -54,14 +55,14 @@
 
         <!-- Récurrence -->
         <div>
-            <input type="checkbox" id="recurrence" name="recurrence" <%= recurrence ? 'checked' : '' %>/>
+            <input type="checkbox" id="recurrence" name="recurrence"  <%= niveau < 2 ? 'disabled' : ''%> <%= recurrence ? 'checked' : '' %> />
             <label for="recurrence">Récurrence du rendez-vous</label>
         </div>
 
         <div class="flex items-center justify-between mb-6" id="contenuCache" style="display: <%= recurrence ? 'block' : 'none' %>;">
             <div class="flex items-center justify-between mb-6">
                 <label for="frequence">Récurrence :</label>
-                <select id="frequenceId" name="frequenceId" class="border px-3 py-2 rounded">
+                <select id="frequenceId" name="frequenceId" class="border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
                     <option value="day1" <%= frequenceRegle === 'day1' ? 'selected' : '' %>>Tous les jours</option>
                     <option value="month1" <%= frequenceRegle === 'month1' ? 'selected' : '' %>>Tous les mois</option>
                     <option value="year1" <%= frequenceRegle === 'year1' ? 'selected' : '' %>>Tous les ans</option>
@@ -70,7 +71,7 @@
 
             <div class="flex items-center justify-between mb-6">
                 <label for="fin_rec">Fin de la récurrence :</label>
-                <select id="fin_rec" name="fin_rec" class="border px-3 py-2 rounded">
+                <select id="fin_rec" name="fin_rec" class="border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
                     <option value="never" <%= !date_fin_ap ? 'selected' : '' %>>Jamais</option>
                     <option value="specificalDate" <%= date_fin_ap ? 'selected' : '' %>>Jusqu'au</option>
                 </select>
@@ -78,15 +79,18 @@
 
             <div id="contenuCacheDateFin" style="display: <%= date_fin_ap ? 'block' : 'none' %>;">
                 <label for="date_fin_rec">Sélectionnez la date de fin :</label>
-                <input type="date" name="date_fin_rec" value="<%= date_fin_ap %>" id="date_fin_rec" class="w-full border px-3 py-2 rounded">
+                <input type="date" name="date_fin_rec" value="<%= date_fin_ap %>" id="date_fin_rec" class="w-full border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
             </div>
         </div>
 
+        <% if(niveau >= 2){ %>
         <div class="flex flex-col md:flex-row items-center justify-evenly">    
             <input type="submit" value="<%= submitText %>" name="actionType" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
-            <% if (submitText == "Modifier") { %>
+            <% if (submitText == "Modifier" && niveau >= 3) { %>
                 <input type="submit" value="Supprimer" name="actionType" onclick="return confirm('Voulez-vous vraiment supprimer ce rendez-vous ?')" class="px-3 py-2 rounded hover:cursor-pointer">
             <% } %>
         </div>
+        <% } %>
+
     </form>
 </div>

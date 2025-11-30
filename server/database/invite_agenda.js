@@ -45,6 +45,15 @@ export async function peutVoirRDV(agendaId, userId)
     return status ? status.niveau >= 1 : false;
 }
 
+export async function getNiveauUser(agendaId, userId)
+{
+    const status = await InviteAgendaModel.findOne({
+        agenda: agendaId,
+        user: userId
+    });
+    return status ? status.niveau : 0;
+}
+
 export async function addInvite(agendaId, userId, niveau) {
     const agenda = await AgendaModel.findById(agendaId);
     if (!agenda) {
