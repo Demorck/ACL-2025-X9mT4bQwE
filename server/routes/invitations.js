@@ -1,5 +1,6 @@
 import { creerInvitation, ajouterUtilisation, getInvitationByAgendaId, getInvitation, updateInvitation} from "../database/invitations.js";
-import { AgendaModel, addInvite, isInviteInAgenda, removeInvite } from "../database/agenda.js";
+import { AgendaModel } from "../database/agenda.js";
+import { addInvite, removeInvite, isInviteInAgenda, getInvites } from "../database/invite_agenda.js"
 import { UserModel } from "../database/users.js"
 
 export async function utiliserlien(req, res) {
@@ -18,7 +19,7 @@ export async function utiliserlien(req, res) {
         return res.render('errors/generic', { message: "Vous êtes déjà dans cet agenda", statusCode: 400 });
     }
     
-    await addInvite(agenda._id, userId);
+    await addInvite(agenda._id, userId, 1);
     await ajouterUtilisation(invitationId);
 
     return res.redirect("/calendar/week");
@@ -34,11 +35,7 @@ export async function routeCreationInvitation(req, res){
 
     const lien = `${req.protocol}://${req.get("host")}/invitation/${invitation._id}`;
 
-    const invites = await Promise.all(
-        agenda.invites.map(id =>
-            UserModel.findById(id).select("username _id").lean()
-        )
-    );
+    const invites = await getInvites(agenda._id);
 
     res.render("modals/agendas/invitations", { 
         lien,
