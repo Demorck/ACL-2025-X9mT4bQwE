@@ -8,6 +8,7 @@ import { routeCalendar } from "./routes/calendar.js";
 import accountRoute from "./routes/account.js";
 import appointmentRoute from "./routes/appointments.js";
 import notificationRoute from "./routes/notifications.js";
+import apiCalendarRoute from "./routes/api/calendar.js";
 import { authMiddleware } from "./middlewares/auth.js";
 import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda, routeTestAgendasPartages, routeAjouterAgendaPartage, routeSupprimerAgendaPartage } from "./routes/agendas.js";
 
@@ -51,6 +52,8 @@ app.use("/appointment", appointmentRoute);
 app.use("/notifications", notificationRoute);
 
 
+app.use("/api/calendar/", apiCalendarRoute);
+
 // Agenda routes
 app.get("/agendas/new", routeNewAgenda);
 app.post("/agendas/add", routeAddAgendaToDatabase)
@@ -63,6 +66,7 @@ app.post("/agendas/edit/:id", routeEditAgenda);
 app.get("/calendar/:view", routeCalendar);
 
 app.use("/api/rechercher", routeRecherche);
+
 
 // app.post("/invitation/modifier", modifierLien);
 app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite)
