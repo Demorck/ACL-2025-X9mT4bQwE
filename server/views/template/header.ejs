@@ -22,7 +22,20 @@
     let resultats = document.querySelector("#resultats");
     let btnFiltre = document.querySelector("#filtre");
     let menuFiltres = document.querySelector("#menu-filtres");
+
     let clearFiltre = document.querySelector("#clearFiltre");
+    let filtreDateMin = document.querySelector("#filtre-dateMin");
+    let filtreDateMax = document.querySelector("#filtre-dateMax");
+    let agendaCheckboxes = document.querySelectorAll(".Filtreagenda");
+
+    // permet de réinitialiser les filtres
+    clearFiltre.addEventListener("click", (e) => {
+      filtreDateMax.value = "";
+      filtreDateMin.value = "";
+      agendaCheckboxes.forEach(checkbox => {
+        checkbox.checked = true;
+      });
+    })
 
     // permet le bon affichage de la barre de recherche
     const afficherCacherRecherche = () => {
