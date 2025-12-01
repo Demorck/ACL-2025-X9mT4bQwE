@@ -58,13 +58,19 @@
     // Permet la recherche dans la bdd des rendez vous et l'affichage du jour du rdv si on clique dessus
     recherche.addEventListener("input", () => { 
         let str = recherche.value;
-        let filtreDateMin = document.querySelector("#filtre-date").value;
+        let filtreDateMin = document.querySelector("#filtre-dateMin").value;
+        let filtreDateMax = document.querySelector("#filtre-dateMax").value;
+
+        let filtreAgendasUtilise = Array.from(document.querySelectorAll(".Filtreagenda:checked")).map(el => el.value);
+    
         fetch("/api/rechercher/recherche", {
           method: "POST",
           headers: { "Content-Type": "application/json;charset=UTF-8" },
           body: JSON.stringify({
             str,
-            filtreDateMin
+            filtreDateMin,
+            filtreDateMax,
+            filtreAgendasUtilise
           })
         })
         .then(response => {
