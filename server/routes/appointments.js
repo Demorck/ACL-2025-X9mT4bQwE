@@ -1,12 +1,11 @@
 import express from "express";
-import { handleCreateAppointment, renderEditAppointment, renderNewAppointment, handleUpdateAppointment, handleDeleteAppointment, renderConfirmDeleteAppointment } from "../controllers/appointmentController.js";
+import { handleCreateAppointment, renderEditAppointment, renderNewAppointment, handleUpdateAppointment, handleDeleteAppointment } from "../controllers/appointmentController.js";
 
 const router = express.Router();
 
 // GET
 router.get("/new", renderNewAppointment);
 router.post("/edit", renderEditAppointment);
-router.get("/appointment/confirmationSuppression",renderConfirmDeleteAppointment)
 
 
 // POST

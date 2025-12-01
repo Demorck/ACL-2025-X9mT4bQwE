@@ -95,35 +95,6 @@ export async function renderEditAppointment(req, res,  next) {
     }
 }
 
-export async function renderConfirmDeleteAppointment(req, res,  next) {
-    try {
-        if(!res.locals.user) return res.redirect("/login");
-
-        const { rdvId } = req.body;
-        
-        const appointment = await AppointmentModel.findById(rdvId);
-        if(!appointment) return res.status(404).send("Rendez-vous introuvable");
-      
-        const isTheOwner = res.locals.user._id.toString() !== agenda.user._id.toString();
-
-        const formData = buildAppointmentFormData({
-            user: res.locals.user,
-            appointment,
-        });
-
-        res.render("modals/appointments/confirmDelete", {
-            ...formData,
-            action: "/appointment/delete",
-            submitText: "Confirmer la suppression",
-            title: "Voulez-vous confirmer la suppression du RDV ?",
-            isTheOwner,
-        });
-
-    } catch (error) {
-        next(error);
-    }
-}
-
 export async function handleUpdateAppointment(req, res, next) {
     try {
         if(!res.locals.user) return res.redirect("/login");
