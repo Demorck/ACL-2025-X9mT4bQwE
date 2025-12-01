@@ -9,21 +9,26 @@
     <button id="filtre" title="Filtres" class="hover:text-amber-300 hidden test">
         <i class="fa-solid fa-sliders"></i>
     </button>
+    <% if (typeof data !== 'undefined' && data.agendas) { %>
     <div id="menu-filtres" class="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-xl p-4 z-30 hidden test overflow-auto" >
         <h3 class="font-bold text-gray-700 mb-2 border-b pb-1">Filtres</h3>
             <div class="flex flex-col gap-3">  
                 <div>
                     <label class="text-xs text-gray-500">Date min : </label>
-                    <input type="date" id="filtre-dateMin" class="w-full border rounded px-2 py-1 text-sm">
+                    <input type="date" id="filtre-dateMin" class="w-full border rounded px-2 py-1 text-sm text-black">
                     <label class="text-xs text-gray-500">Date max : </label>
-                    <input type="date" id="filtre-dateMax" class="w-full border rounded px-2 py-1 text-sm">
-                    <label class="text-xs text-gray-500">Agendas : </label>
+                    <input type="date" id="filtre-dateMax" class="w-full border rounded px-2 py-1 text-sm text-black">
+                    <% if (data.agendas.length === 1) { %>
+                        <label class="text-xs text-gray-500">Agenda : </label>
+                    <% } else { %>
+                        <label class="text-xs text-gray-500">Agendas : </label>
+                    <% } %>
                     <div class="flex flex-wrap flex-row sm:flex-col gap-3">
                         <% data.agendas.forEach(a => { %>
-                            <label class="flex items-center gap-2 cursor-pointer">
+                            <label class="flex items-center gap-2 cursor-pointer text-black">
                                 <input 
                                     type="checkbox" 
-                                    class="Filtreagenda" 
+                                    class="Filtreagenda " 
                                     value="<%= a._id %>" 
                                     checked
                                 >
@@ -34,9 +39,11 @@
                             </label>
                         <% }) %>
                     </div>
+                    <button id="clearFiltre" class="text-black">Réinitialiser filtre</button>
                 </div>
             </div>
     </div>
+    <% } %>
     </div>
 
 
