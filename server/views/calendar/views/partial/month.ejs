@@ -24,6 +24,10 @@
                             <%= day.getDate() %>
                         </div>
                         <div class="flex md:flex-1 flex-col gap-1 mt-1">
+                        <% let appointments = data.appointments.filter(a => a.start.getDate() == day.getDate() && a.start.getMonth() == day.getMonth()); 
+                            appointments.forEach(app => {
+                               
+                            %>
                             <div
                                 class="text-clip group text-xs truncate px-2 py-1 rounded appointment-color-<%=app.color%> transition appointment-month appointment-color-<%= app.color %>"
                                 style="
