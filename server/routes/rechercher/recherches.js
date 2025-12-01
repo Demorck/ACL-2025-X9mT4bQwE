@@ -10,13 +10,13 @@ export const routeRecherche = express.Router();
 routeRecherche.post("/recherche", async (req, res, next) => {
     try {
       const user = res.locals.user;
-      const {str } = req.body;
+      const {str, filtreDateMin } = req.body;
 
       // pour avoir les id de tout les agendas
       const agendas = await listAgendas(user);
       const agendaIds = agendas.map(a => a._id);
 
-      const reponse = await rechercheRendezVous(str, agendaIds, next);
+      const reponse = await rechercheRendezVous(str, agendaIds, filtreDateMin, next);
       res.json(reponse);
     } catch (error) {
         next(error);
@@ -30,7 +30,7 @@ routeRecherche.post("/recherche", async (req, res, next) => {
  * @param {*} next
  * @returns une liste de rdv (à afficher).
  */
-async function rechercheRendezVous(str, agendaIds, next) {
+async function rechercheRendezVous(str, agendaIds, filtreDateMin, next) {
   try {
     if (!str)
       return []; 
@@ -41,30 +41,46 @@ async function rechercheRendezVous(str, agendaIds, next) {
     }).populate('recurrenceRule'); 
 
     const resultatsFinaux = [];
+    const minDateObj = filtreDateMin ? new Date(filtreDateMin) : null;
     const dateMax = new Date();
     dateMax.setFullYear(dateMax.getFullYear() + 1);
 
-    for(let rdv of appointments) {
+    for (let rdv of appointments) {
       let rdvOriginal = rdv.toObject();
+      
       // Si pas de récurrence
-      if(!rdv.recurrenceRule) {
-          resultatsFinaux.push(rdvOriginal);
-          continue; 
+      if (!rdv.recurrenceRule) {
+        if (minDateObj && new Date(rdv.date_Debut) < minDateObj) {
+            continue;
+        }
+        resultatsFinaux.push(rdvOriginal);
+        continue;
       }
-      // Si récurrence
+
+      // Si récurrence 
       const regle = rdv.recurrenceRule;
       const dureeMs = new Date(rdv.date_Fin).getTime() - new Date(rdv.date_Debut).getTime();
-      
       let dateDebutReccurence = new Date(rdv.date_Debut);
       let dateFinRecurrence = regle.date_fin ? new Date(regle.date_fin) : dateMax;
+      
+      // Le rdv est ignoré si la récurrence se termine avant la date du filtre
+      if (minDateObj && dateFinRecurrence < minDateObj) {
+          continue; 
+      }
+
       let intervalle = parseInt(regle.intervale);
       if (isNaN(intervalle) || intervalle < 1) intervalle = 1;
-      while(dateDebutReccurence <= dateFinRecurrence) {
-        resultatsFinaux.push({
-            ...rdvOriginal, 
-            date_Debut: new Date(dateDebutReccurence), 
-            date_Fin: new Date(dateDebutReccurence.getTime() + dureeMs)
-        });
+
+      // Recherche des occurences qui rentre dans la recherche
+      while (dateDebutReccurence <= dateFinRecurrence) {
+        if (!minDateObj || dateDebutReccurence >= minDateObj) {
+            resultatsFinaux.push({
+              ...rdvOriginal,
+              date_Debut: new Date(dateDebutReccurence),
+              date_Fin: new Date(dateDebutReccurence.getTime() + dureeMs)
+            });
+        }
+        
         switch(regle.frequence) {
           case 'day1':
             dateDebutReccurence.setDate(dateDebutReccurence.getDate() + intervalle);

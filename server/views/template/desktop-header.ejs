@@ -6,9 +6,19 @@
         <div id="resultats"
             class="absolute left-0 right-0 mt-1 border border-gray-300 rounded-md bg-white text-gray-500 shadow-lg max-h-60 overflow-auto z-20 hidden test">
         </div>
-    <button id="filtre" title="Filtre" class="hover:text-amber-300 hidden test">
+    <button id="filtre" title="Filtres" class="hover:text-amber-300 hidden test">
         <i class="fa-solid fa-sliders"></i>
     </button>
+    <div id="menu-filtres" class="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-xl p-4 z-30 hidden test overflow-auto" >
+        <h3 class="font-bold text-gray-700 mb-2 border-b pb-1">Filtres</h3>
+            <div class="flex flex-col gap-3">
+                
+                <div>
+                    <label class="text-xs text-gray-500">Date min</label>
+                    <input type="date" id="filtre-date" class="w-full border rounded px-2 py-1 text-sm">
+                </div>
+            </div>
+    </div>
     </div>
 
 
