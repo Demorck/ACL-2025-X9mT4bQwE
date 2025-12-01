@@ -35,6 +35,12 @@
       agendaCheckboxes.forEach(checkbox => {
         checkbox.checked = true;
       });
+      // permet de refaire la recherche sans les filtres
+      const event = new Event('input', {
+        bubbles: true,
+        cancelable: true 
+      });
+      recherche.dispatchEvent(event);
     })
 
     // permet le bon affichage de la barre de recherche
