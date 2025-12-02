@@ -3,6 +3,7 @@
   <div class="flex flex-row items-baseline mx-4">
     <h1 class="text-2xl font-bold mb-4">Mes agendas</h1>
     <div data-action="new" class="ml-4 px-3 py-1 cursor-pointer bg-green-500 text-stone-900 rounded hover:bg-green-600 items-center">Nouvel agenda</div>
+    <div data-action="import" class="ml-4 px-3 py-1 cursor-pointer bg-pink-500 text-stone-900 rounded hover:bg-pink-600 items-center">Importer agenda</div>
   </div>
 
   <% if (agendas && agendas.length) { %>
@@ -95,6 +96,12 @@ document.addEventListener("DOMContentLoaded", () => {
     el.addEventListener("click", async e => {
       let agenda_el = e.target.closest("[data-agenda]");
       await openModal(`/agendas/export/${agenda_el.dataset.agenda}`)
+    })
+  });
+
+  document.querySelectorAll("[data-action='import']").forEach(el => {
+    el.addEventListener("click", async e => {
+      await openModal('/agendas/import/')
     })
   });
 });

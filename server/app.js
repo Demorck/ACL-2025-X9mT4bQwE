@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import multer from 'multer';
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 import engine from "ejs-mate";
@@ -9,7 +10,9 @@ import accountRoute from "./routes/account.js";
 import appointmentRoute from "./routes/appointments.js";
 import notificationRoute from "./routes/notifications.js";
 import { authMiddleware } from "./middlewares/auth.js";
-import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda, routeFormExportAgenda, routeExportAgenda} from "./routes/agendas.js";
+import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, 
+    routeEditAgenda, routeFormEditAgenda, routeFormExportAgenda, routeExportAgenda, 
+    routeFormImportAgenda, routeImportAgenda} from "./routes/agendas.js";
 
 import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
@@ -20,6 +23,7 @@ import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitat
 export const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicPath = path.join(__dirname, "../public");
+const upload = multer({storage: multer.memoryStorage()});
 
 // Chemin et initialisation des views (avec l'EJS)
 app.engine("ejs", engine);
@@ -59,8 +63,12 @@ app.get("/agendas/list", routeListeAgendas);
 app.get("/agendas/delete/:id", routeDeleteAgenda);
 app.get("/agendas/edit/:id", routeFormEditAgenda);
 app.post("/agendas/edit/:id", routeEditAgenda);
+
 app.get("/agendas/export/:id", routeFormExportAgenda);
 app.post("/agendas/export/:id", routeExportAgenda);
+
+app.get("/agendas/import/", routeFormImportAgenda);
+app.post("/agendas/import/", upload.single('file'), routeImportAgenda);
 
 app.get("/calendar/:view", routeCalendar);
 

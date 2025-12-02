@@ -33,7 +33,8 @@
     "express-ejs-layouts": "^2.5.1",
     "ical-generator": "^9.0.0",
     "mongoose": "^8.19.1",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "node-ical": "^0.22.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.17",

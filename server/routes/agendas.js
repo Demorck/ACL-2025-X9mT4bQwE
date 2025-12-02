@@ -1,5 +1,6 @@
 import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda, addInvite, removeInvite, creerIcal } from "../database/agenda.js";
-
+import { createAppointment } from "../database/appointment.js"
+import ical from 'node-ical';
 
 export async function routeNewAgenda(req, res) { 
 
@@ -25,8 +26,6 @@ export async function routeAddAgendaToDatabase(req, res, next) {
             return res.redirect("/login");
         
         const { nom, description, couleur } = req.body;
-        
-        
 
         // Créer une nouvelle instance du modèle Agenda
         creerAgenda(res.locals.user, nom, description, couleur);
@@ -113,7 +112,8 @@ export async function routeSupprimerAgendaPartage(req, res, bext){
 }
 
 export async function routeFormExportAgenda(req, res){
-    const agenda = await getAgendasById(req.params.id)
+    const agenda = await getAgendasById(req.params.id);
+    console.log("pipi");
     res.render('modals/agendas/export', { 
         agenda,
         title: "Exporter l'agenda",
@@ -129,5 +129,45 @@ export async function routeExportAgenda(req, res, next) {
     const ical = await creerIcal(req.params.id);
     res.setHeader('Content-Disposition', 'attachment; filename="agenda.ics"');
     res.send(ical);
+    return res.redirect("/agendas/list");
+}
+
+export async function routeFormImportAgenda(req, res){
+    const agenda = await getAgendasById(req.params.id)
+    res.render('modals/agendas/import', { 
+        agenda,
+        title: "Importer un agenda",
+        buttonText: "Importer",
+        action: "/agendas/import/"
+    });
+}
+
+export async function routeImportAgenda(req, res){
+    if (!res.locals.user) return res.redirect("/login");
+    
+    const agenda = await creerAgenda(
+        res.locals.user,
+        req.body.nom,
+        req.body.description,
+        req.body.couleur
+    );
+
+    console.log(agenda)
+
+    const data = ical.sync.parseICS(req.file.buffer.toString('utf-8'));
+
+    for (const i in data) {
+        const event = data[i];
+        if (event.type === 'VEVENT') {
+            await createAppointment(
+                agenda._id,
+                event.summary,
+                event.start,
+                event.end,
+                res.locals.user._id,
+                null
+            );
+        }
+    }
     return res.redirect("/agendas/list");
 }

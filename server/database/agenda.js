@@ -39,6 +39,8 @@ export async function creerAgenda(user, nom, description, couleur)
     await ajouterAgenda(user, agenda); 
     // sauvegarder la notification dans la bdd
     await creerNotification(user, undefined, user, agenda, 0);
+
+    return agenda;
 }
 
 /**

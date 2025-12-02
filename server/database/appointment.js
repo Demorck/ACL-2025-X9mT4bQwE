@@ -37,6 +37,19 @@ export async function getAppointmentsByUserAndDateRange(user, startDate, endDate
     return final.sort((a, b) => a.date_Debut - b.date_Debut);
 }
 
+export async function createAppointment(agendaId, nom, date_Debut, date_Fin, userId, recurrenceRuleId){
+    const newAppointment = new AppointmentModel({
+        agenda: agendaId,
+        nom: nom,
+        date_Debut: date_Debut,
+        date_Fin: date_Fin,
+        createur: userId,
+        recurrenceRule: recurrenceRuleId || null 
+    });
+
+    return await newAppointment.save();
+}
+
 function generateOccurrences(appointment, rangeStart, rangeEnd) {
     const rule = appointment.recurrenceRule;
     if (!rule) return [appointment]; // pas récurrent
