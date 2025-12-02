@@ -1,6 +1,6 @@
 import { creerInvitation, ajouterUtilisation, getInvitationByAgendaId, getInvitation, updateInvitation} from "../database/invitations.js";
 import { AgendaModel } from "../database/agenda.js";
-import { addInvite, removeInvite, isInviteInAgenda, getInvites } from "../database/invite_agenda.js"
+import { addInvite, removeInvite, isInviteInAgenda, getInvites, getNiveauUser } from "../database/invite_agenda.js"
 import { UserModel } from "../database/users.js"
 
 export async function utiliserlien(req, res) {
@@ -36,12 +36,15 @@ export async function routeCreationInvitation(req, res){
     const lien = `${req.protocol}://${req.get("host")}/invitation/${invitation._id}`;
 
     const invites = await getInvites(agenda._id);
+    
+    const niveau = await getNiveauUser(req.params.idAgenda, res.locals.user._id)
 
     res.render("modals/agendas/invitations", { 
         lien,
         invitation,
         invites,
         title: "Gérer les invitations",
+        niveau,
     });
 }
 

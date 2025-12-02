@@ -40,6 +40,7 @@ export async function routeAddAgendaToDatabase(req, res, next) {
 }
 export async function routeListeAgendas(req, res, next) {
     const agendas = await getAgendasForUser(res.locals.user);
+    // TODO : Faire passer les niveaux de permissions aux différents agendas
     res.render('agendas/listAgendas', 
         { 
             agendas : agendas,

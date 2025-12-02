@@ -1,4 +1,5 @@
 <% layout("modals/template"); %>
+<% if(niveau >= 3){ %>
 <form action="/invitation/modifier" method="POST" class="flex flex-col items-center gap-4 mb-10">
 
     <!-- On envoie maintenant l'ID de l'invitation -->
@@ -17,7 +18,7 @@
                 "><%= lien %></span>
         <% } %>
     </div>
-
+    <% if(niveau >=4) { %>
     <!-- Modification du max -->
     <div class="flex items-center gap-2">
         <label for="utilisationsMax" class="font-semibold whitespace-nowrap">
@@ -38,8 +39,9 @@
         value="Modifier"
         class="px-4 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer whitespace-nowrap"
     >
+    <% } %>
 </form>
-
+<% } %>
 
 <div class="text-left">
 <h3 class="text-xl font-semibold mb-2">Invités <%= invites.length %>/<%= invitation.utilisationsMax %></h3>
@@ -51,7 +53,7 @@
                 <div>
                     <span class="font-semibold"><%= u.username %></span>
                 </div>
-
+                <% if(niveau >= 3){ %>
                 <form action="/invitation/<%= invitation.agenda %>/remove/<%= u._id %>" method="GET">
                     <button
                         type="submit"
@@ -60,6 +62,14 @@
                         Supprimer
                     </button>
                 </form>
+                <form action="/invitation/<%= invitation.agenda %>/changer" method="GET">
+                    <select name="role" id="role" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm">
+                        <option value="Admin">Admin</option>
+                        <option value="Member">Member</option>
+                        <option value="Viewer">Viewer</option>
+                    </select>
+                </form>
+                <% } %>
             </li>
         <% }) %>
     </ul>

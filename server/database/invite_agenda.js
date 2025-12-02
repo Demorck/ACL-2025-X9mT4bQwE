@@ -47,6 +47,12 @@ export async function peutVoirRDV(agendaId, userId)
 
 export async function getNiveauUser(agendaId, userId)
 {
+    const agenda = await AgendaModel.findById(agendaId);
+    if(userId == agenda.user._id.toString())
+    {
+        return 4;
+    }
+
     const status = await InviteAgendaModel.findOne({
         agenda: agendaId,
         user: userId
