@@ -44,7 +44,7 @@ export async function createAppointment(agendaId, nom, date_Debut, date_Fin, use
         date_Debut: date_Debut,
         date_Fin: date_Fin,
         createur: userId,
-        recurrenceRule: recurrenceRuleId || null 
+        recurrenceRule: recurrenceRuleId
     });
 
     return await newAppointment.save();

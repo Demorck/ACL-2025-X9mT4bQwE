@@ -1,4 +1,5 @@
 import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda, addInvite, removeInvite, creerIcal } from "../database/agenda.js";
+import { creerRegleOccurrence } from "../database/regle_occurrence.js"
 import { createAppointment } from "../database/appointment.js"
 import ical from 'node-ical';
 
@@ -156,16 +157,33 @@ export async function routeImportAgenda(req, res){
 
     const data = ical.sync.parseICS(req.file.buffer.toString('utf-8'));
 
+    const frequences = { 3: "day1", 2: "week1", 1: "month1" };
+
     for (const i in data) {
         const event = data[i];
         if (event.type === 'VEVENT') {
+            console.log(event)
+
+            let regle = null;
+
+            if (event.rrule) {
+                const frequence = frequences[event.rrule.options.freq]
+                if (frequence){
+                    const regleOccurence = await creerRegleOccurrence(
+                        frequence,
+                        event.rrule.options.until,
+                        event.rrule.options.interval
+                    );
+                    regle = regleOccurence._id;
+                }
+            }
             await createAppointment(
                 agenda._id,
                 event.summary,
                 event.start,
                 event.end,
                 res.locals.user._id,
-                null
+                regle
             );
         }
     }

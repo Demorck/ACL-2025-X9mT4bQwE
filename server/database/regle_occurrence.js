@@ -18,4 +18,5 @@ export async function creerRegleOccurrence(frequence, date_fin) {
     });
 
     await regleOccurrence.save();
+    return regleOccurrence;
 }
