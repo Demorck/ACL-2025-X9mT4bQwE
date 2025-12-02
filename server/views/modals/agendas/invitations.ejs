@@ -62,12 +62,15 @@
                         Supprimer
                     </button>
                 </form>
-                <form action="/invitation/<%= invitation.agenda %>/changer" method="GET">
-                    <select name="role" id="role" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm">
-                        <option value="Admin">Admin</option>
-                        <option value="Member">Member</option>
-                        <option value="Viewer">Viewer</option>
+                <form action="/invitation/changeRole" method="POST">
+                    <input type="hidden" name="userId" value="<%=u._id%>">
+                    <input type="hidden" name="agendaId" value="<%= invitation.agenda %>">
+                    <select name="role" id="role" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm" onchange="this.form.submit()" <% if(u.niveau === niveau){ %> disabled <% } %> >
+                        <option value="3" <% if(u.niveau == 3){ %> selected <% } %> >Admin</option>
+                        <option value="2" <% if(u.niveau == 2){ %> selected <% } %> >Member</option>
+                        <option value="1" <% if(u.niveau == 1){ %> selected <% } %> >Viewer</option>
                     </select>
+                    <input type="submit" value="">
                 </form>
                 <% } %>
             </li>
@@ -77,3 +80,7 @@
     <p class="text-stone-400">Aucun invité pour le moment.</p>
 <% } %>
 </div>
+
+<script>
+
+</script>

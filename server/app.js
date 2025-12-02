@@ -15,7 +15,7 @@ import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
 import { routeRecherche } from "./routes/rechercher/recherches.js";
 
-import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation} from "./routes/invitations.js"
+import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation, changerRoleInvite} from "./routes/invitations.js"
 
 export const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -65,7 +65,8 @@ app.get("/calendar/:view", routeCalendar);
 app.use("/api/rechercher", routeRecherche);
 
 // app.post("/invitation/modifier", modifierLien);
-app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite)
+app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite);
+app.post("/invitation/changeRole", changerRoleInvite);
 app.get("/invitation/:idAgenda/manage", routeCreationInvitation);
 app.get("/invitation/:id", utiliserlien);
 app.post("/invitation/modifier", modifierInvitation);

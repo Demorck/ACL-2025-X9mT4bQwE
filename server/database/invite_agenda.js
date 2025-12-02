@@ -155,6 +155,26 @@ export async function isInviteInAgenda(agendaId, userId){
     }
 }
 
+export async function changeRole(agendaId, userId, niveau){
+    const agenda = await AgendaModel.findById(agendaId);
+    if (!agenda) {
+        console.error(`changeRole: Agenda non trouvé avec l'ID ${agendaId}`);
+        return;
+    }
+    const user = await mongoose.model("User").findById(userId);
+    if (!user) {
+        console.error(`changeRole: Utilisateur non trouvé avec l'ID ${userId}`);
+        return;
+    }
+
+    const status = await InviteAgendaModel.findOne({
+        agenda: agendaId,
+        user: userId
+    });
+    status.niveau = niveau;
+    await status.save();
+}
+
 export async function getAgendasIdFromUserInvited(userId)
 {
     const agendasId = await InviteAgendaModel.find({
