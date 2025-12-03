@@ -16,10 +16,14 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
 
         const actionType = deleteBtn.dataset.deleteAction;
+        const recurrence = deleteBtn.dataset.isRecurrent;
+        const isRecurrent = recurrence === 'true';
         const message = deleteMessages[actionType] || deleteMessages.default;
 
         // Affiche la modal confirmation
-        const confirmed = await showConfirmation(message, "Supprimer");
+        const resultatConfirmation = await showConfirmation(message, isRecurrent, "Supprimer");
+        const confirmed = resultatConfirmation.confirmation;
+        const modificationRec = resultatConfirmation.recurrence;
 
         if (confirmed) {
             // Trouve le formulaire parent et le soumet
@@ -31,6 +35,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 actionInput.name = "actionType";
                 actionInput.value = "Supprimer";
                 form.appendChild(actionInput);
+
+                if(modificationRec){
+                    // Crée un input hidden pour indiquer la modification d'un rdv recurrent que l'on souhaite
+                    const modifRecurrence = document.createElement("input");
+                    modifRecurrence.type = "hidden";
+                    modifRecurrence.name = "modifRecSup";
+                    modifRecurrence.value = modificationRec;
+                    form.appendChild(modifRecurrence);
+                }
 
                 form.submit();
             }

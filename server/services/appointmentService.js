@@ -120,6 +120,7 @@ export async function updateAppointment(user, body) {
 
     const dateDebut = buildDate(date_debut, heure_debut);
     const dateFin = buildDate(date_fin, heure_fin);
+    console.log(dateDebut, dateFin);
 
     let updatedRecRule = null;
     let appointmentNew = null;
@@ -163,12 +164,16 @@ export async function updateAppointment(user, body) {
         // Suppression règle
         updatedRecRule = null;
     }
+    console.log(appointmentNew._id);
 
     if(modifRec === "only"){
         updated = await AppointmentModel.findByIdAndUpdate(
             id,
             {
-                exception: dateException,
+                $addToSet: { 
+                    exception: appointmentNew._id,
+                    exceptionDate: appointmentNew.date_Debut 
+                },
             },
             { new: true }
         );
@@ -178,7 +183,7 @@ export async function updateAppointment(user, body) {
             id,
             {
                 agenda: newAgenda._id,
-                nom,
+                nom: nom,
                 date_Debut: dateDebut,
                 date_Fin: dateFin,
                 recurrenceRule: updatedRecRule?._id || null,
@@ -197,7 +202,10 @@ export async function updateAppointment(user, body) {
  * Suppression d’un rendez-vous
  */
 export async function deleteAppointment(user, body) {
-    const { id, agendas } = body;
+    const { id, agendas, modifRecSup } = body;
+
+    //il me faut le champs only ou all qui permet de savoir si je modifie que une unique occurrence ou si je modifie tout
+    //si on supprime que une seule occurence, il faut que je récupère la date et que je 
 
     const appointment = await AppointmentModel.findById(id);
     if (!appointment) throw new Error("Rendez-vous introuvable");
@@ -214,11 +222,35 @@ export async function deleteAppointment(user, body) {
         throw new Error("Ce rendez-vous ne vous appartient pas");
     }
 
+    if(appointment.recurrenceRule){
+        const recId = appointment.recurrenceRule;
+        if(modifRecSup === 'all'){
+
+            if(appointment.exception && appointment.exception.length >0){
+                const exceptionIds = appointment.exception.map(exc => exc._id);
+                await AppointmentModel.deleteMany({ _id: { $in: exceptionIds } });
+            }
+            await RegleOccurrenceModel.findByIdAndDelete(recId);
+            await AppointmentModel.findByIdAndDelete(id);
+
+        }else if (modifRecSup === 'only'){
+
+            const dateException = appointment.date_Debut;
+            await AppointmentModel.findByIdAndUpdate(
+            id,
+            {
+                $addToSet: { exceptionDate: dateException },
+            },
+            { new: true }
+        );
+        }     
+    }else{
+        await AppointmentModel.findByIdAndDelete(id);
+    }
+
     await creerNotification(agenda.user, appointment, user, agenda, 3);
 
     await supprimerNotification(id);
-
-    await AppointmentModel.findByIdAndDelete(id);
 
     return true;
 }

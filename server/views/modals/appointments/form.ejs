@@ -99,7 +99,7 @@
         <div class="flex flex-col md:flex-row items-center justify-evenly">    
             <input type="submit" value="<%= submitText %>" name="actionType" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
             <% if (submitText == "Modifier") { %>
-                <input type="button" value="Supprimer" data-delete-action="appointment" class="px-3 py-2 bg-red-600 rounded hover:bg-red-700 hover:cursor-pointer">
+                <input type="button" value="Supprimer" data-delete-action="appointment" data-is-recurrent="<%= recurrence ? 'true' : 'false' %>" class="px-3 py-2 bg-red-600 rounded hover:bg-red-700 hover:cursor-pointer">
             <% } %>
         </div>
     </form>
