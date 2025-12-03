@@ -9,6 +9,8 @@ import accountRoute from "./routes/account.js";
 import appointmentRoute from "./routes/appointments.js";
 import notificationRoute from "./routes/notifications.js";
 import apiCalendarRoute from "./routes/api/calendar.js";
+import apiAppointmentRoute from "./routes/api/appointments.js";
+import apiNotificationRoute from "./routes/api/notifications.js";
 import { authMiddleware } from "./middlewares/auth.js";
 import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda, routeTestAgendasPartages, routeAjouterAgendaPartage, routeSupprimerAgendaPartage } from "./routes/agendas.js";
 
@@ -51,8 +53,10 @@ app.use("/appointment", appointmentRoute);
 // Notification routes
 app.use("/notifications", notificationRoute);
 
-
+// API routes
 app.use("/api/calendar/", apiCalendarRoute);
+app.use("/api/appointments/", apiAppointmentRoute);
+app.use("/api/notifications/", apiNotificationRoute);
 
 // Agenda routes
 app.get("/agendas/new", routeNewAgenda);

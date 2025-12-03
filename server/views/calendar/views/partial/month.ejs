@@ -26,16 +26,9 @@
                         <div class="flex md:flex-1 flex-col gap-1 mt-1">
                         <% let appointments = data.appointments.filter(a => a.start.getDate() == day.getDate() && a.start.getMonth() == day.getMonth()); 
                             appointments.forEach(app => {
-                               
                             %>
                             <div
-                                class="text-clip group text-xs truncate px-2 py-1 rounded appointment-color-<%=app.color%> transition appointment-month appointment-color-<%= app.color %>"
-                                style="
-                                    top: calc(<%= (app.startHour / 24) * 100%>%);
-                                    height: calc((<%= app.durationHours %> / 24) * 100%>%);
-                                    left: calc(<%= (app.colIndex / app.colCount) * 100%>%);
-                                    width: calc(<%= (1 / app.colCount) * 100%>%);
-                                "
+                                class="text-xs truncate px-2 py-1 rounded appointment-color-<%=app.color%> transition appointment-month"
                                 data-agenda="<%= app.agendaId %>"
                                 data-start="<%= app.startHour %>"
                                 data-duration="<%= app.durationHours %>"
