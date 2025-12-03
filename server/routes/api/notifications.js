@@ -27,6 +27,31 @@ router.get("/", async (req, res, next) => {
     }
 });
 
+
+/**
+ * Marque toutes les notifications comme vues
+ * POST /api/notifications/all/seen
+ */
+router.post("/all/seen", async (req, res, next) => {
+    try {
+        if (!res.locals.user) {
+            return res.status(401).json({ success: false, error: "Non authentifié" });
+        }
+        
+        await markAllNotificationsSeen(res.locals.user._id);
+
+        res.json({
+            success: true,
+            message: "Toutes les notifications ont été marquées comme vues"
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message
+        });
+    }
+});
+
 /**
  * Marque une notification comme vue
  * POST /api/notifications/:id/seen
@@ -51,30 +76,6 @@ router.post("/:id/seen", async (req, res, next) => {
     }
 });
 
-/**
- * Marque toutes les notifications comme vues
- * POST /api/notifications/all/seen
- */
-router.post("/all/seen", async (req, res, next) => {
-    console.log("res");
-    try {
-        if (!res.locals.user) {
-            return res.status(401).json({ success: false, error: "Non authentifié" });
-        }
-        
-        await markAllNotificationsSeen(res.locals.user._id);
-
-        res.json({
-            success: true,
-            message: "Toutes les notifications ont été marquées comme vues"
-        });
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            error: err.message
-        });
-    }
-});
 
 /**
  * Supprime une notification
