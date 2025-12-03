@@ -39,10 +39,10 @@
           </span>
           <div>
             <div class="hidden group-hover:inline-flex gap-4">
-              <div data-mark-seen="<%= n.id %>" class="rounded hover:opacity-20 cursor-pointer">
+              <div data-mark-seen="<%= n.id %>" class="rounded hover:opacity-20 cursor-pointer" title="Marquer comme lu">
                 <i class="fa fa-eye"></i> 
               </div>
-              <div data-delete-notification="<%= n.id %>" class="rounded hover:opacity-20 cursor-pointer">
+              <div data-delete-notification="<%= n.id %>" class="rounded hover:opacity-20 cursor-pointer" title="Supprimer notification">
                 <i class="fa fa-trash"></i> 
               </div>
             </div>
@@ -56,69 +56,3 @@
 </div>
 <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 items-end"></div>
 
-<script>
-const toastContainer = document.getElementById('toastContainer');
-
-function creerToast(message, type = 'info') {
-  const toast = document.createElement('div');
-  toast.className = 'toast opacity-0 transition-opacity duration-300 bg-white border border-gray-200 shadow-lg rounded-lg p-4 flex items-start w-72';
-  const iconClass = type === 'success' ? 'fa-solid fa-circle-check text-green-500' : 'fa-regular fa-circle-dot text-blue-500';
-  toast.innerHTML = `
-    <i class="${iconClass} w-5 h-5 mt-1 flex-shrink-0"></i>
-    <div class="ml-3 flex-1">
-      <p class="text-sm font-medium text-gray-900">Notification</p>
-      <p class="text-sm text-gray-500 mt-1">${message}</p>
-    </div>
-    <button class="ml-4 text-gray-400 hover:text-gray-500 focus:outline-none">
-      <i class="fa-solid fa-xmark text-blue-500"></i>
-    </button>
-  `;
-  toast.querySelector('button').addEventListener('click', () => supprimerToast(toast));
-
-  // Ajout dans le container, sans supprimer les autres toasts (mais marche pas parce que ca refresh la page)
-  toastContainer.appendChild(toast);
-
-  requestAnimationFrame(() => {
-    toast.classList.remove('opacity-0');
-    toast.classList.add('opacity-100');
-  });
-
-  // Le toast disparait au bout de 3 secondes 
-  setTimeout(() => supprimerToast(toast), 3000);
-}
-
-function supprimerToast(toast) {
-  toast.classList.remove('opacity-100');
-  toast.classList.add('opacity-0');
-  setTimeout(() => toast.remove(), 300);
-}
-
-// Met dans localStorage que la notif viens d'arriver pour pouvoir l'afficher meme si la page est refresh 
-function EtatToast(message, type) {
-  localStorage.setItem('toastMessage', message);
-  localStorage.setItem('toastType', type);
-}
-
-
-// Bouton qui affiche le toast des notifications lu
-document.getElementById('luNotification').addEventListener('click', function() {
-  EtatToast("Toutes les notifications sont marquées comme lues", "success");
-});
-
-// Bouton qui affiche le toast des notifications supprimées
-document.getElementById('supprNotification').addEventListener('click', function() {
-  EtatToast("Toutes les notifications ont été supprimées", "info");
-});
-
-// Permet d'afficher le toast après le chargement de la page (sinon il disparait dès qu'on appuie sur le bouton vu que ca refresh la page)
-document.addEventListener('DOMContentLoaded', function() {
-  const message1 = localStorage.getItem('toastMessage');
-  const type1 = localStorage.getItem('toastType');
-
-  if (message1) {
-    creerToast(message1, type1);
-    localStorage.removeItem('toastMessage');
-    localStorage.removeItem('toastType');
-  }
-});
-</script>

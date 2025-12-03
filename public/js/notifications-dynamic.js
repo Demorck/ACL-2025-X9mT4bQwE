@@ -135,6 +135,7 @@ function updateNotificationCount(count) {
  */
 async function markNotificationSeen(id) {
     try {
+        
         const response = await fetch(`/api/notifications/${id}/seen`, {
             method: "POST",
             headers: { "Content-Type": "application/json" }
@@ -144,10 +145,9 @@ async function markNotificationSeen(id) {
         if (result.success) {
             await reloadNotifications();
         }
-
-        // Toast pas erreur
+        await creerToast("Notification marquée comme lu.", "lu");
     } catch (error) {
-        // TOast Erreur
+        await creerToast("L'action demandée  échoué.", "echec");
     }
 }
 
@@ -166,9 +166,9 @@ async function deleteNotification(id) {
             await reloadNotifications();
         }
 
-        // Toast pas erreur
+        await creerToast("Notification supprimée.", "supprimer");
     } catch (error) {
-        // TOast Erreur
+        await creerToast("L'action demandée  échoué.", "echec");
     }
 }
 
@@ -187,9 +187,9 @@ async function markAllNotificationsSeen() {
             await reloadNotifications();
         }        
 
-        // Toast pas erreur
+        await creerToast("Toutes les notification ont été marquée comme lu.", "lu");
     } catch (error) {
-        // TOast Erreur
+        await creerToast("L'action demandée  échoué.", "echec");
     }
 }
 
@@ -208,9 +208,9 @@ async function deleteAllNotifications() {
             await reloadNotifications();
         }
 
-        // Toast pas erreur
+        await creerToast("Toutes les notifications ont été supprimées.", "supprimer");
     } catch (error) {
-        // TOast Erreur
+        await creerToast("L'action demandée  échoué.", "echec");
     }
 }
 
