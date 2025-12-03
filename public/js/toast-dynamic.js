@@ -65,7 +65,7 @@ function choixFA(type) {
       iconClasses = "fa-solid fa-circle-info text-blue-500";
       break;
 
-    case "succes": // pas utilisé
+    case "succes": 
       iconClasses = "fa-solid fa-circle-check text-green-500";
       break;
 

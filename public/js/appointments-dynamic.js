@@ -6,6 +6,7 @@
  * Soumet un formulaire de rendez-vous
  */
 async function submitAppointmentForm(form, action) {
+    console.log("non je ny crois pas");
     let formData = new FormData(form);
     let data = Object.fromEntries(formData.entries());
 
@@ -39,12 +40,18 @@ async function submitAppointmentForm(form, action) {
 
             // Recharge la vue actuelle du calendrier
             await reloadCurrentCalendarView();
-            // Toast validé (result.message)
+
+            let type = "succes";
+            if(result.appointment === undefined) {
+                type = "supprimer";
+            }
+            await creerToast(result.message, type);
         } else {
-            // Toast erreur // Toast erreur (result.error)
+            await creerToast(result.error, "echec");
         }
     } catch (error) {
         // Toast erreur 
+        await creerToast(error, "echec");
     }
 }
 

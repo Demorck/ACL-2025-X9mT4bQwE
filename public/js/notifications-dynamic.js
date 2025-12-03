@@ -147,7 +147,7 @@ async function markNotificationSeen(id) {
         }
         await creerToast("Notification marquée comme lu.", "lu");
     } catch (error) {
-        await creerToast("L'action demandée  échoué.", "echec");
+        await creerToast(error, "echec");
     }
 }
 
@@ -168,7 +168,7 @@ async function deleteNotification(id) {
 
         await creerToast("Notification supprimée.", "supprimer");
     } catch (error) {
-        await creerToast("L'action demandée  échoué.", "echec");
+        await creerToast(error, "echec");
     }
 }
 
@@ -189,7 +189,7 @@ async function markAllNotificationsSeen() {
 
         await creerToast("Toutes les notification ont été marquée comme lu.", "lu");
     } catch (error) {
-        await creerToast("L'action demandée  échoué.", "echec");
+        await creerToast(error, "echec");
     }
 }
 
@@ -210,7 +210,7 @@ async function deleteAllNotifications() {
 
         await creerToast("Toutes les notifications ont été supprimées.", "supprimer");
     } catch (error) {
-        await creerToast("L'action demandée  échoué.", "echec");
+        await creerToast(error, "echec");
     }
 }
 
