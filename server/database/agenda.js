@@ -134,8 +134,7 @@ export async function isInviteInAgenda(agendaId, userId){
     return agenda.invites.includes(userId);
 }
 
-export async function creerIcal(agendaId)
-{
+export async function creerIcal(agendaId){
     const agenda = await AgendaModel.findById(agendaId);
 
     // Récuperer tous les RDV liés à l'agenda

@@ -1,0 +1,51 @@
+<% layout("modals/template"); %>
+
+<% 
+    // Logique pour formater la date pour l'input HTML (YYYY-MM-DDTHH:mm)
+    let dateValue = "";
+    if (invitation.dateExpiration) {
+        const d = new Date(invitation.dateExpiration);
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); // Ajustement fuseau horaire local
+        dateValue = d.toISOString().slice(0, 16);
+    }
+%>
+
+<h2 class="text-2xl font-bold mb-6 text-center text-stone-100">Modifier le lien</h2>
+
+<form action="/invitation/<%= invitation._id %>/edit/" method="POST" class="flex flex-col gap-6 max-w-md mx-auto w-full">
+
+    <div class="flex flex-col gap-2">
+        <label for="utilisationsMax" class="font-semibold text-stone-300">
+            Nombre d'utilisations maximum
+        </label>
+        <input 
+            type="number" 
+            id="utilisationsMax" 
+            name="utilisationsMax" 
+            min="1"
+            placeholder="Laisser vide pour illimité"
+            value="<%= invitation.utilisationsMax %>"
+            class="px-4 py-2 rounded bg-stone-800 border border-stone-600 focus:border-blue-500 focus:outline-none text-stone-100 placeholder-stone-500"
+        >
+    </div>
+
+    <div class="flex flex-col gap-2">
+        <label for="dateExpiration" class="font-semibold text-stone-300">
+            Date d'expiration
+        </label>
+        <input 
+            type="datetime-local" 
+            id="dateExpiration" 
+            name="dateExpiration" 
+            value="<%= dateValue %>"
+            class="px-4 py-2 rounded bg-stone-800 border border-stone-600 focus:border-blue-500 focus:outline-none text-stone-100 scheme-dark"
+        >
+    </div>
+
+    <div class="flex justify-end gap-3 mt-4">
+        <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold transition-colors shadow-lg">
+            Enregistrer
+        </button>
+    </div>
+
+</form>
