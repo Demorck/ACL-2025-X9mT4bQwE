@@ -42,7 +42,7 @@ export async function createAppointment(user, body) {
 
 
     //Vérifier si l'utilisateur peut ajouter le RDV :
-    const hasPermissionAjouterRDV = peutAjouterRDV(agenda._id, user._id)
+    const hasPermissionAjouterRDV = await peutAjouterRDV(agenda._id, user._id)
     if(!hasPermissionAjouterRDV)
     {
         throw new Error("createAppointment : Vous n'êtes pas autorisé à ajouter un RDV à cet agenda");

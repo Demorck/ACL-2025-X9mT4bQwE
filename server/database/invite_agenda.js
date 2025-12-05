@@ -18,43 +18,34 @@ export const InviteAgendaModel = mongoose.model("inviteAgenda", inviteAgendaSche
 
 export async function peutSupprimerRDV(agendaId, userId)
 {
-    const status = await InviteAgendaModel.findOne({
-        agenda: agendaId,
-        user: userId
-    });
-    if (!status) return false;
-    return status.niveau >= 3;
+    const niveau = await getNiveauUser(agendaId, userId);
+    return niveau >= 3;
 }
 
 export async function peutAjouterRDV(agendaId, userId)
 {
-    const status = await InviteAgendaModel.findOne({
-        agenda: agendaId,
-        user: userId
-    });
-    if (!status) return false;
-    return status.niveau >= 2;
+    const niveau = await getNiveauUser(agendaId, userId);
+    return niveau >= 2;
 }
 
 export async function peutModifierRDV(agendaId, userId)
 {
-    const status = await InviteAgendaModel.findOne({
-        agenda: agendaId,
-        user: userId
-    });
-    if (!status) return false;
-    return status.niveau >= 2;
+    const niveau = await getNiveauUser(agendaId, userId)
+    return niveau >= 2;
 }
 
 export async function peutVoirRDV(agendaId, userId)
 {
-    const status = await InviteAgendaModel.findOne({
-        agenda: agendaId,
-        user: userId
-    });
-    return status ? status.niveau >= 1 : false;
+    const niveau = await getNiveauUser(agendaId, userId);
+    return niveau >= 1;
 }
 
+/**
+ * Retourne le niveau d'un user pour un agenda donné
+ * @param {Id de l'agenda} agendaId 
+ * @param {Id du user} userId 
+ * @returns 
+ */
 export async function getNiveauUser(agendaId, userId)
 {
     const agenda = await AgendaModel.findById(agendaId);
@@ -186,6 +177,26 @@ export async function getAgendasIdFromUserInvited(userId)
     const agendasId = await InviteAgendaModel.find({
         user: userId,
         niveau: { $gt: 0 }
+    });
+
+    // const agendas = Promise.all(agendasId.map(async (agenda) => {
+    //     return await mongoose.model("Agenda").findById(agenda.agenda);
+    // }));
+
+    return agendasId;
+}
+
+/**
+ * Renvoi la liste des id des agendas d'un user auquels il est invité et a un niveau >= à niveau
+ * @param {id} userId 
+ * @param {Number} niveau 
+ * @returns 
+ */
+export async function getAgendasIdFromUserInvitedAboveLevel(userId, niveau)
+{
+    const agendasId = await InviteAgendaModel.find({
+        user: userId,
+        niveau: { $gte: niveau }
     });
 
     // const agendas = Promise.all(agendasId.map(async (agenda) => {

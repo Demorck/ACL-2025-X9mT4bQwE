@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { ajouterAgenda } from "./users.js";
 import { creerNotification } from "../services/notificationService.js";
-import { getAgendasIdFromUserInvited } from "./invite_agenda.js";
+import { getAgendasIdFromUserInvited, getAgendasIdFromUserInvitedAboveLevel } from "./invite_agenda.js";
 
 const Schema = mongoose.Schema;
 
@@ -53,6 +53,22 @@ export async function getAgendasForUser(user)
     return validAgendas;
 }
 
+/**
+ * Renvoi la liste des agendas qu'un user peut ajouter des RDV
+ * @param {User} user 
+ */
+export async function getAgendasAllowedToAddForUser(user)
+{
+    const agendasOwnedUserIds = user.agendas;
+    const agendasInvitesIds = await getAgendasIdFromUserInvitedAboveLevel(user._id,2)
+    const agendasUserIds = [...agendasOwnedUserIds, ...agendasInvitesIds.map(invite => invite.agenda)];
+    const agendasPromises = agendasUserIds.map(agendaId => AgendaModel.findById(agendaId));
+    const agendas = await Promise.all(agendasPromises);
+    const validAgendas = agendas.filter(agenda => agenda !== null);
+
+    return validAgendas;
+}
+
 export async function getAgendasById(id){
     const agenda = await AgendaModel.findById(id);
     return agenda; 
@@ -60,10 +76,7 @@ export async function getAgendasById(id){
 
 export async function listAgendas(user) {
     const agendas = await AgendaModel.find({
-        $or: [
-            { user: user._id },
-            { invites: user._id }
-        ]
+            user: user._id 
     });
     return agendas;
 }

@@ -45,6 +45,7 @@
         <!-- Sélection de l’agenda -->
         <div class="flex items-center justify-between mb-6 flex-col md:flex-row">
             <label for="agendas" class="bloc font-semibold mb-1">Agendas</label>
+            <!-- On bloque le changement de l'agenda d'un rdv au créateur de l'agenda même -->
             <select id="agendaId" name="agendas" required class="border px-3 py-2 rounded"  <%= niveau !== 4 ? 'disabled' : ''%>>
                 <% agendas.forEach(agenda => { 
                     const selected = (agenda.id === selectedAgenda) ? 'selected' : ''; %>

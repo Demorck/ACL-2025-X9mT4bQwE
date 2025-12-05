@@ -1,5 +1,5 @@
 import { is } from "date-fns/locale";
-import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
+import { AgendaModel, getAgendasAllowedToAddForUser, getAgendasForUser } from "../database/agenda.js";
 import { AppointmentModel } from "../database/appointment.js";
 import { getNiveauUser } from "../database/invite_agenda.js";
 import { UserModel } from "../database/users.js";
@@ -17,7 +17,7 @@ export async function renderNewAppointment(req, res) {
 
     const beginningHour = !isNaN(queryBeginningHour) ? queryBeginningHour : 8;
     
-    const validAgendas = await getAgendasForUser(res.locals.user);
+    const validAgendas = await getAgendasAllowedToAddForUser(res.locals.user);
 
     const formData = buildAppointmentFormData({
         user: res.locals.user,
@@ -67,7 +67,7 @@ export async function renderEditAppointment(req, res,  next) {
         const createurUser = await UserModel.findById(appointment.createur);
         if(!createurUser) return res.status(404).send("Utilisateur introuvable");
 
-        const validAgendas = await getAgendasForUser(res.locals.user);
+        const validAgendas = await getAgendasAllowedToAddForUser(res.locals.user);
         
         const isTheOwner = res.locals.user._id.toString() == agenda.user._id.toString();
         let niveauUser = 0;
