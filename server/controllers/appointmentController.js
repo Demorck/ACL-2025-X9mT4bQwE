@@ -67,14 +67,12 @@ export async function renderEditAppointment(req, res,  next) {
         const createurUser = await UserModel.findById(appointment.createur);
         if(!createurUser) return res.status(404).send("Utilisateur introuvable");
 
-        const validAgendas = await getAgendasAllowedToAddForUser(res.locals.user);
-        
-        const isTheOwner = res.locals.user._id.toString() == agenda.user._id.toString();
-        let niveauUser = 0;
-        if(isTheOwner)
-            niveauUser = 4;
-        else
-            niveauUser = await getNiveauUser(agendaId, res.locals.user._id);
+        const validAgendas = await getAgendasForUser(res.locals.user);
+        await Promise.all(validAgendas.map(async (agenda) => {
+            agenda.niveau = await getNiveauUser(agenda._id, res.locals.user._id);
+        }));
+
+        const niveauUser = await getNiveauUser(agendaId, res.locals.user._id);
 
         const formData = buildAppointmentFormData({
             user: res.locals.user,

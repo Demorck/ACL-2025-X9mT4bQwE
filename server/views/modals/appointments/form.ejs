@@ -48,8 +48,9 @@
             <!-- On bloque le changement de l'agenda d'un rdv au créateur de l'agenda même -->
             <select id="agendaId" name="agendas" required class="border px-3 py-2 rounded"  <%= niveau !== 4 ? 'disabled' : ''%>>
                 <% agendas.forEach(agenda => { 
-                    const selected = (agenda.id === selectedAgenda) ? 'selected' : ''; %>
-                    <option value="<%= agenda.id %>" <%= selected %>><%= agenda.nom %></option>
+                    const selected = (agenda.id === selectedAgenda) ? 'selected' : ''; 
+                    const disabled = (agenda.niveau == 1) ? 'disabled' : ''; %>
+                    <option value="<%= agenda.id %>" <%= selected %> <%= disabled %>><%= agenda.nom %></option>
                 <% }) %>
             </select>
         </div>
