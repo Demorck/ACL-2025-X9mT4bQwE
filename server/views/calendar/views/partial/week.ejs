@@ -1,0 +1,34 @@
+<div class="flex border-b sticky top-0">
+    <% data.daysLabel.forEach(day => { %>
+    <div class="flex-1 md:p-2 text-center text-sm font-semibold border-r">
+        <%= day %>
+    </div>
+    <% }) %>
+</div>
+<div class = "flex relative">
+    <% for (let i = 1; i < 8; i++) { 
+        let isToday = new Date().getDate() == data.days[i - 1].getDate();
+        %>
+    <div class="flex-1 relative border-r calendar-hours-background<%= isToday ? "-today" : "" %>"
+     style="height: 95vh; background-size: auto calc(100%/24);">
+
+    <% for (let hour = 0; hour < 24; hour++) { %>
+    <div class="absolute w-full"
+         style="top: calc(<%= hour %> * (100% / 24)); height: calc(100% / 24);"
+         data-open-appointment
+         data-year="<%= data.days[i-1].getFullYear() %>"
+         data-month="<%= data.days[i-1].getMonth() %>"
+         data-day="<%= data.days[i-1].getDate() %>"
+         data-hour="<%= hour %>">
+    </div>
+    <% } %>  
+        <% data.appointments.filter(a => a.start.getDay()=== i % 7).forEach(app => { 
+            let day = app.start.getDay()
+            let month = app.start.getMonth()
+            let year = app.start.getYear()
+        %>
+        <%- include('../../components/appointment', { app, day, month, year }) %>
+        <% }) %>
+    </div>
+    <% } %>
+</div>

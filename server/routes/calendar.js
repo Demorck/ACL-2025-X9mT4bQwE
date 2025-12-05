@@ -59,6 +59,9 @@ export async function routeCalendar(req, res) {
             title = data.startLabel;
             previous_url = `/calendar/month?month=${requestedDate.getMonth() - 1}&year=${requestedDate.getFullYear()}`;
             after_url = `/calendar/month?month=${requestedDate.getMonth() + 1}&year=${requestedDate.getFullYear()}`;
+            data.day = day;
+            data.month = month;
+            data.year = year;
             break;
         default:
             return res.redirect("/calendar/week");
