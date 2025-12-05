@@ -26,6 +26,16 @@ export async function peutSupprimerRDV(agendaId, userId)
     return status.niveau >= 3;
 }
 
+export async function peutAjouterRDV(agendaId, userId)
+{
+    const status = await InviteAgendaModel.findOne({
+        agenda: agendaId,
+        user: userId
+    });
+    if (!status) return false;
+    return status.niveau >= 2;
+}
+
 export async function peutModifierRDV(agendaId, userId)
 {
     const status = await InviteAgendaModel.findOne({
@@ -117,14 +127,10 @@ export async function removeInvite(agendaId, userId){
 }
 
 export async function getInvites(agendaId){
-    const invitesId = await InviteAgendaModel.find({
+    return await InviteAgendaModel.find({
         agenda: agendaId,
         niveau: { $gt: 0 }
-    });
-    const invites = Promise.all(invitesId.map(async (invite) => {
-        return await mongoose.model("User").findById(invite.user);
-    }));
-    return invites;
+    }).select('user');
 }
 
 export async function getInvitesAvecNiveau(agendaId,niveau){

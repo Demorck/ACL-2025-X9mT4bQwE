@@ -51,10 +51,10 @@
             <li class="bg-stone-700 p-3 rounded flex justify-between items-center">
 
                 <div>
-                    <span class="font-semibold"><%= u.username %></span>
+                    <span class="font-semibold"><%= u.user.username %></span>
                 </div>
                 <% if(niveau >= 3){ %>
-                <form action="/invitation/<%= invitation.agenda %>/remove/<%= u._id %>" method="GET">
+                <form action="/invitation/<%= invitation.agenda %>/remove/<%= u.user._id %>" method="GET">
                     <button
                         type="submit"
                         class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-sm"
@@ -63,7 +63,7 @@
                     </button>
                 </form>
                 <form action="/invitation/changeRole" method="POST">
-                    <input type="hidden" name="userId" value="<%=u._id%>">
+                    <input type="hidden" name="userId" value="<%=u.user._id%>">
                     <input type="hidden" name="agendaId" value="<%= invitation.agenda %>">
                     <select name="role" id="role" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm" onchange="this.form.submit()" <% if(u.niveau === niveau){ %> disabled <% } %> >
                         <option value="3" <% if(u.niveau == 3){ %> selected <% } %> >Admin</option>

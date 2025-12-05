@@ -1,10 +1,12 @@
 // services/appointmentService.js
 import { AppointmentModel } from "../database/appointment.js";
 import { RegleOccurrenceModel } from "../database/regle_occurrence.js";
+import { peutAjouterRDV, peutModifierRDV, peutSupprimerRDV } from "../database/invite_agenda.js";
 import { AgendaModel } from "../database/agenda.js";
 import { creerNotification, supprimerNotification } from "../services/notificationService.js";
 import { TZDate } from "@date-fns/tz";
 import { formatDate, parseDate } from "../utils/date.js";
+
 
 
 /**
@@ -38,9 +40,20 @@ export async function createAppointment(user, body) {
     const agenda = await AgendaModel.findById(agendas);
     if (!agenda) throw new Error("Agenda introuvable");
 
+
+    //Vérifier si l'utilisateur peut ajouter le RDV :
+    const hasPermissionAjouterRDV = peutAjouterRDV(agenda._id, user._id)
+    if(!hasPermissionAjouterRDV)
+    {
+        throw new Error("createAppointment : Vous n'êtes pas autorisé à ajouter un RDV à cet agenda");
+    }
+
+
     // Construction des dates complètes
     const dateDebut = buildDate(date_debut, heure_debut);
     const dateFin = buildDate(date_fin, heure_fin);
+
+
 
     let regle = null;
 
@@ -65,7 +78,7 @@ export async function createAppointment(user, body) {
 
     await appointment.save();
 
-    await creerNotification(user, appointment, user, undefined, 1);
+    await creerNotification(user, appointment, user, agenda, 1);
 
     return appointment;
 }
@@ -94,15 +107,15 @@ export async function updateAppointment(user, body) {
     const appointment = await AppointmentModel.findById(id).populate("agenda");
     if (!appointment) throw new Error("Rendez-vous introuvable");
 
-    const newAgenda = await AgendaModel.findById(agendas);
+    // Utiliser le nouvel agenda s'il est fourni, sinon conserver l'ancien.
+    const agendaIdToUpdate = agendas || appointment.agenda._id;
+
+    const newAgenda = await AgendaModel.findById(agendaIdToUpdate);
     if (!newAgenda) throw new Error("Agenda introuvable");
 
     // Vérification permission changement agenda
-    if (
-        appointment.agenda.user.toString() !== user._id.toString() &&
-        newAgenda._id.toString() !== appointment.agenda._id.toString()
-    ) {
-        throw new Error("Changement d’agenda non autorisé");
+    if (!peutModifierRDV(agendaIdToUpdate, user._id)) {
+        throw new Error("updateAppointment : Changement d’agenda non autorisé");
     }
 
     const dateDebut = buildDate(date_debut, heure_debut);
@@ -149,7 +162,7 @@ export async function updateAppointment(user, body) {
         { new: true }
     );
 
-    await creerNotification(user, updated, user, undefined, 2);
+    await creerNotification(user, updated, user, newAgenda, 2);
 
     return updated;
 }
@@ -160,21 +173,18 @@ export async function updateAppointment(user, body) {
  * Suppression d’un rendez-vous
  */
 export async function deleteAppointment(user, body) {
-    const { id, agendas } = body;
+    const { id } = body;
 
     const appointment = await AppointmentModel.findById(id);
     if (!appointment) throw new Error("Rendez-vous introuvable");
 
-    const agenda = await AgendaModel.findById(agendas).populate("user");
+    const agenda = await AgendaModel.findById(appointment.agenda).populate("user");
+    if (!agenda) throw new Error("L'agenda associé à ce rendez-vous est introuvable.");
 
-    const ownerId = agenda.user._id.toString();
-    const creatorId = appointment.createur.toString();
+    const hasPermissionSupprimerRDV = await peutSupprimerRDV(agenda._id, user._id);
 
-    if (
-        user._id.toString() !== ownerId &&
-        user._id.toString() !== creatorId
-    ) {
-        throw new Error("Ce rendez-vous ne vous appartient pas");
+    if (!hasPermissionSupprimerRDV) {
+        throw new Error("deleteAppointment : Vous n'avez pas les droits pour supprimer ce rendez-vous.");
     }
 
     await creerNotification(agenda.user, appointment, user, agenda, 3);

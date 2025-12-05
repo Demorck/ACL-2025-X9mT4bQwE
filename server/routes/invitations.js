@@ -39,7 +39,8 @@ export async function routeCreationInvitation(req, res){
     for (let invite of invites) {
         // On vérifie que l'utilisateur associé à l'invitation existe toujours
         if (invite) {
-            invite.niveau = await getNiveauUser(agenda._id, invite._id);
+            invite.user = await UserModel.findById(invite.user);
+            invite.niveau = await getNiveauUser(agenda._id, invite.user);
         }
     }
 
