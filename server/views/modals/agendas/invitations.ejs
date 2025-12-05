@@ -1,4 +1,5 @@
 <% layout("modals/template"); %>
+<% if(niveau >= 3){ %>
 <form action="/invitation/modifier" method="POST" class="flex flex-col items-center gap-4 mb-10">
 
     <!-- On envoie maintenant l'ID de l'invitation -->
@@ -17,7 +18,7 @@
                 "><%= lien %></span>
         <% } %>
     </div>
-
+    <% if(niveau >=4) { %>
     <!-- Modification du max -->
     <div class="flex items-center gap-2">
         <label for="utilisationsMax" class="font-semibold whitespace-nowrap">
@@ -38,8 +39,9 @@
         value="Modifier"
         class="px-4 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer whitespace-nowrap"
     >
+    <% } %>
 </form>
-
+<% } %>
 
 <div class="text-left">
 <h3 class="text-xl font-semibold mb-2">Invités <%= invites.length %>/<%= invitation.utilisationsMax %></h3>
@@ -49,10 +51,10 @@
             <li class="bg-stone-700 p-3 rounded flex justify-between items-center">
 
                 <div>
-                    <span class="font-semibold"><%= u.username %></span>
+                    <span class="font-semibold"><%= u.user.username %></span>
                 </div>
-
-                <form action="/invitation/<%= invitation.agenda %>/remove/<%= u._id %>" method="GET">
+                <% if(niveau >= 3){ %>
+                <form action="/invitation/<%= invitation.agenda %>/remove/<%= u.user._id %>" method="GET">
                     <button
                         type="submit"
                         class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-sm"
@@ -60,6 +62,17 @@
                         Supprimer
                     </button>
                 </form>
+                <form action="/invitation/changeRole" method="POST">
+                    <input type="hidden" name="userId" value="<%=u.user._id%>">
+                    <input type="hidden" name="agendaId" value="<%= invitation.agenda %>">
+                    <select name="role" id="role" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm" onchange="this.form.submit()" <% if(u.niveau === niveau){ %> disabled <% } %> >
+                        <option value="3" <% if(u.niveau == 3){ %> selected <% } %> >Admin</option>
+                        <option value="2" <% if(u.niveau == 2){ %> selected <% } %> >Member</option>
+                        <option value="1" <% if(u.niveau == 1){ %> selected <% } %> >Viewer</option>
+                    </select>
+                    <input type="submit" value="">
+                </form>
+                <% } %>
             </li>
         <% }) %>
     </ul>
@@ -67,3 +80,7 @@
     <p class="text-stone-400">Aucun invité pour le moment.</p>
 <% } %>
 </div>
+
+<script>
+
+</script>
