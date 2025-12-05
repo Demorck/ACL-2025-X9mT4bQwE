@@ -38,7 +38,7 @@ export async function routeCreationInvitation(req, res) {
         title: "Invitation"
     });
 
-    return res.redirect("/invitation/:agendaId/manage");
+    return res.redirect(`/invitation/${agendaId}/manage`);
 }
 
 export async function routeFormCreationInvitation(req, res) {
@@ -67,7 +67,6 @@ export async function routeModificationInvitation(req, res) {
 
     await updateInvitation(invitationId, data);
 
-    // console.log(agendaId.agenda._id);
 
     return res.redirect(`/invitation/${agendaId}/manage`);
 }

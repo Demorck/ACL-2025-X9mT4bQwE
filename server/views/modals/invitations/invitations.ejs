@@ -58,7 +58,7 @@
                                             title="Copier le lien"
                                             onclick="
                                                 event.stopPropagation(); // Empêche d'ouvrir l'édition
-                                                const url = window.location.origin + '/invitation/join/<%= l._id %>';
+                                                const url = window.location.origin + '/invitation/<%= l._id %>';
                                                 navigator.clipboard.writeText(url);
                                                 
                                                 // Feedback visuel
