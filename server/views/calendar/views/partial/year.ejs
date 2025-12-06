@@ -1,0 +1,58 @@
+<div class="flex flex-row flex-1 h-full overflow-auto">
+    <div class="flex flex-col justify-between">
+        <% data.months.forEach(month => { %>
+            <h3 class="border flex flex-1 p-4"><%=month.name %></h3>
+        <% }) %>
+    </div>
+
+    <div class="flex flex-1 flex-col">
+    <% data.months.forEach(month => { %>
+        <div class="flex flex-1 flex-row">
+            <div class="flex flex-1 w-full">
+                <% month.days.forEach((day, index) => { 
+                    if (day === null) { %>
+                        <!-- Jour inexistant (grisé) -->
+                        <div class="flex border flex-1 bg-gray-400/20"></div>
+                    <% } else { 
+                        const dayAppointments = data.appointments.filter(a => 
+                            new Date(a.start).getDate() === day.getDate() && 
+                            new Date(a.start).getMonth() === day.getMonth()
+                        );
+                        const isToday = new Date().toDateString() === day.toDateString();
+                    %>
+                        <div class="justify-center relative flex flex-1 border cursor-pointe <%= isToday ? 'ring-2 ring-blue-500' : '' %>"
+                             data-open-appointment
+                             data-year="<%= day.getFullYear() %>"
+                             data-month="<%= day.getMonth() %>"
+                             data-day="<%= day.getDate() %>">
+                            
+                            <h3 class="opacity-50"><%= index + 1 %></h3>
+                            <% if (dayAppointments.length > 0) { %>
+                                <div class="absolute bottom-0 left-0 right-0 flex gap-0.5 px-0.5 pb-0.5 flex-wrap">
+                                    <% dayAppointments.slice(0, 3).forEach(app => { 
+                                     %>
+                                        <div class="w-1.5 h-1.5 rounded-full appointment-year appointment-color-<%= app.color %>" 
+                                                data-agenda="<%= app.agendaId %>"
+                                                title="<%= app.nom %>"
+                                                data-start="<%= app.startHour %>"
+                                                data-duration="<%= app.durationHours %>"
+                                                data-day="<%= day.getDate() %>"
+                                                data-month="<%= day.getMonth() %>"
+                                                data-year="<%= day.getFullYear() %>"
+                                                data-id="<%= app.id %>"
+                                                data-appointment>
+                                             </div>
+                                    <% }) %>
+                                    <% if (dayAppointments.length > 3) { %>
+                                        <span class="text-xs">+<%= dayAppointments.length - 3 %></span>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% } %>
+                <% }) %>
+            </div>
+        </div>
+    <% }) %>
+    </div>
+</div>
