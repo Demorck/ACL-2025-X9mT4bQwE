@@ -120,3 +120,47 @@ export function getMonthData(year, month, user) {
 
     return appointments;
 }
+
+/**
+ * Obtient les données pour une année spécifique
+ * 
+ * @export
+ * @param {Number} year 
+ * @param {User} user 
+ * @returns {{yearLabel: string, months: Array, appointments: Array}}
+ */
+export function getYearData(year, user) {
+    let startISODate = new TZDate(year, 0, 1); // 1er janvier
+    let endISODate = new TZDate(year + 1, 0, 1); // 1er janvier de l'année suivante
+
+    let appointments = getAppointments(user, startISODate, endISODate).then(app => {
+        let months = [];
+        for (let month = 0; month < 12; month++) {
+            let monthDate = new TZDate(year, month, 1);
+            let daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            months.push({
+                name: formatDate(monthDate, "MMM"),
+                monthIndex: month,
+                daysInMonth: daysInMonth,
+                days: Array.from({ length: 31 }, (_, i) => {
+                    if (i < daysInMonth) {
+                        return new TZDate(year, month, i + 1);
+                    }
+                    return null;
+                })
+            });
+        }
+
+        return {
+            yearLabel: year.toString(),
+            year: year,
+            months: months,
+            appointments: app
+        }
+    }).catch(err => {
+        throw new Error(err);
+    });
+
+    return appointments;
+}

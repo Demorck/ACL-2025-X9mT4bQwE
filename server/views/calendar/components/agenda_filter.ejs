@@ -126,7 +126,8 @@ document.addEventListener("DOMContentLoaded", () => {
             
             switch (view) {
                 case "month":
-                    document.querySelectorAll(`.appointment-month[data-agenda="${agendaId}"]`)
+                case "year":
+                    document.querySelectorAll(`.appointment-month[data-agenda="${agendaId}"], .appointment-year[data-agenda="${agendaId}"]`)
                             .forEach(el => el.classList.toggle("hidden"));
                     break;
             
