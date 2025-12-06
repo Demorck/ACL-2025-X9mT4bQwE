@@ -44,3 +44,7 @@ export async function updateInvitation(idInvitation, data) {
         { $set: data }
     );
 }
+
+export async function deleteInvitation(id){
+    await invitationsModel.findByIdAndDelete(id);
+}

@@ -1,4 +1,4 @@
-import { creerInvitation, ajouterUtilisation, getInvitationsByAgendaId, getInvitation, updateInvitation} from "../database/invitations.js";
+import { creerInvitation, ajouterUtilisation, getInvitationsByAgendaId, getInvitation, updateInvitation, deleteInvitation } from "../database/invitations.js";
 import { AgendaModel, addInvite, isInviteInAgenda, removeInvite } from "../database/agenda.js";
 import { UserModel } from "../database/users.js"
 
@@ -18,6 +18,14 @@ export async function utiliserlien(req, res) {
         return res.render('errors/generic', { message: "Vous êtes déjà dans cet agenda", statusCode: 400 });
     }
     
+    if (invitation.dateExpiration && new Date() > new Date(invitation.dateExpiration)) {
+        return res.render('errors/generic', { message: "Ce lien d'invitation a expiré", statusCode: 400 });
+    }
+
+    if (invitation.utilisationsMax && invitation.nbUtilisation >= invitation.utilisationsMax) {
+        return res.render('errors/generic', { message: "Ce lien a atteint son nombre maximum d'utilisations", statusCode: 400 });
+    }
+
     await addInvite(agenda._id, userId);
     await ajouterUtilisation(invitationId);
 
@@ -82,8 +90,6 @@ export async function routeInvitation(req, res){
 
     const invitations = await getInvitationsByAgendaId(req.params.idAgenda);
 
-    console.log(invitations);
-
     res.render("modals/invitations/invitations", { 
         agenda,
         invitations,
@@ -103,3 +109,9 @@ export async function modifierInvitation(req, res) {
 }
 
 
+export async function routeSuppressionInvitation(req, res){
+    const invitation = await getInvitation(req.params.idInvitation);
+    console.log(invitation);
+    await deleteInvitation(req.params.idInvitation);
+    return res.redirect(`/invitation/${invitation.agenda._id}/manage`);
+}

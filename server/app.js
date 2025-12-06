@@ -19,7 +19,7 @@ import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
 import { routeRecherche } from "./routes/rechercher/recherches.js";
 
 import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation, routeInvitation, 
-    routeFormCreationInvitation, routeFormModificationInvitation, routeModificationInvitation} from "./routes/invitations.js"
+    routeFormCreationInvitation, routeFormModificationInvitation, routeModificationInvitation, routeSuppressionInvitation} from "./routes/invitations.js"
 
 export const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -84,6 +84,7 @@ app.post("/invitation/:idAgenda/create", routeCreationInvitation);
 app.get("/invitation/:idInvitation/edit", routeFormModificationInvitation);
 app.post("/invitation/:idInvitation/edit", routeModificationInvitation);
 
+app.get("/invitation/:idInvitation/delete", routeSuppressionInvitation);
 
 app.get("/invitation/:id", utiliserlien);
 app.post("/invitation/modifier", modifierInvitation);
