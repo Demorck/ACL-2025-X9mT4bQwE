@@ -53,54 +53,51 @@
         </div>
 
         <!-- Récurrence -->
-        <%if(!modifRecurrence){%>
-            <div>
-                <input type="checkbox" id="recurrence" name="recurrence" <%= recurrence ? 'checked' : '' %>/>
-                <label for="recurrence">Récurrence du rendez-vous</label>
+        <div>
+            <input type="checkbox" id="recurrence" name="recurrence" <%= recurrence ? 'checked' : '' %>/>
+            <label for="recurrence">Récurrence du rendez-vous</label>
+        </div>
+
+        <div class="flex items-center justify-between mb-6" id="contenuCache" style="display: <%= recurrence ? 'block' : 'none' %>;">
+            <div class="flex items-center justify-between mb-6">
+                <label for="frequence">Récurrence :</label>
+                <select id="frequenceId" name="frequenceId" class="border px-3 py-2 rounded">
+                    <option value="day1" <%= frequenceRegle === 'day1' ? 'selected' : '' %>>Tous les jours</option>
+                    <option value="month1" <%= frequenceRegle === 'month1' ? 'selected' : '' %>>Tous les mois</option>
+                    <option value="year1" <%= frequenceRegle === 'year1' ? 'selected' : '' %>>Tous les ans</option>
+                </select>
             </div>
 
-            <div class="flex items-center justify-between mb-6" id="contenuCache" style="display: <%= recurrence ? 'block' : 'none' %>;">
-                <div class="flex items-center justify-between mb-6">
-                    <label for="frequence">Récurrence :</label>
-                    <select id="frequenceId" name="frequenceId" class="border px-3 py-2 rounded">
-                        <option value="day1" <%= frequenceRegle === 'day1' ? 'selected' : '' %>>Tous les jours</option>
-                        <option value="week1" <%= frequenceRegle === 'week1' ? 'selected' : '' %>>Toutes les semaines</option>
-                        <option value="month1" <%= frequenceRegle === 'month1' ? 'selected' : '' %>>Tous les mois</option>
-                        <option value="year1" <%= frequenceRegle === 'year1' ? 'selected' : '' %>>Tous les ans</option>
-                    </select>
-                </div>
-
-                <div class="flex items-center justify-between mb-6">
-                    <label for="fin_rec">Fin de la récurrence :</label>
-                    <select id="fin_rec" name="fin_rec" class="border px-3 py-2 rounded">
-                        <option value="never" <%= !date_fin_ap ? 'selected' : '' %>>Jamais</option>
-                        <option value="specificalDate" <%= date_fin_ap ? 'selected' : '' %>>Jusqu'au</option>
-                    </select>
-                </div>
-
-                <div id="contenuCacheDateFin" style="display: <%= date_fin_ap ? 'block' : 'none' %>;">
-                    <label for="date_fin_rec">Sélectionnez la date de fin :</label>
-                    <input type="date" name="date_fin_rec" value="<%= date_fin_ap %>" id="date_fin_rec" class="w-full border px-3 py-2 rounded">
-                </div>
+            <div class="flex items-center justify-between mb-6">
+                <label for="fin_rec">Fin de la récurrence :</label>
+                <select id="fin_rec" name="fin_rec" class="border px-3 py-2 rounded">
+                    <option value="never" <%= !date_fin_ap ? 'selected' : '' %>>Jamais</option>
+                    <option value="specificalDate" <%= date_fin_ap ? 'selected' : '' %>>Jusqu'au</option>
+                </select>
             </div>
 
-            <% if (submitText == "Modifier" && recurrence) { %>
-                <div class="flex items-center justify-between mb-6" id="contenuCacheReccurence">
-                    <div class="flex items-center justify-between mb-6">
-                        <label for="modifRec">Modification :</label>
-                        <select id="modifRec" name="modifRec" class="border px-3 py-2 rounded">
-                            <option value="only" id="optionOnly" <%= !date_fin_ap ? 'selected' : '' %>>Uniquement sur ce rdv</option>
-                            <option value="all" id="optionAll" <%= date_fin_ap ? 'selected' : '' %>>Sur toute la récurrence</option>
-                        </select>
-                    </div>
-                </div>
-            <% } %>
-        <%}%>
+            <div id="contenuCacheDateFin" style="display: <%= date_fin_ap ? 'block' : 'none' %>;">
+                <label for="date_fin_rec">Sélectionnez la date de fin :</label>
+                <input type="date" name="date_fin_rec" value="<%= date_fin_ap %>" id="date_fin_rec" class="w-full border px-3 py-2 rounded">
+            </div>
+        </div>
+
         <div class="flex flex-col md:flex-row items-center justify-evenly">    
             <input type="submit" value="<%= submitText %>" name="actionType" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
             <% if (submitText == "Modifier") { %>
-                <input type="button" value="Supprimer" data-delete-action="appointment" data-is-recurrent="<%= recurrence ? 'true' : 'false' %>" class="px-3 py-2 bg-red-600 rounded hover:bg-red-700 hover:cursor-pointer">
+                <input type="submit" value="Supprimer" name="actionType" class="px-3 py-2 rounded hover:cursor-pointer" data-action="confirmerSupprimer">
             <% } %>
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+  let suppr_element = document.querySelector("[data-action='confirmerSupprimer']");
+  new_element.addEventListener("click", async e => {
+    await openModal(`/agendas/new`);
+
+    updateColorPreview()
+  });
+});
+</script>

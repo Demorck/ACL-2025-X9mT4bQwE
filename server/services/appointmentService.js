@@ -99,11 +99,6 @@ export async function updateAppointment(user, body) {
     const jour = parseInt(day) +1; 
     const dateException = new Date(year, month, jour);
 
-    // Affichage (exemple)
-    console.log(dateException);
-    console.log(modifRec);
-    console.log(recurrence);
-
     const appointment = await AppointmentModel.findById(id).populate("agenda");
     if (!appointment) throw new Error("Rendez-vous introuvable");
 
@@ -120,7 +115,6 @@ export async function updateAppointment(user, body) {
 
     const dateDebut = buildDate(date_debut, heure_debut);
     const dateFin = buildDate(date_fin, heure_fin);
-    console.log(dateDebut, dateFin);
 
     let updatedRecRule = null;
     let appointmentNew = null;
@@ -135,6 +129,7 @@ export async function updateAppointment(user, body) {
                 date_Debut: dateDebut,
                 date_Fin: dateFin,
                 recurrenceRule: null,
+                modifRecurrence: true,
                 createur: user._id,
             });
             await appointmentNew.save();
@@ -163,10 +158,19 @@ export async function updateAppointment(user, body) {
     } else {
         // Suppression règle
         updatedRecRule = null;
+        /* appointmentNew = new AppointmentModel({
+                agenda: newAgenda._id,
+                nom,
+                date_Debut: dateDebut,
+                date_Fin: dateFin,
+                recurrenceRule: null,
+                createur: user._id,
+            });
+            await appointmentNew.save(); */
     }
-    console.log(appointmentNew._id);
 
-    if(modifRec === "only"){
+    if(modifRec === "only" && recurrence === "on"){
+        //Si on modifie que 1 seul rdv et qu'il y a encore la récurrence d'activer, il fait encore parti de la rec et donc on l'ajoute comme lié à la rec encore
         updated = await AppointmentModel.findByIdAndUpdate(
             id,
             {
@@ -177,7 +181,8 @@ export async function updateAppointment(user, body) {
             },
             { new: true }
         );
-    }else{
+    }else if (modifRec != "only"){ //passe pour all et off ou on
+        // si il est sur all, on supprime le lien avec la récurrence si c'est undefined et on garde le lien si c'est on
         // Mise à jour RDV
         updated = await AppointmentModel.findByIdAndUpdate(
             id,
@@ -187,6 +192,26 @@ export async function updateAppointment(user, body) {
                 date_Debut: dateDebut,
                 date_Fin: dateFin,
                 recurrenceRule: updatedRecRule?._id || null,
+            },
+            { new: true }
+        );
+    }else if(modifRec === "only"){ //isoler un rdv de la récurrence pour l'enlever de la récurrence
+        appointmentNew = new AppointmentModel({
+                agenda: newAgenda._id,
+                nom,
+                date_Debut: dateDebut,
+                date_Fin: dateFin,
+                recurrenceRule: null,
+                createur: user._id,
+            });
+        await appointmentNew.save();
+
+        updated = await AppointmentModel.findByIdAndUpdate(
+            id,
+            {
+                $addToSet: { 
+                    exceptionDate: appointmentNew.date_Debut 
+                },
             },
             { new: true }
         );
@@ -270,7 +295,8 @@ export function buildAppointmentFormData({
 
     const name = appointment?.nom || '';
     const rdvId = appointment?._id?.toString() || null;
-    const recurrence = !!appointment?.recurrenceRule;
+    const recurrence = appointment?.recurrenceRule;
+    const modifRecurrence = appointment?.modifRecurrence;
     let frequenceRegle = '';
     let regleId = null;
     let date_fin_ap = null;
@@ -309,6 +335,7 @@ export function buildAppointmentFormData({
         name,
         rdvId,
         recurrence,
+        modifRecurrence,
         frequenceRegle,
         regleId,
         date_fin_ap,

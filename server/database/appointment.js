@@ -11,6 +11,7 @@ const appointmentSchema = new Schema({
     recurrenceRule: { type: Schema.Types.ObjectId, ref: "RegleOccurrence", required: false },
     exception: [{ type: Schema.Types.ObjectId, ref: "Appointment", required: false }],
     exceptionDate: [{ type: Date, required: false }],
+    modifRecurrence: { type: Boolean, required: false },
     createur: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 

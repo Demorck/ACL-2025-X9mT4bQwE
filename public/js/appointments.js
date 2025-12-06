@@ -1,6 +1,12 @@
+document.addEventListener('DOMContentLoaded', () => {
+        updateSelectOptions();
+});
+
+
 document.addEventListener("change", function (e) {
     if (e.target.id === "recurrence") {
         const contenuCache = document.getElementById("contenuCache");
+        updateSelectOptions();
         if (!contenuCache) return;
 
         contenuCache.style.display = e.target.checked ? "block" : "none";
@@ -120,6 +126,23 @@ function afficherCalendar(){
         contenuCacheDateFin.style.display = 'none';
         dateFinRecInput.required = false;
     }
+}
+
+function updateSelectOptions() {
+    /* const checkbox = document.getElementById('recurrence');
+    const select = document.getElementById('modifRec');
+    const optionOnly = document.getElementById('optionOnly');
+
+    if (!checkbox || !select || !optionOnly) return;
+
+    if (checkbox.checked) {
+        optionOnly.disabled = false;
+        optionOnly.hidden = false;
+    } else {
+        optionOnly.disabled = true;
+        optionOnly.hidden = true;
+        select.value = "only";
+    } */
 }
 
 
