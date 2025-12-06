@@ -41,11 +41,11 @@ async function submitAppointmentForm(form, action) {
             // Recharge la vue actuelle du calendrier
             await reloadCurrentCalendarView();
 
-            let type = "succes";
+            //let type = "succes";
             if(result.appointment === undefined) {
-                type = "supprimer";
+                action = "supprimer";
             }
-            await creerToast(result.message, type);
+            await creerToast(result.message, action);
         } else {
             await creerToast(result.error, "echec");
         }

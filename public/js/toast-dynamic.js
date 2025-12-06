@@ -1,7 +1,6 @@
 const toastContainer = document.getElementById('toastContainer');
 
 function creerToast(message, type = 'succes') {
-  console.log("non tu rentres")
   const toast = document.createElement('div');
   toast.className = 'toast opacity-0 transition-opacity duration-300 bg-white border border-gray-200 shadow-lg rounded-lg p-4 flex items-start w-72';
   const iconClass = choixFA(type);
@@ -56,12 +55,13 @@ function choixFA(type) {
       iconClasses = "fa-solid fa-eye text-green-500";
       break;
 
-      // pas utilisé
-    case "ajouter":
+    case "create":
+      console.log("plus");
       iconClasses = "fa-solid fa-plus text-green-500";
       break;
 
-    case "info": // pas utilisé
+    case "update":
+      console.log("update");
       iconClasses = "fa-solid fa-circle-info text-blue-500";
       break;
 
@@ -70,6 +70,7 @@ function choixFA(type) {
       break;
 
     default:
+      console.log("default");
       iconClasses = "fa-solid fa-circle-dot text-gray-500";
       break;
   }
