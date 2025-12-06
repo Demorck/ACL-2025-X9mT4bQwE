@@ -6,7 +6,6 @@
  * Soumet un formulaire de rendez-vous
  */
 async function submitAppointmentForm(form, action) {
-    console.log("non je ny crois pas");
     let formData = new FormData(form);
     let data = Object.fromEntries(formData.entries());
 

@@ -56,12 +56,10 @@ function choixFA(type) {
       break;
 
     case "create":
-      console.log("plus");
       iconClasses = "fa-solid fa-plus text-green-500";
       break;
 
     case "update":
-      console.log("update");
       iconClasses = "fa-solid fa-circle-info text-blue-500";
       break;
 
@@ -70,7 +68,6 @@ function choixFA(type) {
       break;
 
     default:
-      console.log("default");
       iconClasses = "fa-solid fa-circle-dot text-gray-500";
       break;
   }
