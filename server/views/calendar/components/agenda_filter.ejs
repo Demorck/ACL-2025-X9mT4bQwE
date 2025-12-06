@@ -130,9 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             .forEach(el => el.classList.toggle("hidden"));
                     break;
             
-                default:
-                console.log('aa');
-                
+                default:                
                 document.querySelectorAll(`.appointment[data-agenda='${agendaId}']`)
                         .forEach(el => {
                             el.style.display = visible ? "block" : "none";

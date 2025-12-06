@@ -9,6 +9,8 @@ import accountRoute from "./routes/account.js";
 import appointmentRoute from "./routes/appointments.js";
 import notificationRoute from "./routes/notifications.js";
 import apiCalendarRoute from "./routes/api/calendar.js";
+import apiAppointmentRoute from "./routes/api/appointments.js";
+import apiNotificationRoute from "./routes/api/notifications.js";
 import { authMiddleware } from "./middlewares/auth.js";
 import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda, routeTestAgendasPartages, routeAjouterAgendaPartage, routeSupprimerAgendaPartage } from "./routes/agendas.js";
 
@@ -16,7 +18,7 @@ import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
 import { routeRecherche } from "./routes/rechercher/recherches.js";
 
-import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation} from "./routes/invitations.js"
+import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation, changerRoleInvite} from "./routes/invitations.js"
 
 export const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -51,8 +53,10 @@ app.use("/appointment", appointmentRoute);
 // Notification routes
 app.use("/notifications", notificationRoute);
 
-
+// API routes
 app.use("/api/calendar/", apiCalendarRoute);
+app.use("/api/appointments/", apiAppointmentRoute);
+app.use("/api/notifications/", apiNotificationRoute);
 
 // Agenda routes
 app.get("/agendas/new", routeNewAgenda);
@@ -69,7 +73,8 @@ app.use("/api/rechercher", routeRecherche);
 
 
 // app.post("/invitation/modifier", modifierLien);
-app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite)
+app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite);
+app.post("/invitation/changeRole", changerRoleInvite);
 app.get("/invitation/:idAgenda/manage", routeCreationInvitation);
 app.get("/invitation/:id", utiliserlien);
 app.post("/invitation/modifier", modifierInvitation);
