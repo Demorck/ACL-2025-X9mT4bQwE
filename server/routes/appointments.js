@@ -1,5 +1,5 @@
 import express from "express";
-import { handleCreateAppointment, renderEditAppointment, renderNewAppointment, handleUpdateAppointment, handleDeleteAppointment } from "../controllers/appointmentController.js";
+import { renderEditAppointment, renderNewAppointment, handleCreateAppointment, handleUpdateAppointment, handleDeleteAppointment } from "../controllers/appointmentController.js";
 
 const router = express.Router();
 

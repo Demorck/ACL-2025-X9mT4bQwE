@@ -1,5 +1,6 @@
 import { TZDate } from "@date-fns/tz";
 import mongoose from "mongoose";
+import { getAgendasIdFromUserInvited } from "./invite_agenda.js";
 
 const Schema = mongoose.Schema;
 
@@ -21,8 +22,11 @@ export const AppointmentModel = mongoose.model("Appointment", appointmentSchema)
 export async function getAppointmentsByUserAndDateRange(user, startDate, endDate) {
     // let agendas = await AgendaModel.find({user: user._id}); 
     let agendas = user.agendas;
-    let agendaIds = agendas.map(agenda => agenda._id);
-    
+    const agendaOwnerIds = agendas.map(agenda => agenda._id);
+    const agendasInvitesIds = await getAgendasIdFromUserInvited(user._id)
+    const agendaIds = [...agendaOwnerIds, ...agendasInvitesIds.map(invite => invite.agenda)];
+
+
     let appointments = await AppointmentModel.find({
         agenda: { $in: agendaIds },
     })
