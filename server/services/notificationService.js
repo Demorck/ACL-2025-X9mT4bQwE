@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { NotificationModel } from "../database/notification.js";
 import { ajouterNotification } from "../database/users.js";
+import { getInvites } from "../database/invite_agenda.js";
 
 /**
  * Renvoie toutes les notifications d’un utilisateur
@@ -53,7 +54,6 @@ export async function deleteSingleNotification(notificationId) {
  * @param {Number} type 
  */
 export async function creerNotification(user, appointment, user_concerned, agenda, type) {
-
     let nomGenerique = appointment ? appointment.nom : agenda?.nom;
 
     if (agenda) {
@@ -64,8 +64,9 @@ export async function creerNotification(user, appointment, user_concerned, agend
             userIds.add(ownerId);
         }
 
-        if (agenda.invites?.length) {
-            agenda.invites.forEach(id => userIds.add(id.toString()));
+        const invites = await getInvites(agenda._id);
+        if (invites?.length > 0) {
+            invites.forEach(invite => userIds.add(invite.user.toString()));
         }
 
         const usersToNotify = await mongoose.model("User").find({

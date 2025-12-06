@@ -1,5 +1,5 @@
-import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda, addInvite, removeInvite } from "../database/agenda.js";
-
+import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda, getAgendasForUser } from "../database/agenda.js";
+import { addInvite, removeInvite } from "../database/invite_agenda.js";
 
 export async function routeNewAgenda(req, res) { 
 
@@ -39,7 +39,8 @@ export async function routeAddAgendaToDatabase(req, res, next) {
     }
 }
 export async function routeListeAgendas(req, res, next) {
-    const agendas = await listAgendas(res.locals.user);
+    const agendas = await getAgendasForUser(res.locals.user);
+    // TODO : Faire passer les niveaux de permissions aux différents agendas
     res.render('agendas/listAgendas', 
         { 
             agendas : agendas,
@@ -94,7 +95,7 @@ export async function routeAjouterAgendaPartage(req, res, bext){
         return res.redirect("/agendas/testAgendasPartages");
     }
 
-    await addInvite(req.body.agendaID, req.body.userID);
+    await addInvite(req.body.agendaID, req.body.userID,1);
     return res.redirect("/agendas/testAgendasPartages");
 }
 

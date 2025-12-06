@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { addInvite } from "./agenda.js";
+import { addInvite } from "./invite_agenda.js";
 
 const Schema = mongoose.Schema;
 
