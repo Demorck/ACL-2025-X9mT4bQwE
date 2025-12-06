@@ -39,8 +39,8 @@ function updateCalendarDisplay(calendarData) {
     }
     
     // Mets à jour les liens précédent/suivant
-    const prevLink = document.querySelector('.calendar-header a[href*="day="], .calendar-header a[href*="month="]');
-    const nextLinks = document.querySelectorAll('.calendar-header a[href*="day="], .calendar-header a[href*="month="]');
+    const prevLink = document.querySelector('.calendar-header a[href*="day="], .calendar-header a[href*="month="], .calendar-header a[href*="year="]');
+    const nextLinks = document.querySelectorAll('.calendar-header a[href*="day="], .calendar-header a[href*="month="], .calendar-header a[href*="year="]');
 
     const buttons = document.querySelectorAll('div > a > .calendar-header-button, div > a > .calendar-header-button--active');
     
