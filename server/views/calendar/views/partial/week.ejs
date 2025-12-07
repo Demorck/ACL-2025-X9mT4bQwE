@@ -23,9 +23,9 @@
     </div>
     <% } %>  
         <% data.appointments.filter(a => a.start.getDay()=== i % 7).forEach(app => { 
-            let day = app.start.getDay()
+            let day = app.start.getDate()
             let month = app.start.getMonth()
-            let year = app.start.getYear()
+            let year = app.start.getFullYear()
         %>
         <%- include('../../components/appointment', { app, day, month, year }) %>
         <% }) %>

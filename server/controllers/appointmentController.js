@@ -3,7 +3,7 @@ import { AgendaModel, getAgendasAllowedToAddForUser, getAgendasForUser } from ".
 import { AppointmentModel } from "../database/appointment.js";
 import { getNiveauUser } from "../database/invite_agenda.js";
 import { UserModel } from "../database/users.js";
-import { buildAppointmentFormData } from "../services/appointmentService.js";
+import { buildAppointmentFormData, deleteAppointment, updateAppointment, createAppointment } from "../services/appointmentService.js";
 
 
 
@@ -37,6 +37,19 @@ export async function renderNewAppointment(req, res) {
         niveau: 4
     });
 }
+
+export async function handleCreateAppointment(req, res, next) {
+    try {
+        const appointment = await createAppointment(res.locals.user, req.body);
+
+        const { day, month, year } = req.body;
+        res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
+
+    } catch (err) {
+        next(err);
+    }
+}
+
 
 export async function renderEditAppointment(req, res,  next) {
     try {
@@ -83,3 +96,37 @@ export async function renderEditAppointment(req, res,  next) {
         next(error);
     }
 }
+
+export async function handleUpdateAppointment(req, res, next) {
+    try {
+        if(!res.locals.user) return res.redirect("/login");
+
+        if (req.body.actionType === "Supprimer") {
+            return handleDeleteAppointment(req, res, next);
+        }
+
+        await updateAppointment(res.locals.user, req.body);
+
+        const { day, month, year } = req.body;
+
+        res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
+
+    } catch (err) {
+        next(err);
+    }
+}
+
+
+export async function handleDeleteAppointment(req, res, next) {
+    try {
+        await deleteAppointment(res.locals.user, req.body);
+
+        const { day, month, year } = req.body;
+
+        res.redirect(`/calendar/day?day=${day}&month=${month}&year=${year}`);
+
+    } catch (err) {
+        next(err);
+    }
+}
+

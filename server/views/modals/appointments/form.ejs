@@ -42,10 +42,9 @@
             </div>
         </div>
 
-        <!-- Sélection de l’agenda -->
+        <!-- Sélection de l'agenda -->
         <div class="flex items-center justify-between mb-6 flex-col md:flex-row">
             <label for="agendas" class="bloc font-semibold mb-1">Agendas</label>
-            <!-- On bloque le changement de l'agenda d'un rdv au créateur de l'agenda même -->
             <select id="agendaId" name="agendas" required class="border px-3 py-2 rounded"  <%= niveau !== 4 ? 'disabled' : ''%>>
                 <% agendas.forEach(agenda => { 
                     const selected = (agenda.id === selectedAgenda) ? 'selected' : ''; 
@@ -56,42 +55,60 @@
         </div>
 
         <!-- Récurrence -->
-        <div>
-            <input type="checkbox" id="recurrence" name="recurrence"  <%= niveau < 2 ? 'disabled' : ''%> <%= recurrence ? 'checked' : '' %> />
-            <label for="recurrence">Récurrence du rendez-vous</label>
-        </div>
-
-        <div class="flex items-center justify-between mb-6" id="contenuCache" style="display: <%= recurrence ? 'block' : 'none' %>;">
-            <div class="flex items-center justify-between mb-6">
-                <label for="frequence">Récurrence :</label>
-                <select id="frequenceId" name="frequenceId" class="border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
-                    <option value="day1" <%= frequenceRegle === 'day1' ? 'selected' : '' %>>Tous les jours</option>
-                    <option value="month1" <%= frequenceRegle === 'month1' ? 'selected' : '' %>>Tous les mois</option>
-                    <option value="year1" <%= frequenceRegle === 'year1' ? 'selected' : '' %>>Tous les ans</option>
-                </select>
+        <%if(!modifRecurrence){%>
+            <div>
+                <input type="checkbox" id="recurrence" name="recurrence" <%= niveau < 2 ? 'disabled' : ''%> <%= recurrence ? 'checked' : '' %>/>
+                <label for="recurrence">Récurrence du rendez-vous</label>
             </div>
 
-            <div class="flex items-center justify-between mb-6">
-                <label for="fin_rec">Fin de la récurrence :</label>
-                <select id="fin_rec" name="fin_rec" class="border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
-                    <option value="never" <%= !date_fin_ap ? 'selected' : '' %>>Jamais</option>
-                    <option value="specificalDate" <%= date_fin_ap ? 'selected' : '' %>>Jusqu'au</option>
-                </select>
+            <div class="flex items-center justify-between mb-6" id="contenuCache" style="display: <%= recurrence ? 'block' : 'none' %>;">
+                <div class="flex items-center justify-between mb-6">
+                    <label for="frequence">Récurrence :</label>
+                    <select id="frequenceId" name="frequenceId" class="border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
+                        <option value="day1" <%= frequenceRegle === 'day1' ? 'selected' : '' %>>Tous les jours</option>
+                        <option value="week1" <%= frequenceRegle === 'week1' ? 'selected' : '' %>>Toutes les semaines</option>
+                        <option value="month1" <%= frequenceRegle === 'month1' ? 'selected' : '' %>>Tous les mois</option>
+                        <option value="year1" <%= frequenceRegle === 'year1' ? 'selected' : '' %>>Tous les ans</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-between mb-6">
+                    <label for="fin_rec">Fin de la récurrence :</label>
+                    <select id="fin_rec" name="fin_rec" class="border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
+                        <option value="never" <%= !date_fin_ap ? 'selected' : '' %>>Jamais</option>
+                        <option value="specificalDate" <%= date_fin_ap ? 'selected' : '' %>>Jusqu'au</option>
+                    </select>
+                </div>
+
+                <div id="contenuCacheDateFin" style="display: <%= date_fin_ap ? 'block' : 'none' %>;">
+                    <label for="date_fin_rec">Sélectionnez la date de fin :</label>
+                    <input type="date" name="date_fin_rec" value="<%= date_fin_ap %>" id="date_fin_rec" class="w-full border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
+                </div>
             </div>
 
-            <div id="contenuCacheDateFin" style="display: <%= date_fin_ap ? 'block' : 'none' %>;">
-                <label for="date_fin_rec">Sélectionnez la date de fin :</label>
-                <input type="date" name="date_fin_rec" value="<%= date_fin_ap %>" id="date_fin_rec" class="w-full border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
-            </div>
-        </div>
+            <% if (submitText == "Modifier" && recurrence) { %>
+                <div class="flex items-center justify-between mb-6" id="contenuCacheReccurence">
+                    <div class="flex items-center justify-between mb-6">
+                        <label for="modifRec">Modification :</label>
+                        <select id="modifRec" name="modifRec" class="border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
+                            <option value="only" id="optionOnly" <%= !date_fin_ap ? 'selected' : '' %>>Uniquement sur ce rdv</option>
+                            <option value="all" id="optionAll" <%= date_fin_ap ? 'selected' : '' %>>Sur toute la récurrence</option>
+                        </select>
+                    </div>
+                </div>
+            <% } %>
+        <%}%>
 
         <% if(niveau >= 2){ %>
-        <div class="flex flex-col md:flex-row items-center justify-evenly">    
-            <input type="submit" value="<%= submitText %>" name="actionType" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
-            <% if (submitText == "Modifier" && niveau >= 3) { %>
-                <input type="submit" value="Supprimer" name="actionType" onclick="return confirm('Voulez-vous vraiment supprimer ce rendez-vous ?')" class="px-3 py-2 rounded hover:cursor-pointer">
-            <% } %>
-        </div>
+            <div class="flex flex-col md:flex-row items-center justify-evenly">    
+                <input type="submit" value="<%= submitText %>" name="actionType" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 hover:cursor-pointer">
+                
+                <% if (submitText == "Modifier") { %>
+                    <% if (niveau >= 3) { %>
+                        <input type="button" value="Supprimer" data-delete-action="appointment" data-is-recurrent="<%= recurrence ? 'true' : 'false' %>" class="px-3 py-2 bg-red-600 rounded hover:bg-red-700 hover:cursor-pointer">
+                    <% } %>
+                <% } %>
+            </div>
         <% } %>
 
     </form>

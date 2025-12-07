@@ -67,6 +67,8 @@ app.get("/agendas/delete/:id", routeDeleteAgenda);
 app.get("/agendas/edit/:id", routeFormEditAgenda);
 app.post("/agendas/edit/:id", routeEditAgenda);
 
+app.get("/appointment/confirmationSuppression?rdvId=<%= rdvId %>")
+
 app.get("/calendar/:view", routeCalendar);
 
 app.use("/api/rechercher", routeRecherche);
