@@ -464,16 +464,17 @@ async function updateAppointmentDateTime(appointmentId, agendaId, startDate, end
             if (typeof reloadCurrentCalendarView === 'function') {
                 await reloadCurrentCalendarView();
             }
-            // Toast ici succès
+            
+            await creerToast(result.message, "update");
         } else {
-            // Toast ici erreur
+            await creerToast(result.error, "error");
             if (draggedElement) {
                 draggedElement.style.opacity = "1";
                 draggedElement.style.pointerEvents = "auto";
             }
         }
     } catch (error) {
-        // Toast ici erreur
+        await creerToast(result.error, "error");
         if (draggedElement) {
             draggedElement.style.opacity = "1";
             draggedElement.style.pointerEvents = "auto";
