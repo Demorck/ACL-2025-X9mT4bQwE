@@ -10,13 +10,13 @@ export const routeRecherche = express.Router();
 routeRecherche.post("/recherche", async (req, res, next) => {
     try {
       const user = res.locals.user;
-      const {str, filtreDateMin, filtreDateMax, filtreAgendasUtilise } = req.body;
+      const {str, filtreDateMin, filtreDateMax, filtreAgendasUtilise, page = 1, limit = 20 } = req.body;
 
       // pour avoir les id de tout les agendas
       const agendas = await listAgendas(user);
       const agendaIds = agendas.map(a => a._id);
 
-      const reponse = await rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax, filtreAgendasUtilise, next);
+      const reponse = await rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax, filtreAgendasUtilise, parseInt(page), parseInt(limit), next);
       res.json(reponse);
     } catch (error) {
         next(error);
@@ -25,15 +25,17 @@ routeRecherche.post("/recherche", async (req, res, next) => {
 
 /**
  * Fonction qui retourne les rendez-vous correspondant à l'entrée utilisateur
- * @param {entrée saisie par l'utilisateur dans la barre de recherche} str
- * @param {Id des agendas dans laquel la recherche est faite} agendaIds
- * @param {Date min donné par l'utilisateur le filtre} filtreDateMin 
- * @param {Date max donné par l'utilisateur le filtre} filtreDateMax 
- * @param {Agenda coché par l'utilisateur le filtre} filtreAgendasUtilise 
+ * @param {String} str : entrée saisie par l'utilisateur dans la barre de recherche
+ * @param {Int} agendaIds : Id des agendas dans laquel la recherche est faite
+ * @param {Date} filtreDateMin : Date min donné par l'utilisateur le filtre 
+ * @param {Date} filtreDateMax : Date max donné par l'utilisateur le filtre
+ * @param {List(Int)} filtreAgendasUtilise : Agenda coché par l'utilisateur le filtre 
+ * @param {Int} limit
+ * @param {Int} page  
  * @param {*} next 
  * @returns 
  */
-async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax, filtreAgendasUtilise, next) {
+async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax, filtreAgendasUtilise, page, limit, next) {
   try {
     if (!str || str.trim() === "")
       return [];
@@ -118,7 +120,17 @@ async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax,
       }
         }
         resultatsFinaux.sort((a, b) => a.date_Debut.getTime() - b.date_Debut.getTime());
-        return resultatsFinaux;
+        
+        // Traitement de l'infinity scroll 
+        const debutIndex = (page - 1) * limit;
+        const finIndex = page * limit;
+        const paginatedResults = resultatsFinaux.slice(debutIndex, finIndex);
+
+        return {
+            results: paginatedResults,
+            hasMore: finIndex < resultatsFinaux.length
+        };
+
     } catch (error) {
         next(error);
     }
