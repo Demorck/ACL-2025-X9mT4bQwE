@@ -43,13 +43,17 @@ async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax,
                                  filtreAgendasUtilise : 
                                  agendaIds;
 
-    const minDateObj = filtreDateMin ? new Date(filtreDateMin) : null;
-    let maxDateObj = filtreDateMax ? new Date(filtreDateMax) : null;    
+    // les recherches de base sont faite sur un an avant et apres aujourd'hui
+    const dateMax = new Date();
+    dateMax.setFullYear(dateMax.getFullYear() + 1);
+    const dateMin = new Date();
+    dateMin.setFullYear(dateMin.getFullYear() - 1);
+
+    const minDateObj = filtreDateMin ? new Date(filtreDateMin) : dateMin;
+    let maxDateObj = filtreDateMax ? new Date(filtreDateMax) : dateMax;    
     if (maxDateObj) {
         maxDateObj.setHours(23, 59, 59, 999);
     }
-    const dateMax = new Date();
-    dateMax.setFullYear(dateMax.getFullYear() + 1);
 
     // recherche dans la bdd
     const appointments = await AppointmentModel.find({
