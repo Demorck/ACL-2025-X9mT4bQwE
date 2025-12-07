@@ -104,6 +104,10 @@ function attachCalendarEventListeners() {
             openModal("/appointment/edit", "/js/appointments.js", options);
         });
     });
+
+    if (typeof initDragDrop === 'function') {
+        initDragDrop();
+    }
 }
 
 /**
