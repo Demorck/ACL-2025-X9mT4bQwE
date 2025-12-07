@@ -39,12 +39,18 @@ async function submitAppointmentForm(form, action) {
 
             // Recharge la vue actuelle du calendrier
             await reloadCurrentCalendarView();
-            // Toast validé (result.message)
+
+            //let type = "succes";
+            if(result.appointment === undefined) {
+                action = "supprimer";
+            }
+            await creerToast(result.message, action);
         } else {
-            // Toast erreur // Toast erreur (result.error)
+            await creerToast(result.error, "echec");
         }
     } catch (error) {
         // Toast erreur 
+        await creerToast(error, "echec");
     }
 }
 

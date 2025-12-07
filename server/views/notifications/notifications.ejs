@@ -39,10 +39,10 @@
           </span>
           <div>
             <div class="hidden group-hover:inline-flex gap-4">
-              <div data-mark-seen="<%= n.id %>" class="rounded hover:opacity-20 cursor-pointer">
+              <div data-mark-seen="<%= n.id %>" class="rounded hover:opacity-20 cursor-pointer" title="Marquer comme lu">
                 <i class="fa fa-eye"></i> 
               </div>
-              <div data-delete-notification="<%= n.id %>" class="rounded hover:opacity-20 cursor-pointer">
+              <div data-delete-notification="<%= n.id %>" class="rounded hover:opacity-20 cursor-pointer" title="Supprimer notification">
                 <i class="fa fa-trash"></i> 
               </div>
             </div>
@@ -54,3 +54,5 @@
     </ul>
   <% } %>
 </div>
+<div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 items-end"></div>
+
