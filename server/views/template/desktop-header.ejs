@@ -3,12 +3,54 @@
     %>
     <div class="relative">
         <input type="text" name="recherche" id="recherche" placeholder="Recherche..." class="hover:border-white-300 hover:border rounded-sm hidden test" autocomplete="off" size="30">
-        <div id="resultats" class="absolute bg-white border border-gray-300 w-full mt-1 max-h-60 overflow-auto z-10 text-gray-500 hidden test"></div>
+        <div id="resultats"
+            class="absolute left-0 right-0 mt-1 border border-gray-300 rounded-md bg-white text-gray-500 shadow-lg max-h-60 overflow-auto z-20 hidden test">
+        </div>
+    <button id="filtre" title="Filtres" class="hover:text-amber-300 hidden test">
+        <i class="fa-solid fa-sliders"></i>
+    </button>
+    <% if (typeof data !== 'undefined' && data.agendas) { %>
+    <div id="menu-filtres" class="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-xl p-4 z-30 hidden test overflow-auto" >
+        <h3 class="font-bold text-gray-700 mb-2 border-b pb-1">Filtres</h3>
+            <div class="flex flex-col gap-3">  
+                <div>
+                    <label class="text-xs text-gray-500">Date min : </label>
+                    <input type="date" id="filtre-dateMin" class="w-full border rounded px-2 py-1 text-sm text-black">
+                    <label class="text-xs text-gray-500">Date max : </label>
+                    <input type="date" id="filtre-dateMax" class="w-full border rounded px-2 py-1 text-sm text-black">
+                    <% if (data.agendas.length === 1) { %>
+                        <label class="text-xs text-gray-500">Agenda : </label>
+                    <% } else { %>
+                        <label class="text-xs text-gray-500">Agendas : </label>
+                    <% } %>
+                    <div class="flex flex-wrap flex-row sm:flex-col gap-3">
+                        <% data.agendas.forEach(a => { %>
+                            <label class="flex items-center gap-2 cursor-pointer text-black">
+                                <input 
+                                    type="checkbox" 
+                                    class="Filtreagenda " 
+                                    value="<%= a._id %>" 
+                                    checked
+                                >
+                                <span 
+                                    class="filter-color filter-color-<%= a.couleur %>"
+                                ></span>
+                                <span><%= a.nom %></span>
+                            </label>
+                        <% }) %>
+                    </div>
+                    <button id="clearFiltre" class="text-black">Réinitialiser filtre</button>
+                </div>
+            </div>
     </div>
-    <i class="fa-solid fa-magnifying-glass hover:text-amber-300"></i>
-    <a href="/agendas/list" class="hover:text-amber-300 test">Mes agendas</a>
-    <a href="/calendar/month" class="hover:text-amber-300 test">Mon calendrier</a>
-    <a href="/notifications" class="relative">
+    <% } %>
+    </div>
+
+
+    <i class="fa-solid fa-magnifying-glass hover:text-amber-300" title="Recherche"></i>
+    <a href="/agendas/list" title="liste des agendas" class="hover:text-amber-300 test">Mes agendas</a>
+    <a href="/calendar/month" title="calendrier" class="hover:text-amber-300 test">Mon calendrier</a>
+    <a href="/notifications" class="relative" title="Notification">
         <div class="hidden md:flex md:visible">
             <i class="fa fa-bell text-xl"></i>
             <% if (notificationCount > 0) { %>
@@ -36,7 +78,7 @@
         <a href="/register" class="px-3 py-1 bg-amber-400 text-stone-900 rounded hover:bg-amber-500">Inscription</a>
         <% } else { %>
         <a href="/logout" class="px-3 py-1 flex-1 text-center w-full md:w-fit bg-red-400 text-stone-900 rounded hover:bg-red-500">Déconnexion</a>
-        <a href="/profile" class="rounded-full items-center justify-center hidden md:flex border-2 border-stone-500 w-12 h-12 cursor-pointer">
+        <a href="/profile" class="rounded-full items-center justify-center hidden md:flex border-2 border-stone-500 w-12 h-12 cursor-pointer" title="Profil">
             <% if (!user.profile_picture) { %>
             <i class="fa fa-user text-2xl"></i>
             <% } else { %>

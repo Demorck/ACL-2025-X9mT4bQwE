@@ -1,5 +1,5 @@
 <header class="shadow-sm border-b-4 w-full">
-  <div class="container mx-auto px-6 py-2 flex flex-col md:flex-row justify-between items-center">
+  <div title="page d'accueil" class="container mx-auto px-6 py-2 flex flex-col md:flex-row justify-between items-center">
     <a href="/" class="text-xl font-bold hover:text-amber-300 hidden md:flex">
       Mon SUPER Agenda (trop slaaay)
     </a>
@@ -20,17 +20,160 @@
     let recherche = document.querySelector("#recherche");
     let visible = document.querySelectorAll(".test");
     let resultats = document.querySelector("#resultats");
+    let btnFiltre = document.querySelector("#filtre");
+    let menuFiltres = document.querySelector("#menu-filtres");
+    
+    let clearFiltre = document.querySelector("#clearFiltre");
+    let filtreDateMin = document.querySelector("#filtre-dateMin");
+    let filtreDateMax = document.querySelector("#filtre-dateMax");
+    let agendaCheckboxes = document.querySelectorAll(".Filtreagenda");
 
-    // permet le bon affichage de la barre de recherche
+    // variable pour l'infinit scroll
+    let currentPage = 1;
+    let isLoading = false;
+    let hasMoreResults = true;
+    const limit = 20; 
+
+    const chargerResultats = (reset = false) => {
+        let str = recherche.value;
+        if(str.length === 0) {
+            resultats.innerHTML = "";
+            return;
+        }
+
+        if (reset) {
+            currentPage = 1;
+            hasMoreResults = true;
+            resultats.innerHTML = "";
+            resultats.scrollTop = 0;
+        }
+        if (isLoading || !hasMoreResults) return;
+        isLoading = true;
+
+        // variable des filtres
+        let valFiltreDateMin = filtreDateMin ? filtreDateMin.value : "";
+        let valFiltreDateMax = filtreDateMax ? filtreDateMax.value : "";
+        let filtreAgendasUtilise = agendaCheckboxes.length > 0 
+            ? Array.from(document.querySelectorAll(".Filtreagenda:checked")).map(el => el.value)
+            : [];
+
+        // indicateur de chargement
+        if(currentPage > 1) {
+             resultats.insertAdjacentHTML('beforeend', '<div id="loading-indicator" class="text-center text-xs text-gray-400 py-1">Chargement...</div>');
+        }
+
+        fetch("/api/rechercher/recherche", {
+          method: "POST",
+          headers: { "Content-Type": "application/json;charset=UTF-8" },
+          body: JSON.stringify({
+            str,
+            filtreDateMin: valFiltreDateMin,
+            filtreDateMax: valFiltreDateMax,
+            filtreAgendasUtilise,
+            page: currentPage,
+            limit: limit
+          })
+        })
+        .then(response => {
+          if(!response.ok) throw new Error("Erreur recherche");
+          return response.json();
+        }) 
+        .then(data => {
+            // permet de retirer l'indicateur du chargement des new rdv
+            const loader = document.getElementById("loading-indicator");
+            if(loader){
+              loader.remove();
+            } 
+
+            const listeRdv = data.results || [];
+            hasMoreResults = data.hasMore;
+
+            if (listeRdv.length > 0) {
+                let suiteRdv = "";
+                listeRdv.forEach(element => {
+                    const date = new Date(element.date_Debut);
+                    const day = date.getUTCDate();             
+                    const month = date.getUTCMonth();
+                    const year = date.getUTCFullYear();
+                    
+                    // création d’un lien cliquable
+                    suiteRdv += `
+                        <div class="px-3 py-2 hover:bg-blue-600 hover:text-white cursor-pointer select-none border-b border-gray-100 last:border-0" 
+                             onclick="window.location.href='/calendar/day?day=${day}&month=${month}&year=${year}'">
+                          <div class="font-semibold text-sm">${element.nom}</div>
+                          <div class="text-xs opacity-75">${day}/${month + 1}/${year}</div>
+                        </div>`;
+                });
+                
+                // rajout des nouveau rdv apres le scroll
+                resultats.insertAdjacentHTML('beforeend', suiteRdv);
+                currentPage++;
+            } else if (reset) {
+                resultats.innerHTML = '<div class="px-3 py-2 text-gray-500 text-sm italic">Aucun résultat trouvé</div>';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            const loader = document.getElementById("loading-indicator");
+            if(loader) loader.remove();
+        })
+        .finally(() => {
+            isLoading = false;
+        });
+    };
+
+
+    // Infinit scroll
+    resultats.addEventListener("scroll", () => {
+        if (resultats.scrollTop + resultats.clientHeight >= resultats.scrollHeight - 50) {
+            chargerResultats(false); 
+        }
+    });
+
+    let debounceTimer;
+    recherche.addEventListener("input", () => { 
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+             chargerResultats(true); 
+        }, 300); 
+    });
+
+    // Utilisation des filtres lors de la recherche
+    const inputsFiltres = document.querySelectorAll("#menu-filtres input, #menu-filtres select");
+    inputsFiltres.forEach(input => {
+        input.addEventListener("change", () => {
+            if(recherche.value.length > 0) {
+                chargerResultats(true);
+            }
+        });
+    });
+
+    // permet de réinitialiser les filtres
+    clearFiltre.addEventListener("click", (e) => {
+      filtreDateMax.value = "";
+      filtreDateMin.value = "";
+      agendaCheckboxes.forEach(checkbox => checkbox.checked = true);
+      if(recherche.value.length > 0) {
+         chargerResultats(true);
+      }
+    });
+    
+    // permet d'afficher et de cacher la barre de recherche
     const afficherCacherRecherche = () => {
         visible.forEach(element => {
             element.classList.toggle("hidden");
         });
     }
 
+    // permet l'affichage des filtres
+    btnFiltre.addEventListener("click", (e) => {
+      menuFiltres.classList.toggle("hidden");
+    });
+
     // listener pour afficher la barre de recherche et mettre le focus dessus
     variableI.addEventListener("click", () => {
         afficherCacherRecherche();
+        menuFiltres.classList.add("hidden");
         if(visible){
           recherche.focus();
         }
@@ -43,44 +186,11 @@
           recherche.value="";
           resultats.innerHTML="";        
           afficherCacherRecherche();
+          menuFiltres.classList.add("hidden");
       }
     });
+  });
 
-    // Permet la recherche dans la bdd des rendez vous et l'affichage du jour du rdv si on clique dessus
-    recherche.addEventListener("input", () => { 
-        let str = recherche.value;
-        fetch("/api/rechercher/recherche", {
-          method: "POST",
-          headers: { "Content-Type": "application/json;charset=UTF-8" },
-          body: JSON.stringify({str})
-        })
-        .then(response => {
-          // Traitement erreur 404
-          if(!response.ok) {
-            throw new Error("Erreur 404 lors de la recherche de rendez-vous (header.js)");
-          }
-          return response.json();
-        }) 
-        .then(data => { // utilisation des données résultats
-          let newTextResultat="";
-          if (data && data.length > 0) {
-            data.forEach(element => {
-              const date = new Date(element.date_Debut);
-              const day = date.getUTCDate();             
-              const month = date.getUTCMonth();
-              const year = date.getUTCFullYear();
-            
-              // création d’un lien cliquable
-              newTextResultat += `
-                <div class="p-2 hover:bg-gray-200 cursor-pointer" onclick="window.location.href='/calendar/day?day=${day}&month=${month}&year=${year}'">
-                  ${element.nom} - ${day}/${month + 1}/${year}
-                </div>`;
-            });
-          }
-          resultats.innerHTML=newTextResultat;
-        }).catch(err => console.error(err));
-    });
-  })
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
