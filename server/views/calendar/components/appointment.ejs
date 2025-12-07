@@ -13,9 +13,13 @@
     data-month="<%= month %>"
     data-year="<%= year %>"
     data-id="<%= app.id %>"
+    data-recurrent="<%= !!app.recurrenceRule %>"
     data-appointment
 >
     <strong><%= app.nom %></strong>
+    <% if (app.recurrenceRule) { %>
+        <i class="fa fa-repeat text-xs ml-1"></i>
+    <% } %>
     <br> 
     <%= app.startLabel %> - <%= app.endLabel %>
 </div>

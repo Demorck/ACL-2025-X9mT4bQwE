@@ -68,6 +68,13 @@ async function reloadCurrentCalendarView() {
             updateCalendarDisplay(calendarData);
         }
     }
+
+    if (typeof updateNotificationCount === 'function')
+    {
+        const response = await fetch("/api/notifications");
+        const result = await response.json();
+        updateNotificationCount(result.notifications.filter(n => !n.seen).length);
+    }
 }
 
 /**
