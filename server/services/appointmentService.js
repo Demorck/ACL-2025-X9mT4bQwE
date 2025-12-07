@@ -314,13 +314,18 @@ export function buildAppointmentFormData({
     let requestedDate = parseDate(day, month, year);
     let requestedDateEnd = new TZDate(requestedDate);
     
-    let dateDeb = new TZDate(requestedDate).setHours(beginningHour);
+    let dateDeb = new TZDate(requestedDate);
+    dateDeb.setHours(beginningHour);
+    
     let dateFin = new TZDate(requestedDate).setHours(beginningHour + 1);
     if(appointment) {
-        dateDeb = new TZDate(appointment.date_Debut);
-        requestedDate = formatDate(dateDeb);
-        dateFin = new TZDate(appointment.date_Fin);
-        requestedDateEnd = formatDate(dateFin);
+        if (!recurrence)
+        {
+            dateDeb = new TZDate(appointment.date_Debut);
+            requestedDate = formatDate(dateDeb);
+            dateFin = new TZDate(appointment.date_Fin);
+            requestedDateEnd = formatDate(dateFin);
+        }
     }
 
     let formDate = formatDate(dateDeb);

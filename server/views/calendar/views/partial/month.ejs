@@ -32,9 +32,9 @@
                                 data-agenda="<%= app.agendaId %>"
                                 data-start="<%= app.startHour %>"
                                 data-duration="<%= app.durationHours %>"
-                                data-day="<%= data.day %>"
-                                data-month="<%= data.month %>"
-                                data-year="<%= data.year %>"
+                                data-day="<%= day.getDate() %>"
+                                data-month="<%= day.getMonth() %>"
+                                data-year="<%= day.getFullYear() %>"
                                 data-id="<%= app.id %>"
                                 data-appointment
                             >
