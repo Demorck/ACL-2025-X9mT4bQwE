@@ -3,7 +3,7 @@ import { AgendaModel, getAgendasAllowedToAddForUser, getAgendasForUser } from ".
 import { AppointmentModel } from "../database/appointment.js";
 import { getNiveauUser } from "../database/invite_agenda.js";
 import { UserModel } from "../database/users.js";
-import { buildAppointmentFormData, deleteAppointment } from "../services/appointmentService.js";
+import { buildAppointmentFormData, deleteAppointment, updateAppointment, createAppointment } from "../services/appointmentService.js";
 
 
 

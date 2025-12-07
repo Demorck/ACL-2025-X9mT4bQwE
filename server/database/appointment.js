@@ -1,6 +1,8 @@
 import { TZDate } from "@date-fns/tz";
 import mongoose from "mongoose";
 import { getAgendasIdFromUserInvited } from "./invite_agenda.js";
+import { sameDay } from "../utils/date.js";
+import { addMonths, getDay, getDaysInMonth } from "date-fns";
 
 const Schema = mongoose.Schema;
 
@@ -48,6 +50,9 @@ function generateOccurrences(appointment, rangeStart, rangeEnd) {
     const rule = appointment.recurrenceRule;
     if (!rule) return [appointment]; // pas récurrent
 
+    const exceptionDates = appointment.exceptionDate;
+    let monthDayReference = undefined;
+
     const occurrences = [];
 
     let current = new TZDate(appointment.date_Debut);
@@ -65,7 +70,7 @@ function generateOccurrences(appointment, rangeStart, rangeEnd) {
         const currentEnd = new TZDate(current.getTime() + duration);
 
         // si l’occurrence est dans la plage => on garde
-        if (currentEnd >= rangeStart && current <= rangeEnd) {
+        if (currentEnd >= rangeStart && current <= rangeEnd && exceptionDates.filter(e => sameDay(current, e)).length == 0) {
             occurrences.push({
                 ...appointment.toObject(),
                 date_Debut: new TZDate(current),
@@ -74,6 +79,7 @@ function generateOccurrences(appointment, rangeStart, rangeEnd) {
             });
         }
 
+        
         // occurrence suivante
         switch (freq) {
             case "day1":
@@ -83,7 +89,14 @@ function generateOccurrences(appointment, rangeStart, rangeEnd) {
                 current.setDate(current.getDate() + 7 * interval);
                 break;
             case "month1":
-                current.setMonth(current.getMonth() + interval);
+                if (monthDayReference === undefined)
+                    monthDayReference = current.getDate();
+                  
+                current = addMonths(current, 1)
+
+                if (getDaysInMonth(current) > current.getDate() && current.getDate() < monthDayReference){  
+                    current.setDate(monthDayReference);
+                }
                 break;
             case "year1":
                 current.setFullYear(current.getFullYear() + interval);
