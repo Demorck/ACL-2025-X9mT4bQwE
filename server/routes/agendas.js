@@ -1,4 +1,7 @@
-import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda, getAgendasForUser } from "../database/agenda.js";
+import { creerAgenda, listAgendas, deleteAgenda, getAgendasById, editAgenda, creerIcal, getAgendasForUser} from "../database/agenda.js";
+import { creerRegleOccurrence } from "../database/regle_occurrence.js"
+import { createAppointment } from "../database/appointment.js"
+import ical from 'node-ical';
 import { addInvite, removeInvite } from "../database/invite_agenda.js";
 
 export async function routeNewAgenda(req, res) { 
@@ -25,9 +28,6 @@ export async function routeAddAgendaToDatabase(req, res, next) {
             return res.redirect("/login");
         
         const { nom, description, couleur } = req.body;
-        
-        
-
         // Créer une nouvelle instance du modèle Agenda
         creerAgenda(res.locals.user, nom, description, couleur);
 
@@ -112,3 +112,83 @@ export async function routeSupprimerAgendaPartage(req, res, bext){
     await removeInvite(req.body.agendaID, req.body.userID);
     return res.redirect("/agendas/testAgendasPartages");
 }
+
+export async function routeFormExportAgenda(req, res){
+    const agenda = await getAgendasById(req.params.id);
+    res.render('modals/agendas/export', { 
+        agenda,
+        title: "Exporter l'agenda",
+        buttonText: "Exporter",
+        action: `/agendas/export/${req.params.id}`
+    });
+}
+
+export async function routeExportAgenda(req, res, next) {
+    if (!res.locals.user)
+        return res.redirect("/login");
+
+    const ical = await creerIcal(req.params.id);
+    res.setHeader('Content-Disposition', 'attachment; filename="agenda.ics"');
+    res.send(ical);
+    return res.redirect("/agendas/list");
+}
+
+export async function routeFormImportAgenda(req, res){
+    const agenda = await getAgendasById(req.params.id)
+    res.render('modals/agendas/import', { 
+        agenda,
+        title: "Importer un agenda",
+        buttonText: "Importer",
+        action: "/agendas/import/"
+    });
+}
+
+export async function routeImportAgenda(req, res){
+    if (!res.locals.user) return res.redirect("/login");
+
+    if (!req.body.nom)
+    {
+        return res.redirect("/agendas/list");
+    }
+
+    const agenda = await creerAgenda(
+        res.locals.user,
+        req.body.nom,
+        req.body.description ?? '',
+        req.body.couleur
+    );
+
+    const data = ical.sync.parseICS(req.file.buffer.toString('utf-8'));
+
+    const frequences = { 3: "day1", 2: "week1", 1: "month1" };
+
+    for (const i in data) {
+        const event = data[i];
+        if (event.type === 'VEVENT') {
+
+            let regle = null;
+
+            if (event.rrule) {
+                const frequence = frequences[event.rrule.options.freq]
+                if (frequence){
+                    const regleOccurence = await creerRegleOccurrence(
+                        frequence,
+                        event.rrule.options.until,
+                        event.rrule.options.interval
+                    );
+                    regle = regleOccurence._id;
+                }
+            }
+            await createAppointment(
+                agenda._id,
+                event.summary,
+                event.start,
+                event.end,
+                res.locals.user._id,
+                regle
+            );
+        }
+    }
+    return res.redirect("/agendas/list");
+}
+

@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import multer from 'multer';
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 import engine from "ejs-mate";
@@ -12,17 +13,21 @@ import apiCalendarRoute from "./routes/api/calendar.js";
 import apiAppointmentRoute from "./routes/api/appointments.js";
 import apiNotificationRoute from "./routes/api/notifications.js";
 import { authMiddleware } from "./middlewares/auth.js";
-import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, routeEditAgenda, routeFormEditAgenda, routeTestAgendasPartages, routeAjouterAgendaPartage, routeSupprimerAgendaPartage } from "./routes/agendas.js";
+import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, 
+    routeEditAgenda, routeFormEditAgenda, routeFormExportAgenda, routeExportAgenda, 
+    routeFormImportAgenda, routeImportAgenda} from "./routes/agendas.js";
 
 import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
 import { routeRecherche } from "./routes/rechercher/recherches.js";
 
-import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation, changerRoleInvite} from "./routes/invitations.js"
+import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation, changerRoleInvite, routeInvitation, 
+    routeFormCreationInvitation, routeFormModificationInvitation, routeModificationInvitation, routeSuppressionInvitation} from "./routes/invitations.js"
 
 export const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicPath = path.join(__dirname, "../public");
+const upload = multer({storage: multer.memoryStorage()});
 
 // Chemin et initialisation des views (avec l'EJS)
 app.engine("ejs", engine);
@@ -69,15 +74,29 @@ app.post("/agendas/edit/:id", routeEditAgenda);
 
 app.get("/appointment/confirmationSuppression?rdvId=<%= rdvId %>")
 
+app.get("/agendas/export/:id", routeFormExportAgenda);
+app.post("/agendas/export/:id", routeExportAgenda);
+
+app.get("/agendas/import/", routeFormImportAgenda);
+app.post("/agendas/import/", upload.single('file'), routeImportAgenda);
+
 app.get("/calendar/:view", routeCalendar);
 
 app.use("/api/rechercher", routeRecherche);
 
 
-// app.post("/invitation/modifier", modifierLien);
 app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite);
 app.post("/invitation/changeRole", changerRoleInvite);
-app.get("/invitation/:idAgenda/manage", routeCreationInvitation);
+app.get("/invitation/:idAgenda/manage", routeInvitation);
+
+app.get("/invitation/:idAgenda/create", routeFormCreationInvitation);
+app.post("/invitation/:idAgenda/create", routeCreationInvitation);
+
+app.get("/invitation/:idInvitation/edit", routeFormModificationInvitation);
+app.post("/invitation/:idInvitation/edit", routeModificationInvitation);
+
+app.get("/invitation/:idInvitation/delete", routeSuppressionInvitation);
+
 app.get("/invitation/:id", utiliserlien);
 app.post("/invitation/modifier", modifierInvitation);
 
