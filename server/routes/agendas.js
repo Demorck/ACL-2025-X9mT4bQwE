@@ -115,7 +115,6 @@ export async function routeSupprimerAgendaPartage(req, res, bext){
 
 export async function routeFormExportAgenda(req, res){
     const agenda = await getAgendasById(req.params.id);
-    console.log("pipi");
     res.render('modals/agendas/export', { 
         agenda,
         title: "Exporter l'agenda",
@@ -146,15 +145,18 @@ export async function routeFormImportAgenda(req, res){
 
 export async function routeImportAgenda(req, res){
     if (!res.locals.user) return res.redirect("/login");
-    
+
+    if (!req.body.nom)
+    {
+        return res.redirect("/agendas/list");
+    }
+
     const agenda = await creerAgenda(
         res.locals.user,
         req.body.nom,
-        req.body.description,
+        req.body.description ?? '',
         req.body.couleur
     );
-
-    console.log(agenda)
 
     const data = ical.sync.parseICS(req.file.buffer.toString('utf-8'));
 
@@ -163,7 +165,6 @@ export async function routeImportAgenda(req, res){
     for (const i in data) {
         const event = data[i];
         if (event.type === 'VEVENT') {
-            console.log(event)
 
             let regle = null;
 
