@@ -9,6 +9,9 @@ import { routeCalendar } from "./routes/calendar.js";
 import accountRoute from "./routes/account.js";
 import appointmentRoute from "./routes/appointments.js";
 import notificationRoute from "./routes/notifications.js";
+import apiCalendarRoute from "./routes/api/calendar.js";
+import apiAppointmentRoute from "./routes/api/appointments.js";
+import apiNotificationRoute from "./routes/api/notifications.js";
 import { authMiddleware } from "./middlewares/auth.js";
 import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, 
     routeEditAgenda, routeFormEditAgenda, routeFormExportAgenda, routeExportAgenda, 
@@ -18,7 +21,7 @@ import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
 import { routeRecherche } from "./routes/rechercher/recherches.js";
 
-import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation, routeInvitation, 
+import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation, changerRoleInvite, routeInvitation, 
     routeFormCreationInvitation, routeFormModificationInvitation, routeModificationInvitation, routeSuppressionInvitation} from "./routes/invitations.js"
 
 export const app = express();
@@ -55,6 +58,10 @@ app.use("/appointment", appointmentRoute);
 // Notification routes
 app.use("/notifications", notificationRoute);
 
+// API routes
+app.use("/api/calendar/", apiCalendarRoute);
+app.use("/api/appointments/", apiAppointmentRoute);
+app.use("/api/notifications/", apiNotificationRoute);
 
 // Agenda routes
 app.get("/agendas/new", routeNewAgenda);
@@ -64,6 +71,8 @@ app.get("/agendas/list", routeListeAgendas);
 app.get("/agendas/delete/:id", routeDeleteAgenda);
 app.get("/agendas/edit/:id", routeFormEditAgenda);
 app.post("/agendas/edit/:id", routeEditAgenda);
+
+app.get("/appointment/confirmationSuppression?rdvId=<%= rdvId %>")
 
 app.get("/agendas/export/:id", routeFormExportAgenda);
 app.post("/agendas/export/:id", routeExportAgenda);
@@ -75,7 +84,9 @@ app.get("/calendar/:view", routeCalendar);
 
 app.use("/api/rechercher", routeRecherche);
 
-app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite)
+
+app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite);
+app.post("/invitation/changeRole", changerRoleInvite);
 app.get("/invitation/:idAgenda/manage", routeInvitation);
 
 app.get("/invitation/:idAgenda/create", routeFormCreationInvitation);

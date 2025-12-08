@@ -103,27 +103,26 @@ function layoutAppointments() {
 
 </script>
 <script>
-    function setLocalStorageFilter(checkboxes)
-    {
-        localStorage.setItem("agenda-filter", Array.from(checkboxes).filter(e => !e.checked).map(e => e.value))
-    }
+function setLocalStorageFilter(checkboxes)
+{
+    localStorage.setItem("agenda-filter", Array.from(checkboxes).filter(e => !e.checked).map(e => e.value))
+}
 
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     let toggles = document.querySelectorAll(".agenda-toggle");
-    let view = document.querySelector('#container-filter');
     let default_visibleID = localStorage.getItem("agenda-filter");
     if (default_visibleID != null) {
         default_visibleID = default_visibleID.split(",");
     }
-
-    view = view.dataset.view
     
     toggles.forEach(toggle => {
         toggle.addEventListener("change", () => {
             let agendaId = toggle.value;
             let visible = toggle.checked;
+            let view = document.querySelector('#container-filter');
+            view = view.dataset.view
             
             switch (view) {
                 case "month":
@@ -131,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             .forEach(el => el.classList.toggle("hidden"));
                     break;
             
-                default:
+                default:                
                 document.querySelectorAll(`.appointment[data-agenda='${agendaId}']`)
                         .forEach(el => {
                             el.style.display = visible ? "block" : "none";

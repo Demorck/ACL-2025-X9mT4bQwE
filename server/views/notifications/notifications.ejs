@@ -3,16 +3,12 @@
   <h1 class="text-2xl font-bold mb-4">Mes notifications</h1>
 
   <div class="flex gap-4 mb-4">
-    <form action="/notifications/all-seen" method="POST" class="mb-4">
-      <button type="submit" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
-        Marquer comme lues
-      </button>
-    </form>
-    <form action="/notifications/all-delete" method="POST" class="mb-4">
-      <button type="submit" class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
-        Supprimer les notifications
-      </button>
-    </form>
+    <div data-mark-all-seen class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
+      Marquer comme lues
+    </div>
+    <div data-delete-all class="px-3 py-2 bg-green-600 rounded hover:bg-green-700 cursor-pointer">
+      Supprimer les notifications
+    </div>
   </div>
 
 
@@ -43,25 +39,20 @@
           </span>
           <div>
             <div class="hidden group-hover:inline-flex gap-4">
-              <form action="/notifications/single-seen" method="POST">
-                <input type="hidden" name="id" value="<%= n.id %>">
-                <button type="submit" title="Supprimer notification" class="rounded hover:opacity-20 cursor-pointer">
-                  <li class="fa fa-eye"></li> 
-                </button>
-              </form>
-              <form action="/notifications/single-delete" method="POST">
-                <input type="hidden" name="id" value="<%= n.id %>">
-                <button type="submit" title="Supprimer notification" class="rounded hover:opacity-20 cursor-pointer">
-                  <li class="fa fa-trash"></li> 
-                </button>
-              </form>
+              <div data-mark-seen="<%= n.id %>" class="rounded hover:opacity-20 cursor-pointer" title="Marquer comme lu">
+                <i class="fa fa-eye"></i> 
+              </div>
+              <div data-delete-notification="<%= n.id %>" class="rounded hover:opacity-20 cursor-pointer" title="Supprimer notification">
+                <i class="fa fa-trash"></i> 
+              </div>
             </div>
             <% if (!n.seen) { %>
               <span class="text-xs text-red-400 font-semibold">Non lu</span>
             <% } %>
-            </div>
         </li>
       <% }) %>
     </ul>
   <% } %>
 </div>
+<div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 items-end"></div>
+

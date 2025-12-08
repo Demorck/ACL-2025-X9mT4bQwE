@@ -1,10 +1,17 @@
+document.addEventListener('DOMContentLoaded', () => {
+        updateSelectOptions();
+});
+
+
 document.addEventListener("change", function (e) {
     if (e.target.id === "recurrence") {
         const contenuCache = document.getElementById("contenuCache");
+        updateSelectOptions();
         if (!contenuCache) return;
 
         contenuCache.style.display = e.target.checked ? "block" : "none";
     } else if (e.target.id === "date_debut") {
+        updateDateFinRecurrence(); 
         updateDateFin();
     } else if (e.target.id === "heure_debut") {
         updateHeureFin();
@@ -20,11 +27,17 @@ document.addEventListener("blur", function (e) {
     }
 });
 
+
 document.addEventListener("change", function (e) {
     if (e.target.id === "fin_rec") {
         afficherCalendar();
     }
 });
+
+
+
+
+
 
 //permet de vérifier si la date de fin est antérieur à la date de debut
 function validiteDateFin(){
@@ -39,6 +52,7 @@ function validiteDateFin(){
     }
 }
 
+
 //permet de changer la date de fin en fonction de la date de debut
 function updateDateFin(){
     let dateDebAppointment = document.getElementById('date_debut');
@@ -52,6 +66,7 @@ function updateDateFin(){
         dateFinAppointment.removeAttribute('min');
     }
     validiteDateFin();
+
 }
 
 // Permet de ne pas avoir d'heure de fin antérieur à l'heure de début (sur le même jour)
@@ -68,6 +83,34 @@ function updateHeureFin() {
     }
 }
 
+//permet de mettre à jour la date 
+function updateDateFinRecurrence() {
+    const dateDebInput = document.getElementById('date_debut');
+    const dateFinRecInput = document.getElementById('date_fin_rec');
+
+    if (!dateFinRecInput) {
+        return; 
+    }
+    const valueDateDeb = dateDebInput.value;
+
+    if (!dateFinRecInput.value && valueDateDeb) {
+        dateFinRecInput.value = valueDateDeb;
+    }
+
+    if (valueDateDeb) {
+        dateFinRecInput.setAttribute('min', valueDateDeb);
+    } else {
+        dateFinRecInput.removeAttribute('min');
+    }
+
+    const valueDateFinRec = dateFinRecInput.value;
+
+    if (valueDateFinRec && valueDateDeb && valueDateFinRec < valueDateDeb) {
+        dateFinRecInput.value = valueDateDeb;
+    }
+}
+
+
 function afficherCalendar(){
     const selectionSpecialDate = document.getElementById('fin_rec');
     const contenuCacheDateFin = document.getElementById('contenuCacheDateFin');
@@ -78,8 +121,28 @@ function afficherCalendar(){
     if(selectionSpecialDate.value == 'specificalDate'){
         contenuCacheDateFin.style.display = 'block';
         dateFinRecInput.required = true;
+        updateDateFinRecurrence();
     }else{
         contenuCacheDateFin.style.display = 'none';
         dateFinRecInput.required = false;
     }
 }
+
+function updateSelectOptions() {
+    /* const checkbox = document.getElementById('recurrence');
+    const select = document.getElementById('modifRec');
+    const optionOnly = document.getElementById('optionOnly');
+
+    if (!checkbox || !select || !optionOnly) return;
+
+    if (checkbox.checked) {
+        optionOnly.disabled = false;
+        optionOnly.hidden = false;
+    } else {
+        optionOnly.disabled = true;
+        optionOnly.hidden = true;
+        select.value = "only";
+    } */
+}
+
+

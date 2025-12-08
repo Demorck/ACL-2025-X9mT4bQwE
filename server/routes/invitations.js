@@ -1,5 +1,6 @@
 import { creerInvitation, ajouterUtilisation, getInvitationsByAgendaId, getInvitation, updateInvitation, deleteInvitation } from "../database/invitations.js";
-import { AgendaModel, addInvite, isInviteInAgenda, removeInvite } from "../database/agenda.js";
+import { AgendaModel } from "../database/agenda.js";
+import { addInvite, removeInvite, isInviteInAgenda, getInvites, getNiveauUser, changeRole } from "../database/invite_agenda.js"
 import { UserModel } from "../database/users.js"
 
 export async function utiliserlien(req, res) {
@@ -26,7 +27,7 @@ export async function utiliserlien(req, res) {
         return res.render('errors/generic', { message: "Ce lien a atteint son nombre maximum d'utilisations", statusCode: 400 });
     }
 
-    await addInvite(agenda._id, userId);
+    await addInvite(agenda._id, userId, 1);
     await ajouterUtilisation(invitationId);
 
     return res.redirect("/calendar/week");
@@ -82,11 +83,16 @@ export async function routeModificationInvitation(req, res) {
 export async function routeInvitation(req, res){
     const agenda = await AgendaModel.findById(req.params.idAgenda);
 
-    const invites = await Promise.all(
-        agenda.invites.map(id =>
-            UserModel.findById(id).select("username _id").lean()
-        )
-    );
+    const invites = await getInvites(agenda._id);
+    for (let invite of invites) {
+        // On vérifie que l'utilisateur associé à l'invitation existe toujours
+        if (invite) {
+            invite.user = await UserModel.findById(invite.user);
+            invite.niveau = await getNiveauUser(agenda._id, invite.user);
+        }
+    }
+
+    const niveau = await getNiveauUser(req.params.idAgenda, res.locals.user._id)
 
     const invitations = await getInvitationsByAgendaId(req.params.idAgenda);
 
@@ -94,13 +100,41 @@ export async function routeInvitation(req, res){
         agenda,
         invitations,
         invites,
-        title: "Gérer les invitations"
+        title: "Gérer les invitations",
+        niveau,
     });
 }
 
 export async function supprimerInvite(req, res){
     await removeInvite(req.params.idAgenda, req.params.userId);
     res.redirect(req.get("referer"));
+}
+
+export async function changerRoleInvite(req, res, next){
+    const { userId, agendaId, role } = req.body;
+
+
+    if (!role) {
+        return res.render('errors/generic', { message: "Informations manquantes pour changer le rôle.", statusCode: 400 });
+    }
+
+    const user = await UserModel.findById(userId); 
+    const agenda = await AgendaModel.findById(agendaId);
+    if (!user) {
+        return res.render('errors/generic', { message: "Cet user n'existe pas", statusCode: 400 });
+    }
+    if(!agenda)
+    {
+        return res.render('errors/generic', { message: "Cet agenda n'existe pas", statusCode: 400 });
+    }
+    if(role < 1 || role > 4)
+    {
+        return res.render('errors/generic', { message: "Ce rôle n'existe pas", statusCode: 400 });
+    }
+
+    await changeRole(agendaId, userId, role);
+    return res.redirect(req.get("referer"));
+
 }
 
 export async function modifierInvitation(req, res) {

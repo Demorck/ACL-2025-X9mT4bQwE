@@ -1,5 +1,8 @@
 import { TZDate } from "@date-fns/tz";
 import mongoose from "mongoose";
+import { getAgendasIdFromUserInvited } from "./invite_agenda.js";
+import { sameDay } from "../utils/date.js";
+import { addMonths, getDay, getDaysInMonth } from "date-fns";
 
 const Schema = mongoose.Schema;
 
@@ -9,6 +12,9 @@ const appointmentSchema = new Schema({
     date_Debut: { type: Date, required: true },
     date_Fin: { type: Date, required: true },
     recurrenceRule: { type: Schema.Types.ObjectId, ref: "RegleOccurrence", required: false },
+    exception: [{ type: Schema.Types.ObjectId, ref: "Appointment", required: false }],
+    exceptionDate: [{ type: Date, required: false }],
+    modifRecurrence: { type: Boolean, required: false },
     createur: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
@@ -18,8 +24,11 @@ export const AppointmentModel = mongoose.model("Appointment", appointmentSchema)
 export async function getAppointmentsByUserAndDateRange(user, startDate, endDate) {
     // let agendas = await AgendaModel.find({user: user._id}); 
     let agendas = user.agendas;
-    let agendaIds = agendas.map(agenda => agenda._id);
-    
+    const agendaOwnerIds = agendas.map(agenda => agenda._id);
+    const agendasInvitesIds = await getAgendasIdFromUserInvited(user._id)
+    const agendaIds = [...agendaOwnerIds, ...agendasInvitesIds.map(invite => invite.agenda)];
+
+
     let appointments = await AppointmentModel.find({
         agenda: { $in: agendaIds },
     })
@@ -54,6 +63,9 @@ function generateOccurrences(appointment, rangeStart, rangeEnd) {
     const rule = appointment.recurrenceRule;
     if (!rule) return [appointment]; // pas récurrent
 
+    const exceptionDates = appointment.exceptionDate;
+    let monthDayReference = undefined;
+
     const occurrences = [];
 
     let current = new TZDate(appointment.date_Debut);
@@ -71,7 +83,7 @@ function generateOccurrences(appointment, rangeStart, rangeEnd) {
         const currentEnd = new TZDate(current.getTime() + duration);
 
         // si l’occurrence est dans la plage => on garde
-        if (currentEnd >= rangeStart && current <= rangeEnd) {
+        if (currentEnd >= rangeStart && current <= rangeEnd && exceptionDates.filter(e => sameDay(current, e)).length == 0) {
             occurrences.push({
                 ...appointment.toObject(),
                 date_Debut: new TZDate(current),
@@ -80,6 +92,7 @@ function generateOccurrences(appointment, rangeStart, rangeEnd) {
             });
         }
 
+        
         // occurrence suivante
         switch (freq) {
             case "day1":
@@ -89,7 +102,17 @@ function generateOccurrences(appointment, rangeStart, rangeEnd) {
                 current.setDate(current.getDate() + 7 * interval);
                 break;
             case "month1":
-                current.setMonth(current.getMonth() + interval);
+                if (monthDayReference === undefined)
+                    monthDayReference = current.getDate();
+                  
+                current = addMonths(current, 1)
+
+                if (getDaysInMonth(current) > current.getDate() && current.getDate() < monthDayReference){  
+                    current.setDate(monthDayReference);
+                }
+                break;
+            case "year1":
+                current.setFullYear(current.getFullYear() + interval);
                 break;
             default:
                 return occurrences;

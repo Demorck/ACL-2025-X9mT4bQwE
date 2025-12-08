@@ -5,6 +5,7 @@ import { AppointmentModel } from "./appointment.js";
 import ical from "ical-generator";
 import { RegleOccurrenceModel } from "./regle_occurrence.js";
 
+import { getAgendasIdFromUserInvited, getAgendasIdFromUserInvitedAboveLevel } from "./invite_agenda.js";
 
 const Schema = mongoose.Schema;
 
@@ -14,7 +15,6 @@ const agendaSchema = new Schema({
     nom: { type: String, required: true },
     description: { type: String, required: false },
     couleur: {type: String, required: true},
-    invites: [{type: Schema.Types.ObjectId, ref: "User"}],
 });
 
 export const AgendaModel = mongoose.model("Agenda", agendaSchema);
@@ -49,7 +49,25 @@ export async function creerAgenda(user, nom, description, couleur)
  */
 export async function getAgendasForUser(user)
 {
-    const agendasUserIds = user.agendas;
+    const agendasOwnedUserIds = user.agendas;
+    const agendasInvitesIds = await getAgendasIdFromUserInvited(user._id)
+    const agendasUserIds = [...agendasOwnedUserIds, ...agendasInvitesIds.map(invite => invite.agenda)];
+    const agendasPromises = agendasUserIds.map(agendaId => AgendaModel.findById(agendaId));
+    const agendas = await Promise.all(agendasPromises);
+    const validAgendas = agendas.filter(agenda => agenda !== null);
+
+    return validAgendas;
+}
+
+/**
+ * Renvoi la liste des agendas qu'un user peut ajouter des RDV
+ * @param {User} user 
+ */
+export async function getAgendasAllowedToAddForUser(user)
+{
+    const agendasOwnedUserIds = user.agendas;
+    const agendasInvitesIds = await getAgendasIdFromUserInvitedAboveLevel(user._id,2)
+    const agendasUserIds = [...agendasOwnedUserIds, ...agendasInvitesIds.map(invite => invite.agenda)];
     const agendasPromises = agendasUserIds.map(agendaId => AgendaModel.findById(agendaId));
     const agendas = await Promise.all(agendasPromises);
     const validAgendas = agendas.filter(agenda => agenda !== null);
@@ -64,10 +82,7 @@ export async function getAgendasById(id){
 
 export async function listAgendas(user) {
     const agendas = await AgendaModel.find({
-        $or: [
-            { user: user._id },
-            { invites: user._id }
-        ]
+            user: user._id 
     });
     return agendas;
 }

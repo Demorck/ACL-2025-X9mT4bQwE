@@ -33,7 +33,7 @@
         <div class="flex flex-col md:flex-row items-center justify-evenly">    
             <input type="submit" value="<%= buttonText %>" name="actionType" class="px-3 py-2 rounded hover:cursor-pointer">
             <% if (buttonText == "Modifier") { %>
-                <input type="submit" value="Supprimer" name="actionType" onclick="return confirm('Voulez-vous vraiment supprimer cet agenda ?')" class="px-3 py-2 rounded hover:cursor-pointer">
+                <input type="button" value="Supprimer" data-delete-action="agenda" class="px-3 py-2 bg-red-600 rounded hover:bg-red-700 hover:cursor-pointer">
             <% } %>
         </div>
     </form>

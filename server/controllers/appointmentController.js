@@ -1,7 +1,9 @@
-import { AgendaModel, getAgendasForUser } from "../database/agenda.js";
+import { is } from "date-fns/locale";
+import { AgendaModel, getAgendasAllowedToAddForUser, getAgendasForUser } from "../database/agenda.js";
 import { AppointmentModel } from "../database/appointment.js";
+import { getNiveauUser } from "../database/invite_agenda.js";
 import { UserModel } from "../database/users.js";
-import { createAppointment, updateAppointment, deleteAppointment, buildAppointmentFormData } from "../services/appointmentService.js";
+import { buildAppointmentFormData, deleteAppointment, updateAppointment, createAppointment } from "../services/appointmentService.js";
 
 
 
@@ -15,7 +17,7 @@ export async function renderNewAppointment(req, res) {
 
     const beginningHour = !isNaN(queryBeginningHour) ? queryBeginningHour : 8;
     
-    const validAgendas = await getAgendasForUser(res.locals.user);
+    const validAgendas = await getAgendasAllowedToAddForUser(res.locals.user);
 
     const formData = buildAppointmentFormData({
         user: res.locals.user,
@@ -31,11 +33,10 @@ export async function renderNewAppointment(req, res) {
         action: "/appointment/add",
         submitText: "Ajouter",
         title: "Nouveau rendez-vous",
-        isTheOwner: false,
-        createur: null
+        createur: null,
+        niveau: 4
     });
 }
-
 
 export async function handleCreateAppointment(req, res, next) {
     try {
@@ -66,8 +67,11 @@ export async function renderEditAppointment(req, res,  next) {
         if(!createurUser) return res.status(404).send("Utilisateur introuvable");
 
         const validAgendas = await getAgendasForUser(res.locals.user);
-        
-        const isTheOwner = res.locals.user._id.toString() !== agenda.user._id.toString();
+        await Promise.all(validAgendas.map(async (agenda) => {
+            agenda.niveau = await getNiveauUser(agenda._id, res.locals.user._id);
+        }));
+
+        const niveauUser = await getNiveauUser(agendaId, res.locals.user._id);
 
         const formData = buildAppointmentFormData({
             user: res.locals.user,
@@ -84,15 +88,14 @@ export async function renderEditAppointment(req, res,  next) {
             action: "/appointment/update",
             submitText: "Modifier",
             title: "Modifier le rendez-vous",
-            isTheOwner,
-            createur: createurUser
+            createur: createurUser,
+            niveau: niveauUser
         });
 
     } catch (error) {
         next(error);
     }
 }
-
 
 export async function handleUpdateAppointment(req, res, next) {
     try {
@@ -126,3 +129,4 @@ export async function handleDeleteAppointment(req, res, next) {
         next(err);
     }
 }
+

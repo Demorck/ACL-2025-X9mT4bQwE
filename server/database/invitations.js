@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { addInvite, AgendaModel } from "./agenda.js";
 
 const Schema = mongoose.Schema;
 
