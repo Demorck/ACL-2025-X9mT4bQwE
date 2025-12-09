@@ -33,14 +33,14 @@ function updateCalendarDisplay(calendarData) {
     const { view, title, html, previous_url, after_url } = calendarData;
     
     // Met à jour le titre (header)
-    const titleElement = document.querySelector('.calendar-header .font-semibold');
+    const titleElement = document.querySelector('.title-header');
     if (titleElement) {
         titleElement.textContent = title;
     }
     
     // Mets à jour les liens précédent/suivant
-    const prevLink = document.querySelector('.calendar-header a[href*="day="], .calendar-header a[href*="month="]');
-    const nextLinks = document.querySelectorAll('.calendar-header a[href*="day="], .calendar-header a[href*="month="]');
+    const prevLink = document.querySelector('.calendar-header a[href*="day="], .calendar-header a[href*="month="], .calendar-header a[href*="year="]');
+    const nextLinks = document.querySelectorAll('.calendar-header a[href*="day="], .calendar-header a[href*="month="], .calendar-header a[href*="year="]');
 
     const buttons = document.querySelectorAll('div > a > .calendar-header-button, div > a > .calendar-header-button--active');
     
@@ -104,6 +104,10 @@ function attachCalendarEventListeners() {
             openModal("/appointment/edit", "/js/appointments.js", options);
         });
     });
+
+    if (typeof initDragDrop === 'function') {
+        initDragDrop();
+    }
 }
 
 /**

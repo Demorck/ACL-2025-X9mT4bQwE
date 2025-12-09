@@ -1,7 +1,8 @@
 <div class="mb-4 p-3" data-view="<%= view %>" id="container-filter">
     <h2 class="text-lg font-semibold mb-2">Agendas</h2>
     <div class="flex flex-wrap flex-row sm:flex-col gap-3">
-        <% data.agendas.forEach(a => { %>
+        <% data.agendas.forEach(a => { 
+            %>
             <label class="flex items-center gap-2 cursor-pointer">
                 <input 
                     type="checkbox" 
@@ -12,7 +13,14 @@
                 <span 
                     class="filter-color filter-color-<%= a.couleur %>"
                 ></span>
-                <span><%= a.nom %></span>
+                <div class="flex flex-col flex-1">
+                    <span class="font-medium"><%= a.nom %></span>
+                    <% if (typeof a.niveau !== 'undefined') { %>
+                        <span class="text-xs opacity-70">
+                            <%= a.niveau === 4 ? 'Propriétaire' : a.niveau === 3 ? 'Admin' : a.niveau === 2 ? 'Member' : 'Viewer' %>
+                        </span>
+                    <% } %>
+                </div>
             </label>
         <% }) %>
     </div>
@@ -126,7 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
             
             switch (view) {
                 case "month":
-                    document.querySelectorAll(`.appointment-month[data-agenda="${agendaId}"]`)
+                case "year":
+                    document.querySelectorAll(`.appointment-month[data-agenda="${agendaId}"], .appointment-year[data-agenda="${agendaId}"]`)
                             .forEach(el => el.classList.toggle("hidden"));
                     break;
             

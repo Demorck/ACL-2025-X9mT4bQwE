@@ -62,7 +62,7 @@
              resultats.insertAdjacentHTML('beforeend', '<div id="loading-indicator" class="text-center text-xs text-gray-400 py-1">Chargement...</div>');
         }
 
-        fetch("/api/rechercher/recherche", {
+        fetch("/api/search", {
           method: "POST",
           headers: { "Content-Type": "application/json;charset=UTF-8" },
           body: JSON.stringify({
@@ -149,7 +149,7 @@
     });
 
     // permet de réinitialiser les filtres
-    clearFiltre.addEventListener("click", (e) => {
+    clearFiltre?.addEventListener("click", (e) => {
       filtreDateMax.value = "";
       filtreDateMin.value = "";
       agendaCheckboxes.forEach(checkbox => checkbox.checked = true);
@@ -167,13 +167,13 @@
 
     // permet l'affichage des filtres
     btnFiltre.addEventListener("click", (e) => {
-      menuFiltres.classList.toggle("hidden");
+      menuFiltres?.classList.toggle("hidden");
     });
 
     // listener pour afficher la barre de recherche et mettre le focus dessus
     variableI.addEventListener("click", () => {
         afficherCacherRecherche();
-        menuFiltres.classList.add("hidden");
+        menuFiltres?.classList.add("hidden");
         if(visible){
           recherche.focus();
         }

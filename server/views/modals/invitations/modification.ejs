@@ -13,9 +13,8 @@
 <h2 class="text-2xl font-bold mb-6 text-center text-stone-100">Modifier le lien</h2>
 
 <div class="max-w-md mx-auto w-full">
-    
     <!-- Formulaire de Modification (Identifié par editForm) -->
-    <form id="editForm" action="/invitation/<%= invitation._id %>/edit/" method="POST" class="flex flex-col gap-6">
+    <form action="/invitation/<%= invitation._id %>/edit/" data-invitation-id="<%= invitation._id %>" method="POST" class="flex flex-col gap-6">
 
         <div class="flex flex-col gap-2">
             <label for="utilisationsMax" class="font-semibold text-stone-300">
@@ -29,6 +28,7 @@
                 placeholder="Laisser vide pour illimité"
                 value="<%= invitation.utilisationsMax %>"
                 class="px-4 py-2 rounded bg-stone-800 border border-stone-600 focus:border-blue-500 focus:outline-none text-stone-100 placeholder-stone-500"
+                disabled 
             >
         </div>
 
@@ -45,19 +45,11 @@
             >
         </div>
 
+
+        <div class="flex justify-end gap-3 mt-6">
+            <input type="submit" name="actionType" value="Supprimer" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-semibold transition-colors shadow-lg">
+            <input type="submit" name="actionType" value="Enregistrer" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold transition-colors shadow-lg">
+        </div>
+
     </form>
-
-    <div class="flex justify-end gap-3 mt-6">
-        
-        <form action="/invitation/<%= invitation._id %>/delete" method="GET">
-            <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-semibold transition-colors shadow-lg">
-                Supprimer
-            </button>
-        </form>
-
-        <button type="submit" form="editForm" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold transition-colors shadow-lg">
-            Enregistrer
-        </button>
-    </div>
-
 </div>

@@ -3,35 +3,6 @@ import { AgendaModel } from "../database/agenda.js";
 import { addInvite, removeInvite, isInviteInAgenda, getInvites, getNiveauUser, changeRole } from "../database/invite_agenda.js"
 import { UserModel } from "../database/users.js"
 
-export async function utiliserlien(req, res) {
-    const invitationId = req.params.id;
-    const userId = res.locals.user._id;
-    const invitation = await getInvitation(invitationId);
-    const agenda = invitation.agenda;
-    
-    if (agenda.user && agenda.user._id.toString() === userId.toString()) {
-        return res.render('errors/generic', { message: "Vous êtes le propriétaire de cet agenda", statusCode: 400 });
-    }
-
-    const isInAgenda = await isInviteInAgenda(agenda, userId);
-    
-    if (isInAgenda) {
-        return res.render('errors/generic', { message: "Vous êtes déjà dans cet agenda", statusCode: 400 });
-    }
-    
-    if (invitation.dateExpiration && new Date() > new Date(invitation.dateExpiration)) {
-        return res.render('errors/generic', { message: "Ce lien d'invitation a expiré", statusCode: 400 });
-    }
-
-    if (invitation.utilisationsMax && invitation.nbUtilisation >= invitation.utilisationsMax) {
-        return res.render('errors/generic', { message: "Ce lien a atteint son nombre maximum d'utilisations", statusCode: 400 });
-    }
-
-    await addInvite(agenda._id, userId, 1);
-    await ajouterUtilisation(invitationId);
-
-    return res.redirect("/calendar/week");
-}
 
 export async function routeCreationInvitation(req, res) {
     const agendaId = req.params.idAgenda;

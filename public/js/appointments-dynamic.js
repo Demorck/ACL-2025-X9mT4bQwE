@@ -74,6 +74,13 @@ async function reloadCurrentCalendarView() {
             updateCalendarDisplay(calendarData);
         }
     }
+
+    if (typeof updateNotificationCount === 'function')
+    {
+        const response = await fetch("/api/notifications");
+        const result = await response.json();
+        updateNotificationCount(result.notifications.filter(n => !n.seen).length);
+    }
 }
 
 /**
@@ -81,7 +88,6 @@ async function reloadCurrentCalendarView() {
  */
 document.addEventListener("submit", async (e) => {
     let form = e.target;
-    
     if (form.action.includes("/appointment/add") || 
         form.action.includes("/appointment/update")) {
         
@@ -89,10 +95,18 @@ document.addEventListener("submit", async (e) => {
 
         let action = form.action.includes("/add") ? "create" : "update";
         
+
         // Demander confirmation si on veut supprimer, pour le moment existe pas mais ça sera ici pour après
         let submitter = e.submitter;
         if (submitter && submitter.name === "actionType" && submitter.value === "Supprimer") {
-            await submitAppointmentForm(form, "delete");
+            const confirmed = await showConfirmation(
+                "Voulez-vous vraiment supprimer ce rendez-vous ?",
+                form.dataset.isRecurrent === 'true',
+                "Supprimer"
+            );
+
+            if (confirmed.confirmation)
+                await submitAppointmentForm(form, "delete");
         } else {
             await submitAppointmentForm(form, action);
         }

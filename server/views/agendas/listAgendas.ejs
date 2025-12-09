@@ -36,7 +36,7 @@
               Exporter
             </div>
             <% } else { %>
-                <form action="/invitation/<%= a._id %>/remove/<%= user._id %>" method="GET">
+                <form action="/invitation/<%= a._id %>/remove/<%= user._id %>" method="GET" class="inline-form">
                   <button
                       type="submit"
                       class="px-3 py-1 rounded cursor-pointer bg-red-500 text-sm hover:bg-red-400"
@@ -53,63 +53,3 @@
     <p class="text-center">Aucun agenda pour le moment.</p>
   <% } %>
 </div>
-
-<script>
-function updateColorPreview() {
-    let select = document.getElementById('couleur');
-    let preview = document.getElementById('color-preview');
-
-    const selected = select.options[select.selectedIndex];
-    const colorClass = selected.dataset.color;
-    preview.className = `absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full border border-stone-400 ${colorClass}`;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  let new_element = document.querySelector("[data-action='new']");
-  new_element.addEventListener("click", async e => {
-    await openModal(`/agendas/new`);
-
-    updateColorPreview()
-  });
-
-  let invit_elements = document.querySelectorAll("[data-action='invite']");
-  invit_elements.forEach(el => {
-    el.addEventListener("click", async e => {
-      let agenda_el = e.target.closest("[data-agenda]");
-      await openModal(`/invitation/${agenda_el.dataset.agenda}/manage`)
-    })
-  });
-
-
-  let edit_elements = document.querySelectorAll("[data-action='edit']");
-  edit_elements.forEach(el => {
-    el.addEventListener("click", async e => {
-      let agenda_el = e.target.closest("[data-agenda]");
-
-      await openModal(`/agendas/edit/${agenda_el.dataset.agenda}`);
-
-      updateColorPreview()
-    });
-  })
-
-  let export_elements = document.querySelectorAll("[data-action='export']");
-  export_elements.forEach(el => {
-    el.addEventListener("click", async e => {
-      let agenda_el = e.target.closest("[data-agenda]");
-      await openModal(`/agendas/export/${agenda_el.dataset.agenda}`)
-    })
-  });
-
-  document.querySelectorAll("[data-action='import']").forEach(el => {
-    el.addEventListener("click", async e => {
-      await openModal('/agendas/import/')
-    })
-  });
-});
-
-document.addEventListener("change", function (e) {
-    if (e.target.id === "couleur") {
-        updateColorPreview();
-    }
-});
-</script>

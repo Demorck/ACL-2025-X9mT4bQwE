@@ -5,18 +5,18 @@
         </div>
     </div>
     <div class="flex items-center justify-center gap-2">
-        <span class="font-semibold text-center"><%= title %></span>
+        <a href="<%= previous_url %>" class="font-semibold px-2 py-1 calendar-header-button rounded-l-sm">
+            <div>&lt;</div>
+        </a>
+        <span class="font-semibold text-center title-header"><%= title %></span>
+        <a href="<%= after_url %>" class="font-semibold px-2 py-1 calendar-header-button rounded-r-sm">
+            <div>&gt;</div>
+        </a>
     </div>
     <div class="flex items-stretch md:items-center justify-between gap-2">
         <div class="flex items-center">
-            <a href="<%= previous_url %>" class="font-semibold px-2 py-1 calendar-header-button rounded-l-sm">
-                <div>&lt;</div>
-            </a>
             <a href="/calendar/day" class="font-semibold px-2 py-1 calendar-header-button">
                 <span >Aujourd'hui</span>
-            </a>
-            <a href="<%= after_url %>" class="font-semibold px-2 py-1 calendar-header-button rounded-r-sm">
-                <div>&gt;</div>
             </a>
         </div>
         
@@ -29,22 +29,15 @@
         <a href="/calendar/month" class="hidden md:block">
             <div class="md:px-3 py-1 calendar-header-button<%= view == "month" ? "--active" : "" %> rounded">Mois</div>
         </a>
+        <a href="/calendar/year" class="hidden md:block">
+            <div class="md:px-3 py-1 calendar-header-button<%= view == "year" ? "--active" : "" %> rounded">Année</div>
+        </a>
 
         <select name="" id="view-select" class="md:hidden">
-            <option value="day">Jour</option>
+            <option href="/calendar/day" value="day">Jour</option>
             <option value="week">Semaine</option>
             <option value="month">Mois</option>
+            <option value="month">Année</option>
         </select>
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        let select = document.querySelector("#view-select");
-
-        select.addEventListener("change", (event) => {
-            location.href = "/calendar/" + event.target.value;        
-        })
-    })
-
-</script>
