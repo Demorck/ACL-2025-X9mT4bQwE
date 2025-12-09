@@ -90,7 +90,6 @@ export async function createAppointment(user, body) {
 export async function updateAppointment(user, body) {
     //mettre ici comme quoi on recupère only ou all pour savoir ce qu'on a choisi
     let {
-    let {
         id,
         idRegle,
         nom,
