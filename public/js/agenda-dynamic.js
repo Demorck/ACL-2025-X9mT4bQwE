@@ -288,6 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Intercepte les soumissions de formulaires
     document.addEventListener("submit", async (e) => {
         const form = e.target;
+        if (form.action.includes("/invitation")) return;
         
         e.preventDefault();
         e.stopPropagation();

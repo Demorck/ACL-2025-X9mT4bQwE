@@ -9,7 +9,7 @@ export async function authMiddleware(req, res, next) {
     }
 
     try {
-        const user = await UserModel.findOne({ token });
+        const user = await UserModel.findOne({ token }).populate("agendas");
         if (user) {
             res.locals.user = user;
         } else {

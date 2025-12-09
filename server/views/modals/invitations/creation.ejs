@@ -1,6 +1,6 @@
 <% layout("modals/template"); %>
 
-<form action="/invitation/<%= agendaId %>/create" method="POST" class="flex flex-col gap-6 max-w-md mx-auto w-full">
+<form action="/invitation/<%= agendaId %>/create" data-agenda="<%= agendaId %>" method="POST" class="flex flex-col gap-6 max-w-md mx-auto w-full">
 
     <div class="flex flex-col gap-2">
         <label for="utilisationsMax" class="font-semibold text-stone-300">
