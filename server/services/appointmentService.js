@@ -270,7 +270,7 @@ export async function deleteAppointment(user, body) {
 
         }else if (modifRecSup === 'only'){
 
-            const dateException = new Date(new Date(body.date_debut).setHours(appointment.date_Debut.getHours()));
+            const dateException = new Date(new Date(body.year, body.month, body.day).setHours(appointment.date_Debut.getHours()));
             await AppointmentModel.findByIdAndUpdate(
             id,
             {
