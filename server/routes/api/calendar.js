@@ -1,6 +1,6 @@
 import express from "express";
 import { TZDate } from "@date-fns/tz";
-import { getDayData, getWeekData, getMonthData, getYearData } from "../../models/appointment.js";
+import { getDayData, getWeekData, getMonthData, getYearData, getListData } from "../../models/appointment.js";
 import { getAgendasForUser } from "../../database/agenda.js";
 import { formatDate, getFirstDayOfWeek } from "../../utils/date.js";
 import { getNiveauUser } from "../../database/invite_agenda.js";
@@ -83,6 +83,17 @@ router.get("/:view", async (req, res, next) => {
                 title = data.yearLabel;
                 previous_url = `/calendar/year?year=${requestedDate.getFullYear() - 1}`;
                 after_url = `/calendar/year?year=${requestedDate.getFullYear() + 1}`;
+                break;
+
+            case "list":
+                let listStartDate = new TZDate(year, month, 1);
+                let listEndDate = new TZDate(year, month + 1, 0, 23, 59, 59, 999);
+                
+                data = await getListData(listStartDate, listEndDate, res.locals.user);
+                title = `Liste - ${formatDate(listStartDate, "MMMM yyyy")}`;
+                title = title.charAt(0).toUpperCase() + title.slice(1);
+                previous_url = `/calendar/list?month=${month - 1}&year=${year}`;
+                after_url = `/calendar/list?month=${month + 1}&year=${year}`;
                 break;
 
             default:
