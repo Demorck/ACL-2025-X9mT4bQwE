@@ -33,7 +33,7 @@ function updateCalendarDisplay(calendarData) {
     const { view, title, html, previous_url, after_url } = calendarData;
     
     // Met à jour le titre (header)
-    const titleElement = document.querySelector('.calendar-header .font-semibold');
+    const titleElement = document.querySelector('.title-header');
     if (titleElement) {
         titleElement.textContent = title;
     }

@@ -2,6 +2,7 @@ import { TZDate } from "@date-fns/tz";
 import { getAgendasForUser } from "../../database/agenda.js";
 import { getDayData, getWeekData, getMonthData, getYearData } from "../../models/appointment.js";
 import { formatDate, getFirstDayOfWeek } from "../../utils/date.js";
+import { getNiveauUser } from "../../database/invite_agenda.js";
 
 function getDateFromQuery(query) {
     let queryMonth = parseInt(query.month);
@@ -26,6 +27,12 @@ export async function routeCalendar(req, res) {
 
     let view = req.params.view || "week";
     let agendas = await getAgendasForUser(res.locals.user);
+
+    await Promise.all(agendas.map(async (agenda) => {
+        agenda.niveau = await getNiveauUser(agenda._id, res.locals.user._id);
+    }));
+
+
     let data = {};
     let title = "";
     let previous_url = "";
