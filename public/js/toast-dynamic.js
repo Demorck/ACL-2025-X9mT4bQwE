@@ -67,6 +67,10 @@ function choixFA(type) {
       iconClasses = "fa-solid fa-circle-check text-green-500";
       break;
 
+    case "warning":  
+    iconClasses = "fa-solid fa-exclamation text-orange-500";
+    break;
+
     default:
       iconClasses = "fa-solid fa-circle-dot text-gray-500";
       break;

@@ -54,7 +54,6 @@ export async function createAppointment(user, body) {
     const dateFin = buildDate(date_fin, heure_fin);
 
 
-
     let regle = null;
 
     // Récurrence
@@ -126,8 +125,8 @@ export async function updateAppointment(user, body) {
         throw new Error("updateAppointment : Changement d’agenda non autorisé");
     }
 
-    const dateDebut = buildDate(date_debut, heure_debut);
-    const dateFin = buildDate(date_fin, heure_fin);
+    let dateDebut = buildDate(date_debut, heure_debut);
+    let dateFin = buildDate(date_fin, heure_fin);
 
     let updatedRecRule = null;
     let appointmentNew = null;
@@ -136,6 +135,8 @@ export async function updateAppointment(user, body) {
     if (recurrence === "on") {
         // Si on modifie que un seul rdv
         if(modifRec === "only"){
+            dateDebut = buildDate(new Date(year,month,day), heure_debut);
+            dateFin = buildDate(new Date(year,month,day), heure_fin);
             appointmentNew = new AppointmentModel({
                 agenda: newAgenda._id,
                 nom,
@@ -241,7 +242,6 @@ export async function updateAppointment(user, body) {
  */
 export async function deleteAppointment(user, body) {
     const { id, agendas, modifRecSup } = body;
-
     //il me faut le champs only ou all qui permet de savoir si je modifie que une unique occurrence ou si je modifie tout
     //si on supprime que une seule occurence, il faut que je récupère la date et que je 
 
@@ -270,7 +270,7 @@ export async function deleteAppointment(user, body) {
 
         }else if (modifRecSup === 'only'){
 
-            const dateException = appointment.date_Debut;
+            const dateException = new Date(new Date(body.year, body.month, body.day).setHours(appointment.date_Debut.getHours()));
             await AppointmentModel.findByIdAndUpdate(
             id,
             {

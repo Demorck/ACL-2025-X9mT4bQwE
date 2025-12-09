@@ -1,5 +1,26 @@
-document.addEventListener('DOMContentLoaded', () => {
-        updateSelectOptions();
+document.addEventListener('change', function(e) {
+    // Utilisation de la délégation d'événement pour l'élément #modifRec créé dynamiquement
+    if (e.target && e.target.id === 'modifRec') {
+        const modifRecSelect = e.target;
+        const dateInputs = [
+            document.getElementById('date_debut'),
+            document.getElementById('date_fin'),
+        ];
+
+        function handleRecurrenceChange() {
+            const disableDates = modifRecSelect.value === 'only';
+            dateInputs.forEach(input => {
+                if (input) { // Vérifier que les inputs existent
+                    input.disabled = disableDates;
+                }
+            });
+            if(disableDates)
+                creerToast("Cette option bloque la modification d'une occurrence au jour même !", "warning");
+        }
+
+        // Exécuter la fonction pour définir l'état correct
+        handleRecurrenceChange();
+    }
 });
 
 
@@ -112,6 +133,7 @@ function updateDateFinRecurrence() {
 
 
 function afficherCalendar(){
+
     const selectionSpecialDate = document.getElementById('fin_rec');
     const contenuCacheDateFin = document.getElementById('contenuCacheDateFin');
     const dateFinRecInput = document.getElementById('date_fin_rec');
@@ -145,4 +167,4 @@ function updateSelectOptions() {
     } */
 }
 
-
+    

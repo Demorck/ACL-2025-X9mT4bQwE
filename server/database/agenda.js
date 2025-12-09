@@ -153,7 +153,10 @@ export async function creerIcal(agendaId){
     const agenda = await AgendaModel.findById(agendaId);
 
     // Récuperer tous les RDV liés à l'agenda
-    const appointments = await AppointmentModel.find({agenda: agendaId});
+    const appointments = await AppointmentModel.find({
+        agenda: agendaId,
+        modifRecurrence: { $ne: true } // Exclure les RDV qui sont des exceptions modifiées
+    }).populate('exception');
     // Les rentrer dans un .ics
     const agendaToExport = ical({ name: agenda.nom, description: agenda.description});
 
@@ -178,6 +181,10 @@ export async function creerIcal(agendaId){
                 if (regleOccurrence.date_fin) {
                     rruleConfig.until = new Date(regleOccurrence.date_fin);
                 }
+                // Gérer les occurrences supprimées
+                if (appointment.exceptionDate && appointment.exceptionDate.length > 0) {
+                    rruleConfig.exclude = appointment.exceptionDate;
+                }
             }
         }        
         const eventData = {
@@ -190,9 +197,38 @@ export async function creerIcal(agendaId){
             eventData.repeating = rruleConfig;
         }
         
+        const event = agendaToExport.createEvent(eventData);
 
-        agendaToExport.createEvent(eventData);
+        if(regleOccurrence)
+        {
+            // S'il y a une récurrence, vérifier s'il existe des RDV modifiés liés à cette récurrence et on les ajoute
+            const idModifiedAppointments = appointment.exception;
+            const modifiedAppointments = await AppointmentModel.find({
+                _id: { $in: idModifiedAppointments }
+            });
+
+            let seq = event.data.sequence || 0;
+            for(const modA of modifiedAppointments)
+            {
+                seq++;
+                const originalDateModified = new Date(modA.date_Debut);
+
+                originalDateModified.setHours(appointment.date_Debut.getHours());
+
+
+                const modifiedEventData = {
+                    id: event.id(),
+                    recurrenceId: originalDateModified,
+                    start: modA.date_Debut,
+                    end: modA.date_Fin,
+                    summary: modA.nom,
+                    sequence : seq,
+                }
+                agendaToExport.createEvent(modifiedEventData);
+            }
+        }
     }
+
 
     // console.log(agendaToExport.toString());
     return agendaToExport.toString();
