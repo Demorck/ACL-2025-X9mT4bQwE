@@ -54,7 +54,6 @@ export async function createAppointment(user, body) {
     const dateFin = buildDate(date_fin, heure_fin);
 
 
-
     let regle = null;
 
     // Récurrence
@@ -241,7 +240,6 @@ export async function updateAppointment(user, body) {
  */
 export async function deleteAppointment(user, body) {
     const { id, agendas, modifRecSup } = body;
-
     //il me faut le champs only ou all qui permet de savoir si je modifie que une unique occurrence ou si je modifie tout
     //si on supprime que une seule occurence, il faut que je récupère la date et que je 
 
@@ -270,7 +268,7 @@ export async function deleteAppointment(user, body) {
 
         }else if (modifRecSup === 'only'){
 
-            const dateException = appointment.date_Debut;
+            const dateException = new Date(new Date(body.date_debut).setHours(appointment.date_Debut.getHours()));
             await AppointmentModel.findByIdAndUpdate(
             id,
             {

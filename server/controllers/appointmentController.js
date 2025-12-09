@@ -55,6 +55,7 @@ export async function renderEditAppointment(req, res,  next) {
     try {
         if(!res.locals.user) return res.redirect("/login");
 
+
         const { id, day, month, year, agendaId } = req.body;
         
         const appointment = await AppointmentModel.findById(id).populate('recurrenceRule');
@@ -98,12 +99,16 @@ export async function renderEditAppointment(req, res,  next) {
 }
 
 export async function handleUpdateAppointment(req, res, next) {
+        console.log(req.body);
+
     try {
+
         if(!res.locals.user) return res.redirect("/login");
 
         if (req.body.actionType === "Supprimer") {
             return handleDeleteAppointment(req, res, next);
         }
+
 
         await updateAppointment(res.locals.user, req.body);
 
@@ -129,4 +134,6 @@ export async function handleDeleteAppointment(req, res, next) {
         next(err);
     }
 }
+
+
 

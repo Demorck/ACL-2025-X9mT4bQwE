@@ -1,6 +1,30 @@
-document.addEventListener('DOMContentLoaded', () => {
-        updateSelectOptions();
-});
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Ici");
+        const modifRecSelect = document.getElementById('modifRec');
+
+        // On applique cette logique uniquement si le menu déroulant existe et que l'utilisateur a les droits de base (niveau >= 2)
+        if (modifRecSelect) {
+            const dateInputs = [
+                document.getElementById('date_debut'),
+                document.getElementById('heure_debut'),
+                document.getElementById('date_fin'),
+                document.getElementById('heure_fin')
+            ];
+
+            function handleRecurrenceChange() {
+                const disableDates = modifRecSelect.value === 'only';
+                dateInputs.forEach(input => {
+                    input.disabled = disableDates;
+                });
+            }
+
+            // Ajouter l'écouteur d'événement
+            modifRecSelect.addEventListener('change', handleRecurrenceChange);
+
+            // Exécuter la fonction au chargement pour définir l'état initial correct
+            handleRecurrenceChange();
+        }
+    });
 
 
 document.addEventListener("change", function (e) {
@@ -144,5 +168,7 @@ function updateSelectOptions() {
         select.value = "only";
     } */
 }
+
+    
 
 
