@@ -1,7 +1,7 @@
 import { TZDate } from "@date-fns/tz";
-import { getAgendasForUser } from "../database/agenda.js";
-import { getDayData, getWeekData, getMonthData, getYearData } from "../models/appointment.js";
-import { formatDate, getFirstDayOfWeek } from "../utils/date.js";
+import { getAgendasForUser } from "../../database/agenda.js";
+import { getDayData, getWeekData, getMonthData, getYearData } from "../../models/appointment.js";
+import { formatDate, getFirstDayOfWeek } from "../../utils/date.js";
 
 function getDateFromQuery(query) {
     let queryMonth = parseInt(query.month);

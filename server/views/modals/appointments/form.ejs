@@ -105,7 +105,7 @@
                 
                 <% if (submitText == "Modifier") { %>
                     <% if (niveau >= 3) { %>
-                        <input type="button" value="Supprimer" data-delete-action="appointment" data-is-recurrent="<%= recurrence ? 'true' : 'false' %>" class="px-3 py-2 bg-red-600 rounded hover:bg-red-700 hover:cursor-pointer">
+                        <input type="submit" value="Supprimer" name="actionType" data-delete-action="appointment" data-is-recurrent="<%= recurrence ? 'true' : 'false' %>" class="px-3 py-2 bg-red-600 rounded hover:bg-red-700 hover:cursor-pointer">
                     <% } %>
                 <% } %>
             </div>

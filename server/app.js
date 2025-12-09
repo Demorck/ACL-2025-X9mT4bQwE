@@ -5,21 +5,21 @@ import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 import engine from "ejs-mate";
 
-import { routeCalendar } from "./routes/calendar.js";
-import accountRoute from "./routes/account.js";
-import appointmentRoute from "./routes/appointments.js";
-import notificationRoute from "./routes/notifications.js";
+import { routeCalendar } from "./routes/web/calendar.js";
+import accountRoute from "./routes/web/account.js";
+import appointmentRoute from "./routes/web/appointments.js";
+import notificationRoute from "./routes/web/notifications.js";
+
 import apiCalendarRoute from "./routes/api/calendar.js";
 import apiAppointmentRoute from "./routes/api/appointments.js";
 import apiNotificationRoute from "./routes/api/notifications.js";
+import apiAgendaRoute from "./routes/api/agendas.js";
+import apiSearchRoute from "./routes/api/search.js";
+import agendasRoute from "./routes/web/agendas.js";
 import { authMiddleware } from "./middlewares/auth.js";
-import { routeNewAgenda, routeAddAgendaToDatabase, routeListeAgendas, routeDeleteAgenda, 
-    routeEditAgenda, routeFormEditAgenda, routeFormExportAgenda, routeExportAgenda, 
-    routeFormImportAgenda, routeImportAgenda} from "./routes/agendas.js";
 
 import { notificationMiddleware } from "./middlewares/notification.js";
 import { mergeRenderOptionsMiddleware } from "./middlewares/render.js";
-import { routeRecherche } from "./routes/rechercher/recherches.js";
 
 import { utiliserlien, routeCreationInvitation, supprimerInvite, modifierInvitation, changerRoleInvite, routeInvitation, 
     routeFormCreationInvitation, routeFormModificationInvitation, routeModificationInvitation, routeSuppressionInvitation} from "./routes/invitations.js"
@@ -62,27 +62,13 @@ app.use("/notifications", notificationRoute);
 app.use("/api/calendar/", apiCalendarRoute);
 app.use("/api/appointments/", apiAppointmentRoute);
 app.use("/api/notifications/", apiNotificationRoute);
+app.use("/api/agendas", apiAgendaRoute);
+app.use("/api/search", apiSearchRoute);
 
-// Agenda routes
-app.get("/agendas/new", routeNewAgenda);
-app.post("/agendas/add", routeAddAgendaToDatabase)
-
-app.get("/agendas/list", routeListeAgendas);
-app.get("/agendas/delete/:id", routeDeleteAgenda);
-app.get("/agendas/edit/:id", routeFormEditAgenda);
-app.post("/agendas/edit/:id", routeEditAgenda);
-
-app.get("/appointment/confirmationSuppression?rdvId=<%= rdvId %>")
-
-app.get("/agendas/export/:id", routeFormExportAgenda);
-app.post("/agendas/export/:id", routeExportAgenda);
-
-app.get("/agendas/import/", routeFormImportAgenda);
-app.post("/agendas/import/", upload.single('file'), routeImportAgenda);
 
 app.get("/calendar/:view", routeCalendar);
+app.use("/agendas", agendasRoute);
 
-app.use("/api/rechercher", routeRecherche);
 
 
 app.get("/invitation/:idAgenda/remove/:userId", supprimerInvite);

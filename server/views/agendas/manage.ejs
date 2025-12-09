@@ -1,0 +1,68 @@
+<% layout('template/layout') %>
+
+<div class="container mx-auto px-6 py-8 max-w-4xl">
+    <h1 class="text-3xl font-bold mb-6">Import / Export d'agendas</h1>
+
+    <!-- Sélection de l'agenda -->
+    <div class="inner-container rounded-xl p-6 mb-6">
+        <label class="block font-bold text-lg mb-3">Sélectionner un agenda</label>
+        <select id="agenda-select" class="w-full px-4 py-2 rounded border">
+            <option value="">-- Choisir un agenda --</option>
+        </select>
+    </div>
+
+    <!-- Section Export -->
+    <div class="inner-container rounded-xl p-6 mb-6">
+        <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fa fa-download mr-3 text-green-500"></i>
+            Exporter un agenda
+        </h2>
+        <p class="mb-4 text-sm opacity-75">
+            Exportez vos rendez-vous au format iCalendar (.ics) pour les importer dans d'autres applications (Google Calendar, Outlook, etc.)
+        </p>
+        
+        <button id="export-btn" disabled class="px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition">
+            <i class="fa fa-download mr-2"></i>
+            Télécharger le fichier .ics
+        </button>
+        
+        <div id="export-status" class="mt-4 hidden"></div>
+    </div>
+
+    <!-- Section Import -->
+    <div class="inner-container rounded-xl p-6">
+        <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fa fa-upload mr-3 text-blue-500"></i>
+            Importer des rendez-vous
+        </h2>
+        <p class="mb-4 text-sm opacity-75">
+            Importez des rendez-vous depuis un fichier iCalendar (.ics). Les rendez-vous seront ajoutés à l'agenda sélectionné.
+        </p>
+
+        <form id="import-form" class="space-y-4">
+            <div class="border-2 border-dashed rounded-lg p-8 text-center hover:border-blue-500 transition cursor-pointer" id="drop-zone">
+                <input type="file" id="ics-file" accept=".ics" class="hidden">
+                <div id="drop-zone-content">
+                    <i class="fa fa-cloud-upload text-5xl mb-3 opacity-50"></i>
+                    <p class="text-lg font-semibold mb-2">Glissez votre fichier .ics ici</p>
+                    <p class="text-sm opacity-75">ou cliquez pour parcourir</p>
+                </div>
+                <div id="file-info" class="hidden">
+                    <i class="fa fa-file text-4xl text-blue-500 mb-2"></i>
+                    <p class="font-semibold" id="file-name"></p>
+                    <p class="text-sm opacity-75" id="file-size"></p>
+                    <button type="button" id="remove-file" class="mt-2 text-red-500 hover:text-red-700">
+                        <i class="fa fa-times"></i> Supprimer
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" id="import-btn" disabled class="w-full px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition">
+                <i class="fa fa-upload mr-2"></i>
+                Importer les rendez-vous
+            </button>
+        </form>
+
+        <div id="import-status" class="mt-4 hidden"></div>
+    </div>
+</div>

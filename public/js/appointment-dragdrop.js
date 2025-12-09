@@ -282,7 +282,7 @@ function handleDragEnd(e) {
     
     currentDropZone = null;
     lastSnapZone = null;
-    draggedAppointment = null;
+    // draggedAppointment = null;
     draggedElement = null;
 }
 
@@ -394,12 +394,16 @@ async function handleDrop(e) {
     }
 
     // Demander confirmation du déplacement
-    // let confirmed = await showConfirmation(
-    //     `Déplacer ${modifyAllOccurrences ? 'toutes les occurrences du' : 'ce'} rendez-vous au ${newStartDate.toLocaleDateString('fr-FR')} à ${newStartDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} ?`,
-    //     "Déplacer"
-    // );
+    let confirmed = await showConfirmation(
+        `Déplacer ${modifyAllOccurrences ? 'toutes les occurrences du' : 'ce'} rendez-vous au ${newStartDate.toLocaleDateString('fr-FR')} à ${newStartDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} ?`,
+        false,
+        "Déplacer"
+    );
 
-    if (true) {
+    console.log(draggedAppointment);
+    
+
+    if (confirmed.confirmation) {
         await updateAppointmentDateTime(
             draggedAppointment.id,
             draggedAppointment.agendaId,

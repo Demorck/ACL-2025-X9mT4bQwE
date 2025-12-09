@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
-import * as userController from "../controllers/accountController.js";
+import * as userController from "../../controllers/accountController.js";
 
 const router = express.Router();
 

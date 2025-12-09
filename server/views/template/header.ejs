@@ -62,7 +62,7 @@
              resultats.insertAdjacentHTML('beforeend', '<div id="loading-indicator" class="text-center text-xs text-gray-400 py-1">Chargement...</div>');
         }
 
-        fetch("/api/rechercher/recherche", {
+        fetch("/api/search", {
           method: "POST",
           headers: { "Content-Type": "application/json;charset=UTF-8" },
           body: JSON.stringify({
