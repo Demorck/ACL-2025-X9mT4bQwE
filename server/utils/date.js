@@ -114,7 +114,7 @@ export function shiftDate(date, days) {
  * @param {Intervalle de la récurrence} intervalle 
  * @returns 
  */
-function avanceDate(date, frequence, intervalle) {
+export function avanceDate(date, frequence, intervalle) {
     const nouvelleDate = new Date(date.getTime());   
     switch(frequence) {
         case 'day1':

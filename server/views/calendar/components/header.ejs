@@ -8,14 +8,34 @@
         <a href="<%= previous_url %>" class="font-semibold px-2 py-1 calendar-header-button rounded-l-sm">
             <div>&lt;</div>
         </a>
-        <span class="font-semibold text-center title-header"><%= title %></span>
+        
+        
+        <div class="relative flex items-center gap-2">
+            <button 
+                id="title-date-picker-btn" 
+                class="font-semibold text-center cursor-pointer transition px-3 py-1 rounded flex items-center gap-2 group"
+                title="Choisir une date"
+            >
+                <span class="title-header"><%= title %></span>
+                <i class="fa fa-calendar text-xs opacity-50 group-hover:opacity-100 transition"></i>
+            </button>
+
+            <input 
+                type="date" 
+                id="title-date-picker" 
+                class="absolute opacity-0 pointer-events-none"
+                data-current-view="<%= view %>"
+            >
+        </div>
+
+
         <a href="<%= after_url %>" class="font-semibold px-2 py-1 calendar-header-button rounded-r-sm">
             <div>&gt;</div>
         </a>
     </div>
     <div class="flex items-stretch md:items-center justify-between gap-2">
         <div class="flex items-center">
-            <a href="/calendar/day" class="font-semibold px-2 py-1 calendar-header-button">
+            <a href="/calendar/day" class="font-semibold px-2 py-1 calendar-header-button rounded">
                 <span >Aujourd'hui</span>
             </a>
         </div>
@@ -32,12 +52,120 @@
         <a href="/calendar/year" class="hidden md:block">
             <div class="md:px-3 py-1 calendar-header-button<%= view == "year" ? "--active" : "" %> rounded">Année</div>
         </a>
+        <a href="/calendar/list" class="hidden md:block">
+            <div class="md:px-3 py-1 calendar-header-button<%= view == "list" ? "--active" : "" %> rounded">Liste</div>
+        </a>
 
-        <select name="" id="view-select" class="md:hidden">
-            <option href="/calendar/day" value="day">Jour</option>
-            <option value="week">Semaine</option>
-            <option value="month">Mois</option>
-            <option value="month">Année</option>
+        <select id="view-select" class="md:hidden px-3 py-2 rounded cursor-pointer" data-current-view="<%= view %>">
+            <option value="day" <%= view === "day" ? "selected" : "" %>>Jour</option>
+            <option value="week" <%= view === "week" ? "selected" : "" %>>Semaine</option>
+            <option value="month" <%= view === "month" ? "selected" : "" %>>Mois</option>
+            <option value="year" <%= view === "year" ? "selected" : "" %>>Année</option>
+            <option value="list" <%= view === "list" ? "selected" : "" %>>Liste</option>
         </select>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const viewSelect = document.getElementById("view-select");
+    
+    if (viewSelect) {
+        viewSelect.addEventListener("change", async (e) => {
+            const selectedView = e.target.value;
+            const currentUrl = new URL(window.location.href);
+            
+            const params = new URLSearchParams(currentUrl.search);
+            const paramsObj = {};
+            params.forEach((value, key) => {
+                paramsObj[key] = value;
+            });
+            
+            if (!paramsObj.day && !paramsObj.month && !paramsObj.year) {
+                const today = new Date();
+                paramsObj.day = today.getDate();
+                paramsObj.month = today.getMonth();
+                paramsObj.year = today.getFullYear();
+            }
+            
+            if (typeof navigateToView === 'function') {
+                await navigateToView(selectedView, paramsObj);
+            } else {
+                const queryString = new URLSearchParams(paramsObj).toString();
+                window.location.href = `/calendar/${selectedView}?${queryString}`;
+            }
+        });
+    }
+
+    const titleBtn = document.getElementById("title-date-picker-btn");
+    const datePicker = document.getElementById("title-date-picker");
+    
+    if (titleBtn && datePicker) {
+        const currentUrl = new URL(window.location.href);
+        const params = new URLSearchParams(currentUrl.search);
+        
+        let day, month, year;
+        
+        if (params.has("day") && params.has("month") && params.has("year")) {
+            day = parseInt(params.get("day"));
+            month = parseInt(params.get("month"));
+            year = parseInt(params.get("year"));
+        } else {
+            const today = new Date();
+            day = today.getDate();
+            month = today.getMonth();
+            year = today.getFullYear();
+        }
+        
+        const currentDate = new Date(year, month, day);
+        const formattedDate = currentDate.toISOString().split('T')[0];
+        datePicker.value = formattedDate;
+        
+        titleBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (datePicker.showPicker) {
+                datePicker.showPicker();
+            } else {
+                datePicker.click();
+            }
+        });
+        
+        datePicker.addEventListener("change", async (e) => {
+            const selectedDate = new Date(e.target.value + 'T00:00:00');
+            const currentView = datePicker.dataset.currentView;
+            
+            const newParams = {
+                day: selectedDate.getDate(),
+                month: selectedDate.getMonth(),
+                year: selectedDate.getFullYear()
+            };
+            
+            if (typeof navigateToView === 'function') {
+                await navigateToView(currentView, newParams);
+            } else {
+                const queryString = new URLSearchParams(newParams).toString();
+                window.location.href = `/calendar/${currentView}?${queryString}`;
+            }
+        });
+        
+        titleBtn.addEventListener("mouseenter", () => {
+            titleBtn.classList.add("calendar-header-button");
+        });
+        
+        titleBtn.addEventListener("mouseleave", () => {
+            titleBtn.classList.remove("calendar-header-button");
+        });
+    }
+
+    // ========================================
+    // SYNCHRONISATION DU SELECT AU CHARGEMENT
+    // ========================================
+    // S'assurer que le select mobile est bien synchronisé
+    if (viewSelect) {
+        const currentView = viewSelect.dataset.currentView;
+        viewSelect.value = currentView;
+    }
+});
+</script>

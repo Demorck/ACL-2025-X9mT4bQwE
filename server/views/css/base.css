@@ -103,6 +103,13 @@ header {
     background-color: --alpha(var(--inner-text)/10%);
 }
 
+.group-list {
+    background-color: var(--btn-bg-hover);
+}
+
+.item-list:hover {
+    background-color: --alpha(var(--btn-bg)/70%);
+}
 
 /* Modaux */
 #modal-container > div {

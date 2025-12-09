@@ -90,7 +90,7 @@ export async function createAppointment(user, body) {
  */
 export async function updateAppointment(user, body) {
     //mettre ici comme quoi on recupère only ou all pour savoir ce qu'on a choisi
-    const {
+    let {
         id,
         idRegle,
         nom,
@@ -147,8 +147,13 @@ export async function updateAppointment(user, body) {
             });
             await appointmentNew.save();
         }else{
+            if (!date_fin_rec) {
+                let rule = await RegleOccurrenceModel.findById(idRegle);
+                if (rule) {
+                    date_fin_rec = rule.date_fin;
+                }
+            }
             let dateFinRec = fin_rec === "never" ? null : new TZDate(date_fin_rec);
-
             // Si une règle existe -> update
             if (appointment.recurrenceRule) {
                 updatedRecRule = await RegleOccurrenceModel.findByIdAndUpdate(
@@ -240,7 +245,7 @@ export async function updateAppointment(user, body) {
  * Suppression d’un rendez-vous
  */
 export async function deleteAppointment(user, body) {
-    const { id, agendas, modifRecSup } = body;
+    const { id, agendas, modifRec } = body;
 
     //il me faut le champs only ou all qui permet de savoir si je modifie que une unique occurrence ou si je modifie tout
     //si on supprime que une seule occurence, il faut que je récupère la date et que je 
@@ -259,17 +264,14 @@ export async function deleteAppointment(user, body) {
 
     if(appointment.recurrenceRule){
         const recId = appointment.recurrenceRule;
-        if(modifRecSup === 'all'){
-
+        if(modifRec === 'all'){
             if(appointment.exception && appointment.exception.length >0){
                 const exceptionIds = appointment.exception.map(exc => exc._id);
                 await AppointmentModel.deleteMany({ _id: { $in: exceptionIds } });
             }
             await RegleOccurrenceModel.findByIdAndDelete(recId);
             await AppointmentModel.findByIdAndDelete(id);
-
-        }else if (modifRecSup === 'only'){
-
+        }else if (modifRec === 'only'){
             const dateException = appointment.date_Debut;
             await AppointmentModel.findByIdAndUpdate(
             id,
