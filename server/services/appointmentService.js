@@ -125,8 +125,8 @@ export async function updateAppointment(user, body) {
         throw new Error("updateAppointment : Changement d’agenda non autorisé");
     }
 
-    const dateDebut = buildDate(date_debut, heure_debut);
-    const dateFin = buildDate(date_fin, heure_fin);
+    let dateDebut = buildDate(date_debut, heure_debut);
+    let dateFin = buildDate(date_fin, heure_fin);
 
     let updatedRecRule = null;
     let appointmentNew = null;
@@ -135,6 +135,8 @@ export async function updateAppointment(user, body) {
     if (recurrence === "on") {
         // Si on modifie que un seul rdv
         if(modifRec === "only"){
+            dateDebut = buildDate(new Date(year,month,day), heure_debut);
+            dateFin = buildDate(new Date(year,month,day), heure_fin);
             appointmentNew = new AppointmentModel({
                 agenda: newAgenda._id,
                 nom,

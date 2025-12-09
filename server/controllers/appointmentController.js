@@ -99,8 +99,6 @@ export async function renderEditAppointment(req, res,  next) {
 }
 
 export async function handleUpdateAppointment(req, res, next) {
-        console.log(req.body);
-
     try {
 
         if(!res.locals.user) return res.redirect("/login");
@@ -134,6 +132,3 @@ export async function handleDeleteAppointment(req, res, next) {
         next(err);
     }
 }
-
-
-

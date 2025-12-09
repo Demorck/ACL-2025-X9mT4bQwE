@@ -1,30 +1,27 @@
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("Ici");
-        const modifRecSelect = document.getElementById('modifRec');
+document.addEventListener('change', function(e) {
+    // Utilisation de la délégation d'événement pour l'élément #modifRec créé dynamiquement
+    if (e.target && e.target.id === 'modifRec') {
+        const modifRecSelect = e.target;
+        const dateInputs = [
+            document.getElementById('date_debut'),
+            document.getElementById('date_fin'),
+        ];
 
-        // On applique cette logique uniquement si le menu déroulant existe et que l'utilisateur a les droits de base (niveau >= 2)
-        if (modifRecSelect) {
-            const dateInputs = [
-                document.getElementById('date_debut'),
-                document.getElementById('heure_debut'),
-                document.getElementById('date_fin'),
-                document.getElementById('heure_fin')
-            ];
-
-            function handleRecurrenceChange() {
-                const disableDates = modifRecSelect.value === 'only';
-                dateInputs.forEach(input => {
+        function handleRecurrenceChange() {
+            const disableDates = modifRecSelect.value === 'only';
+            dateInputs.forEach(input => {
+                if (input) { // Vérifier que les inputs existent
                     input.disabled = disableDates;
-                });
-            }
-
-            // Ajouter l'écouteur d'événement
-            modifRecSelect.addEventListener('change', handleRecurrenceChange);
-
-            // Exécuter la fonction au chargement pour définir l'état initial correct
-            handleRecurrenceChange();
+                }
+            });
+            if(disableDates)
+                creerToast("Cette option bloque la modification d'une occurrence au jour même !", "warning");
         }
-    });
+
+        // Exécuter la fonction pour définir l'état correct
+        handleRecurrenceChange();
+    }
+});
 
 
 document.addEventListener("change", function (e) {
@@ -136,6 +133,7 @@ function updateDateFinRecurrence() {
 
 
 function afficherCalendar(){
+
     const selectionSpecialDate = document.getElementById('fin_rec');
     const contenuCacheDateFin = document.getElementById('contenuCacheDateFin');
     const dateFinRecInput = document.getElementById('date_fin_rec');
@@ -170,5 +168,3 @@ function updateSelectOptions() {
 }
 
     
-
-
