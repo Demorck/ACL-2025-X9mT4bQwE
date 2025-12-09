@@ -1,4 +1,5 @@
 import { AppointmentModel } from "../database/appointment.js";
+import { avanceDate } from "../utils/date.js";
 
 /**
  * Fonction qui retourne les rendez-vous correspondant à l'entrée utilisateur
@@ -18,9 +19,7 @@ export async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreD
       return [];
 
     // permet d'avoir les agendas selectionné (si aucun, cela prend tout les agendas de l'utilisateur)
-    const agendasPourRecherche = (filtreAgendasUtilise && filtreAgendasUtilise.length > 0) ? 
-                                 filtreAgendasUtilise : 
-                                 agendaIds;
+    const agendasPourRecherche = (filtreAgendasUtilise && filtreAgendasUtilise.length > 0) ? filtreAgendasUtilise : agendaIds;
 
     // les recherches de base sont faite sur un an avant et apres aujourd'hui
     const dateMax = new Date();
@@ -37,7 +36,7 @@ export async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreD
     // recherche dans la bdd
     const appointments = await AppointmentModel.find({
         agenda: { $in: agendasPourRecherche },
-        nom: { $regex: new RegExp(`^${str}`, 'i') } 
+        nom: { $regex: new RegExp(`^${str}`, 'i') }
     }).populate('recurrenceRule');
     const resultatsFinaux = [];
 
@@ -46,29 +45,30 @@ export async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreD
       let rdvOriginal = rdv.toObject();
       const debutRdv = new Date(rdvOriginal.date_Debut);
       const dureeMs = new Date(rdvOriginal.date_Fin).getTime() - debutRdv.getTime();
-          
+
       // Si rdv pas récurrent
       if (!rdv.recurrenceRule) {
-          if ((!minDateObj || debutRdv >= minDateObj) && 
+          if ((!minDateObj || debutRdv >= minDateObj) &&
               (!maxDateObj || debutRdv <= maxDateObj)) {
               resultatsFinaux.push(rdvOriginal);
           }
           continue;
       }
-    
-      const regle = rdv.recurrenceRule;            
-      let dateDebutReccurence = new Date(debutRdv);            
+
+      const regle = rdv.recurrenceRule;
+      const dateException = rdv.exceptionDate || []; 
+      let dateDebutReccurence = new Date(debutRdv);
       let dateFinRecurrence = regle.date_fin ? new Date(regle.date_fin) : dateMax;
       let dateDebutCalcul = (minDateObj && debutRdv < minDateObj) ? minDateObj : debutRdv;
       if (maxDateObj && maxDateObj < dateFinRecurrence) {
           dateFinRecurrence = maxDateObj;
       }
-      if (dateDebutCalcul > dateFinRecurrence) 
+      if (dateDebutCalcul > dateFinRecurrence)
         continue;
             
 
       let intervalle = parseInt(regle.intervale);
-      if (isNaN(intervalle) || intervalle < 1) 
+      if (isNaN(intervalle) || intervalle < 1)
         intervalle = 1;
       if (minDateObj && dateDebutReccurence < minDateObj) {
           // On traite la premiere occurence ici
@@ -80,9 +80,21 @@ export async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreD
                continue;
            }
       }
+
       // Ajoute les rdv réccurents
       while (dateDebutReccurence <= dateFinRecurrence) {
-        if (!minDateObj || dateDebutReccurence >= minDateObj) {
+
+        // Vérifie que ce n'est pas une date qui est une exception de la récurrence
+        const estUneException = dateException.some(exception => {
+            const dateException = new Date(exception);
+            const dateActuelle = new Date(dateDebutReccurence);
+            
+            return dateException.getFullYear() === dateActuelle.getFullYear() &&
+                   dateException.getMonth() === dateActuelle.getMonth() &&
+                   dateException.getDate() === dateActuelle.getDate();
+        });
+
+        if (!estUneException && (!minDateObj || dateDebutReccurence >= minDateObj)) {
             resultatsFinaux.push({
                 ...rdvOriginal,
                 recurrenceRule: undefined,
@@ -90,15 +102,15 @@ export async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreD
                 date_Fin: new Date(dateDebutReccurence.getTime() + dureeMs)
             });
         }
-        
+
         dateDebutReccurence = avanceDate(dateDebutReccurence, regle.frequence, intervalle);
-        if (!dateDebutReccurence) 
+        if (!dateDebutReccurence)
           break;
       }
         }
         resultatsFinaux.sort((a, b) => a.date_Debut.getTime() - b.date_Debut.getTime());
-        
-        // Traitement de l'infinity scroll 
+
+        // Traitement de l'infinity scroll
         const debutIndex = (page - 1) * limit;
         const finIndex = page * limit;
         const paginatedResults = resultatsFinaux.slice(debutIndex, finIndex);
