@@ -19,18 +19,18 @@
         <div class="invitation-links-container space-y-2 flex-1 overflow-y-auto max-h-96">
             <% if (typeof invitations !== 'undefined' && invitations.length > 0) { %>
                 <% invitations.forEach(inv => { %>
-                    <div class="invitation-link-card bg-stone-700 hover:bg-stone-600 rounded-lg p-4 transition-colors group"
+                    <div class="invitation-link-card card item-list rounded-lg p-4 transition-colors group"
                          data-invitation-id="<%= inv._id %>">
                         
                         <!-- En-tête avec ID et actions -->
                         <div class="flex justify-between items-start mb-3">
                             <div class="flex items-center gap-3 flex-1">
-                                <div class="bg-stone-800 px-3 py-1 rounded font-mono text-sm">
+                                <div class="card-header px-3 py-1 rounded font-mono text-sm">
                                     ...<%= inv._id.toString().slice(-8) %>
                                 </div>
                                 
                                 <button type="button"
-                                        class="cursor-pointer copy-link-btn p-2 bg-stone-800 hover:bg-stone-500 rounded transition-colors relative flex items-center"
+                                        class="cursor-pointer copy-link-btn p-2 card-header hover:bg-stone-500 rounded transition-colors relative flex items-center"
                                         data-invitation-id="<%= inv._id %>"
                                         title="Copier le lien">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -98,11 +98,11 @@
             Membres (<%= invites.length %>)
         </h3>
         
-        <div class="bg-stone-800 rounded-lg border border-stone-600 p-3 flex-1 overflow-y-auto max-h-96">
+        <div class="card rounded-lg border p-3 flex-1 overflow-y-auto max-h-96">
             <% if (invites && invites.length > 0) { %>
                 <div class="space-y-2 members-list">
                     <% invites.forEach(u => { %>
-                        <div class="member-card bg-stone-700 rounded-lg p-3 flex items-center justify-between gap-3 hover:bg-stone-600 transition-colors"
+                        <div class="member-card rounded-lg p-3 flex items-center justify-between gap-3 transition-colors"
                              data-member-id="<%= u.user._id %>">
                             
                             <div class="flex items-center gap-3 flex-1 min-w-0">
@@ -125,7 +125,7 @@
                             <% if(niveau >= 3) { %>
                                 <div class="flex items-center gap-2 flex-shrink-0">
                                     <!-- Sélecteur de rôle -->
-                                    <select class="role-select px-2 py-1 bg-stone-800 hover:bg-stone-900 rounded text-xs border border-stone-600"
+                                    <select class="role-select px-2 py-1 rounded text-xs border"
                                             data-agenda-id="<%= agenda._id %>"
                                             data-user-id="<%= u.user._id %>"
                                             <%= u.niveau === niveau ? 'disabled' : '' %>>
