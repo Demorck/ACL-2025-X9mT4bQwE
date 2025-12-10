@@ -1,7 +1,8 @@
 import { TZDate } from "@date-fns/tz";
-import { getAgendasForUser } from "../database/agenda.js";
-import { getDayData, getWeekData, getMonthData } from "../models/appointment.js";
-import { formatDate, getFirstDayOfWeek } from "../utils/date.js";
+import { getAgendasForUser } from "../../database/agenda.js";
+import { getDayData, getWeekData, getMonthData, getYearData, getListData } from "../../models/appointment.js";
+import { formatDate, getFirstDayOfWeek } from "../../utils/date.js";
+import { getNiveauUser } from "../../database/invite_agenda.js";
 
 function getDateFromQuery(query) {
     let queryMonth = parseInt(query.month);
@@ -26,6 +27,12 @@ export async function routeCalendar(req, res) {
 
     let view = req.params.view || "week";
     let agendas = await getAgendasForUser(res.locals.user);
+
+    await Promise.all(agendas.map(async (agenda) => {
+        agenda.niveau = await getNiveauUser(agenda._id, res.locals.user._id);
+    }));
+
+
     let data = {};
     let title = "";
     let previous_url = "";
@@ -62,6 +69,25 @@ export async function routeCalendar(req, res) {
             data.day = day;
             data.month = month;
             data.year = year;
+            break;
+
+        case "year":
+            data = await getYearData(requestedDate.getFullYear(), res.locals.user);
+            title = data.yearLabel;
+            previous_url = `/calendar/year?year=${requestedDate.getFullYear() - 1}`;
+            after_url = `/calendar/year?year=${requestedDate.getFullYear() + 1}`;
+            break;
+
+
+        case "list":
+            let listStartDate = new TZDate(year, month, 1);
+            let listEndDate = new TZDate(year, month + 1, 0, 23, 59, 59, 999);
+            
+            data = await getListData(listStartDate, listEndDate, res.locals.user);
+            title = `Liste - ${formatDate(listStartDate, "MMMM yyyy")}`;
+            title = title.charAt(0).toUpperCase() + title.slice(1);
+            previous_url = `/calendar/list?month=${month - 1}&year=${year}`;
+            after_url = `/calendar/list?month=${month + 1}&year=${year}`;
             break;
         default:
             return res.redirect("/calendar/week");

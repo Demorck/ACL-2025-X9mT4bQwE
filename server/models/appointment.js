@@ -120,3 +120,88 @@ export function getMonthData(year, month, user) {
 
     return appointments;
 }
+
+/**
+ * Obtient les données pour une année spécifique
+ * 
+ * @export
+ * @param {Number} year 
+ * @param {User} user 
+ * @returns {{yearLabel: string, months: Array, appointments: Array}}
+ */
+export function getYearData(year, user) {
+    let startISODate = new TZDate(year, 0, 1); // 1er janvier
+    let endISODate = new TZDate(year + 1, 0, 1); // 1er janvier de l'année suivante
+
+    let appointments = getAppointments(user, startISODate, endISODate).then(app => {
+        let months = [];
+        for (let month = 0; month < 12; month++) {
+            let monthDate = new TZDate(year, month, 1);
+            let daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            months.push({
+                name: formatDate(monthDate, "MMM"),
+                monthIndex: month,
+                daysInMonth: daysInMonth,
+                days: Array.from({ length: 31 }, (_, i) => {
+                    if (i < daysInMonth) {
+                        return new TZDate(year, month, i + 1);
+                    }
+                    return null;
+                })
+            });
+        }
+
+        return {
+            yearLabel: year.toString(),
+            year: year,
+            months: months,
+            appointments: app
+        }
+    }).catch(err => {
+        throw new Error(err);
+    });
+
+    return appointments;
+}
+
+/**
+ * Obtient les données pour la vue liste
+ * 
+ * @export
+ * @param {Date} startDate 
+ * @param {Date} endDate 
+ * @param {User} user 
+ * @returns {{groupedAppointments: Array, startDate: Date, endDate: Date}}
+ */
+export function getListData(startDate, endDate, user) {
+    let appointments = getAppointments(user, startDate, endDate).then(app => {
+        let groupedByDate = {};
+        
+        app.forEach(appointment => {
+            let dateKey = formatDate(toLocalDate(appointment.start), "yyyy-MM-dd");
+            
+            if (!groupedByDate[dateKey]) {
+                groupedByDate[dateKey] = {
+                    date: toLocalDate(appointment.start),
+                    dateLabel: formatDate(toLocalDate(appointment.start), "EEEE dd MMMM yyyy"),
+                    appointments: []
+                };
+            }
+            
+            groupedByDate[dateKey].appointments.push(appointment);
+        });
+        
+        let groupedArray = Object.values(groupedByDate).sort((a, b) => a.date - b.date);
+
+        return {
+            startDate,
+            endDate,
+            groupedAppointments: groupedArray
+        };
+    }).catch(err => {
+        throw new Error(err);
+    });
+
+    return appointments;
+}

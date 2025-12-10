@@ -45,6 +45,7 @@ export function normalizeAppointment(appointments, rangeStart, rangeEnd) {
         agendaId : app.agenda.id ?? app.agenda._id.toString(),
         startLabel: formatHourMinute(segmentStart),
         endLabel: formatHourMinute(segmentEnd),
+        recurrenceRule: app.recurrenceRule || null
       });
 
       current = new Date(dayEnd.getTime() + 1);

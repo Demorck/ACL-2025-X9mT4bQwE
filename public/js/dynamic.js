@@ -33,14 +33,14 @@ function updateCalendarDisplay(calendarData) {
     const { view, title, html, previous_url, after_url } = calendarData;
     
     // Met à jour le titre (header)
-    const titleElement = document.querySelector('.calendar-header .font-semibold');
+    const titleElement = document.querySelector('.title-header');
     if (titleElement) {
         titleElement.textContent = title;
     }
     
     // Mets à jour les liens précédent/suivant
-    const prevLink = document.querySelector('.calendar-header a[href*="day="], .calendar-header a[href*="month="]');
-    const nextLinks = document.querySelectorAll('.calendar-header a[href*="day="], .calendar-header a[href*="month="]');
+    const prevLink = document.querySelector('.calendar-header a[href*="day="], .calendar-header a[href*="month="], .calendar-header a[href*="year="]');
+    const nextLinks = document.querySelectorAll('.calendar-header a[href*="day="], .calendar-header a[href*="month="], .calendar-header a[href*="year="]');
 
     const buttons = document.querySelectorAll('div > a > .calendar-header-button, div > a > .calendar-header-button--active');
     
@@ -65,6 +65,11 @@ function updateCalendarDisplay(calendarData) {
     const filterContainer = document.querySelector('#container-filter');
     if (filterContainer) {
         filterContainer.dataset.view = view;
+    }
+
+    const dataPicker = document.querySelector('#title-date-picker');
+    if (dataPicker) {
+        dataPicker.dataset.currentView = view;
     }
     
     // Mets à jour le contenu du calendrier
@@ -104,6 +109,10 @@ function attachCalendarEventListeners() {
             openModal("/appointment/edit", "/js/appointments.js", options);
         });
     });
+
+    if (typeof initDragDrop === 'function') {
+        initDragDrop();
+    }
 }
 
 /**
@@ -119,31 +128,69 @@ function applyAgendaFilters() {
         const agendaId = toggle.value;
         const visible = toggle.checked;
         
-        if (view === "month") {
-            // Pour la vue mois, on utilise les classes hidden
-            document.querySelectorAll(`.appointment-month[data-agenda="${agendaId}"]`)
-                .forEach(el => {
-                    if (visible) {
-                        el.classList.remove("hidden");
-                    } else {
-                        el.classList.add("hidden");
-                    }
-                });
+        // Utiliser la fonction applyAgendaFilter si elle existe
+        if (typeof applyAgendaFilter === 'function') {
+            applyAgendaFilter(agendaId, visible, view);
         } else {
-            // Pour les vues jour/semaine, on utilise display
-            document.querySelectorAll(`.appointment[data-agenda='${agendaId}']`)
-                .forEach(el => {
-                    el.style.display = visible ? "block" : "none";
-                });
+            // Fallback : code existant
+            switch (view) {
+                case "month":
+                    document.querySelectorAll(`.appointment-month[data-agenda="${agendaId}"]`)
+                        .forEach(el => {
+                            if (visible) {
+                                el.classList.remove("hidden");
+                            } else {
+                                el.classList.add("hidden");
+                            }
+                        });
+                    break;
+                
+                case "year":
+                    document.querySelectorAll(`.appointment-year[data-agenda="${agendaId}"]`)
+                        .forEach(el => {
+                            if (visible) {
+                                el.classList.remove("hidden");
+                            } else {
+                                el.classList.add("hidden");
+                            }
+                        });
+                    break;
+                
+                case "list":
+                    document.querySelectorAll(`[data-appointment][data-agenda="${agendaId}"]`)
+                        .forEach(el => {
+                            el.style.display = visible ? "flex" : "none";
+                        });
+                    
+                    // Masquer les groupes de date vides
+                    document.querySelectorAll(".inner-container").forEach(container => {
+                        const visibleAppointments = Array.from(
+                            container.querySelectorAll("[data-appointment]")
+                        ).filter(el => el.style.display !== "none");
+                        
+                        if (visibleAppointments.length === 0) {
+                            container.style.display = "none";
+                        } else {
+                            container.style.display = "block";
+                        }
+                    });
+                    break;
+                
+                default:
+                    document.querySelectorAll(`.appointment[data-agenda='${agendaId}']`)
+                        .forEach(el => {
+                            el.style.display = visible ? "block" : "none";
+                        });
+                    break;
+            }
         }
     });
     
-    // Re-layout après application des filtres
-    if (typeof layoutAppointments === 'function') {
+    // Re-layout après application des filtres (jour/semaine uniquement)
+    if (typeof layoutAppointments === 'function' && (view === 'day' || view === 'week')) {
         layoutAppointments();
     }
 }
-
 /**
  * Navigation vers une nouvelle vue
  */

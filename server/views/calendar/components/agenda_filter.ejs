@@ -1,7 +1,8 @@
 <div class="mb-4 p-3" data-view="<%= view %>" id="container-filter">
     <h2 class="text-lg font-semibold mb-2">Agendas</h2>
     <div class="flex flex-wrap flex-row sm:flex-col gap-3">
-        <% data.agendas.forEach(a => { %>
+        <% data.agendas.forEach(a => { 
+            %>
             <label class="flex items-center gap-2 cursor-pointer">
                 <input 
                     type="checkbox" 
@@ -12,27 +13,26 @@
                 <span 
                     class="filter-color filter-color-<%= a.couleur %>"
                 ></span>
-                <span><%= a.nom %></span>
+                <div class="flex flex-col flex-1">
+                    <span class="font-medium"><%= a.nom %></span>
+                    <% if (typeof a.niveau !== 'undefined') { %>
+                        <span class="text-xs opacity-70">
+                            <%= a.niveau === 4 ? 'Propriétaire' : a.niveau === 3 ? 'Admin' : a.niveau === 2 ? 'Member' : 'Viewer' %>
+                        </span>
+                    <% } %>
+                </div>
             </label>
         <% }) %>
     </div>
 </div>
+
 <script>
 /**
-* Gère le placement des rendez-vous avec le filtre.
-*
-*/
+ * Gère le placement des rendez-vous avec le filtre (vue jour/semaine).
+ */
 function layoutAppointments() {
     let days = [];
 
-    /**
-    * Récupère tous les rendez-vous visible et extrait les données des attributs data-*
-    *   - start: début du rendez-vous en heure décimale ;
-    *   - duratioin: durée du rendez-vous en heure décimale ;
-    *   - day: Jour du rendez-vous.
-    *   
-    *   - end: start + duration
-    */
     document.querySelectorAll(".appointment").forEach(el => {
         if (el.style.display === "none") return;
         let day = el.dataset.day;
@@ -44,23 +44,10 @@ function layoutAppointments() {
         days[day].push({ el, start, duration, end });
     });
 
-    /**
-    * Itère pour chaque jour (car les rendez-vous sont par jour, triés par heure de début)
-    */
     Object.values(days).forEach(appointments => {
         appointments.sort((a, b) => a.start - b.start);
-
-        // On aura un tableau qui seront les colonnes pour placer chaque rendez-vous
         let columns = [];
 
-        /** 
-        * Pour chaque rendez-vous par jour:
-        * Sur chaque colonne, si le dernier rendez-vous termine avant le début du rendez-vous actuel : aucun chevauchement (ils sont triés), on l'ajoute à la colonne
-        * Si pour chaque colonne, y a pas de chevauchement, alors le rendez-vous se chevauche avec tout
-        *   => Il n'est pas placé, on rajoute une colonne avec ce rendez-vous
-        * 
-        * Petit hic, si on a un rendez-vous qui peut prendre toute la largeur et qu'on utilise seulement ça, il va prendre que la largeur & posiiton de la première colonne disponible
-        */
         appointments.forEach(appt => {
             let placed = false;
             for (let i = 0; i < columns.length; i++) {
@@ -78,12 +65,6 @@ function layoutAppointments() {
 
         let colCount = columns.length;
 
-        /**
-        * Pour pallier le hic précédent, on sur chaque colonne.
-        * Pour chaque rendez-vous, on regarde les colonnes d'après:
-        *   Si le rendez-vous overlap, on passe, sinon on incrémente un compteur
-        *   On met donc le début (la colonne) proportionnellement au numéro de la colonne et on l'étend, proportionnellement aux nombres de colonne disponibles
-        */
         columns.forEach((col, i) => {
             col.forEach(appt => {
                 let span = 1;
@@ -101,14 +82,75 @@ function layoutAppointments() {
     });
 }
 
-</script>
-<script>
-function setLocalStorageFilter(checkboxes)
-{
+/**
+ * Sauvegarde les filtres dans le localStorage
+ */
+function setLocalStorageFilter(checkboxes) {
     localStorage.setItem("agenda-filter", Array.from(checkboxes).filter(e => !e.checked).map(e => e.value))
 }
 
+/**
+ * Applique le filtre d'agenda selon la vue actuelle
+ */
+function applyAgendaFilter(agendaId, visible, view) {
+    switch (view) {
+        case "month":
+            // Vue mois : toggle class hidden
+            document.querySelectorAll(`.appointment-month[data-agenda="${agendaId}"]`)
+                .forEach(el => {
+                    if (visible) {
+                        el.classList.remove("hidden");
+                    } else {
+                        el.classList.add("hidden");
+                    }
+                });
+            break;
+        
+        case "year":
+            // Vue année : toggle class hidden
+            document.querySelectorAll(`.appointment-year[data-agenda="${agendaId}"]`)
+                .forEach(el => {
+                    if (visible) {
+                        el.classList.remove("hidden");
+                    } else {
+                        el.classList.add("hidden");
+                    }
+                });
+            break;
+        
+        case "list":
+            // Vue liste : toggle display sur les rendez-vous
+            document.querySelectorAll(`[data-appointment][data-agenda="${agendaId}"]`)
+                .forEach(el => {
+                    el.style.display = visible ? "flex" : "none";
+                });
+            
+            // Masquer les groupes de date vides
+            document.querySelectorAll(".inner-container").forEach(container => {
+                const visibleAppointments = Array.from(
+                    container.querySelectorAll("[data-appointment]")
+                ).filter(el => el.style.display !== "none");
+                
+                if (visibleAppointments.length === 0) {
+                    container.style.display = "none";
+                } else {
+                    container.style.display = "block";
+                }
+            });
+            break;
+        
+        default:
+            // Vue jour/semaine : toggle display et relayout
+            document.querySelectorAll(`.appointment[data-agenda='${agendaId}']`)
+                .forEach(el => {
+                    el.style.display = visible ? "block" : "none";
+                });
+            layoutAppointments();
+            break;
+    }
+}
 </script>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     let toggles = document.querySelectorAll(".agenda-toggle");
@@ -122,35 +164,28 @@ document.addEventListener("DOMContentLoaded", () => {
             let agendaId = toggle.value;
             let visible = toggle.checked;
             let view = document.querySelector('#container-filter');
-            view = view.dataset.view
+            view = view.dataset.view;
             
-            switch (view) {
-                case "month":
-                    document.querySelectorAll(`.appointment-month[data-agenda="${agendaId}"]`)
-                            .forEach(el => el.classList.toggle("hidden"));
-                    break;
+            // Appliquer le filtre selon la vue
+            applyAgendaFilter(agendaId, visible, view);
             
-                default:                
-                document.querySelectorAll(`.appointment[data-agenda='${agendaId}']`)
-                        .forEach(el => {
-                            el.style.display = visible ? "block" : "none";
-                        });
-                    layoutAppointments();
-                    break;
-            }
-
+            // Sauvegarder dans localStorage
             setLocalStorageFilter(toggles);
         });
 
+        // Appliquer les filtres sauvegardés
         if (default_visibleID != null) {
-            let exist = default_visibleID.includes(toggle.value)
-            if (exist)
-            {
+            let exist = default_visibleID.includes(toggle.value);
+            if (exist) {
                 toggle.click();
             }
         }
     });
 
-    layoutAppointments();
+    // Layout initial pour les vues jour/semaine
+    let view = document.querySelector('#container-filter')?.dataset.view;
+    if (view === "day" || view === "week") {
+        layoutAppointments();
+    }
 });
 </script>

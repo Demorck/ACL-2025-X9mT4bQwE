@@ -19,7 +19,7 @@
         </div>
 
         <!-- Date et heure début / fin -->
-        <div class="flex gap-4 mb-4 flex-col md:flex-row">
+        <div class="flex gap-4 mb-4 flex-row">
             <div class="flex-1">
                 <label for="date_debut" class="block font-semibold mb-1">Date début</label>
                 <input id="date_debut" type="date" name="date_debut" value="<%= formDate || formattedDate %>" required class="w-full border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="flex gap-4 mb-4 flex-col md:flex-row">
+        <div class="flex gap-4 mb-4 flex-row">
             <div class="flex-1">
                 <label for="date_fin" class="block font-semibold mb-1">Date fin</label>
                 <input id="date_fin" type="date" name="date_fin" value="<%= formDateFin %>" required class="w-full border px-3 py-2 rounded" <%= niveau < 2 ? 'disabled' : ''%>>
@@ -104,7 +104,7 @@
                 
                 <% if (submitText == "Modifier") { %>
                     <% if (niveau >= 3) { %>
-                        <input type="button" value="Supprimer" data-delete-action="appointment" data-is-recurrent="<%= recurrence ? 'true' : 'false' %>" class="px-3 py-2 bg-red-600 rounded hover:bg-red-700 hover:cursor-pointer">
+                        <input type="submit" value="Supprimer" name="actionType" data-delete-action="appointment" data-is-recurrent="<%= recurrence ? 'true' : 'false' %>" class="px-3 py-2 bg-red-600 rounded hover:bg-red-700 hover:cursor-pointer">
                     <% } %>
                 <% } %>
             </div>

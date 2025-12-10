@@ -1,27 +1,5 @@
-import express from "express";
-import { AppointmentModel } from "../../database/appointment.js";
-import { listAgendas } from "../../database/agenda.js";
-
-export const routeRecherche = express.Router();
-
-/**
- * Route pour faire la recherche de rendez vous dans la base de donnée
- */
-routeRecherche.post("/recherche", async (req, res, next) => {
-    try {
-      const user = res.locals.user;
-      const {str, filtreDateMin, filtreDateMax, filtreAgendasUtilise, page = 1, limit = 20 } = req.body;
-
-      // pour avoir les id de tout les agendas
-      const agendas = await listAgendas(user);
-      const agendaIds = agendas.map(a => a._id);
-
-      const reponse = await rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax, filtreAgendasUtilise, parseInt(page), parseInt(limit), next);
-      res.json(reponse);
-    } catch (error) {
-        next(error);
-    }
-})
+import { AppointmentModel } from "../database/appointment.js";
+import { avanceDate } from "../utils/date.js";
 
 /**
  * Fonction qui retourne les rendez-vous correspondant à l'entrée utilisateur
@@ -35,15 +13,13 @@ routeRecherche.post("/recherche", async (req, res, next) => {
  * @param {*} next 
  * @returns 
  */
-async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax, filtreAgendasUtilise, page, limit, next) {
+export async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax, filtreAgendasUtilise, page, limit, next) {
   try {
     if (!str || str.trim() === "")
       return [];
 
     // permet d'avoir les agendas selectionné (si aucun, cela prend tout les agendas de l'utilisateur)
-    const agendasPourRecherche = (filtreAgendasUtilise && filtreAgendasUtilise.length > 0) ? 
-                                 filtreAgendasUtilise : 
-                                 agendaIds;
+    const agendasPourRecherche = (filtreAgendasUtilise && filtreAgendasUtilise.length > 0) ? filtreAgendasUtilise : agendaIds;
 
     // les recherches de base sont faite sur un an avant et apres aujourd'hui
     const dateMax = new Date();
@@ -60,7 +36,7 @@ async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax,
     // recherche dans la bdd
     const appointments = await AppointmentModel.find({
         agenda: { $in: agendasPourRecherche },
-        nom: { $regex: new RegExp(`^${str}`, 'i') } 
+        nom: { $regex: new RegExp(`^${str}`, 'i') }
     }).populate('recurrenceRule');
     const resultatsFinaux = [];
 
@@ -69,29 +45,30 @@ async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax,
       let rdvOriginal = rdv.toObject();
       const debutRdv = new Date(rdvOriginal.date_Debut);
       const dureeMs = new Date(rdvOriginal.date_Fin).getTime() - debutRdv.getTime();
-          
+
       // Si rdv pas récurrent
       if (!rdv.recurrenceRule) {
-          if ((!minDateObj || debutRdv >= minDateObj) && 
+          if ((!minDateObj || debutRdv >= minDateObj) &&
               (!maxDateObj || debutRdv <= maxDateObj)) {
               resultatsFinaux.push(rdvOriginal);
           }
           continue;
       }
-    
-      const regle = rdv.recurrenceRule;            
-      let dateDebutReccurence = new Date(debutRdv);            
+
+      const regle = rdv.recurrenceRule;
+      const dateException = rdv.exceptionDate || []; 
+      let dateDebutReccurence = new Date(debutRdv);
       let dateFinRecurrence = regle.date_fin ? new Date(regle.date_fin) : dateMax;
       let dateDebutCalcul = (minDateObj && debutRdv < minDateObj) ? minDateObj : debutRdv;
       if (maxDateObj && maxDateObj < dateFinRecurrence) {
           dateFinRecurrence = maxDateObj;
       }
-      if (dateDebutCalcul > dateFinRecurrence) 
+      if (dateDebutCalcul > dateFinRecurrence)
         continue;
             
 
       let intervalle = parseInt(regle.intervale);
-      if (isNaN(intervalle) || intervalle < 1) 
+      if (isNaN(intervalle) || intervalle < 1)
         intervalle = 1;
       if (minDateObj && dateDebutReccurence < minDateObj) {
           // On traite la premiere occurence ici
@@ -103,9 +80,21 @@ async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax,
                continue;
            }
       }
+
       // Ajoute les rdv réccurents
       while (dateDebutReccurence <= dateFinRecurrence) {
-        if (!minDateObj || dateDebutReccurence >= minDateObj) {
+
+        // Vérifie que ce n'est pas une date qui est une exception de la récurrence
+        const estUneException = dateException.some(exception => {
+            const dateException = new Date(exception);
+            const dateActuelle = new Date(dateDebutReccurence);
+            
+            return dateException.getFullYear() === dateActuelle.getFullYear() &&
+                   dateException.getMonth() === dateActuelle.getMonth() &&
+                   dateException.getDate() === dateActuelle.getDate();
+        });
+
+        if (!estUneException && (!minDateObj || dateDebutReccurence >= minDateObj)) {
             resultatsFinaux.push({
                 ...rdvOriginal,
                 recurrenceRule: undefined,
@@ -113,19 +102,19 @@ async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax,
                 date_Fin: new Date(dateDebutReccurence.getTime() + dureeMs)
             });
         }
-        
+
         dateDebutReccurence = avanceDate(dateDebutReccurence, regle.frequence, intervalle);
-        if (!dateDebutReccurence) 
+        if (!dateDebutReccurence)
           break;
       }
         }
         resultatsFinaux.sort((a, b) => a.date_Debut.getTime() - b.date_Debut.getTime());
-        
-        // Traitement de l'infinity scroll 
+
+        // Traitement de l'infinity scroll
         const debutIndex = (page - 1) * limit;
         const finIndex = page * limit;
         const paginatedResults = resultatsFinaux.slice(debutIndex, finIndex);
-
+        
         return {
             results: paginatedResults,
             hasMore: finIndex < resultatsFinaux.length
@@ -134,33 +123,4 @@ async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreDateMax,
     } catch (error) {
         next(error);
     }
-}
-
-
-/**
- * Fonction qui pemet d'avoir la nouvelle date d'un rdv récurrent
- * @param {La date à modifier} date 
- * @param {Fréquence de la récurrence} frequence 
- * @param {Intervalle de la récurrence} intervalle 
- * @returns 
- */
-function avanceDate(date, frequence, intervalle) {
-    const nouvelleDate = new Date(date.getTime());   
-    switch(frequence) {
-        case 'day1':
-            nouvelleDate.setDate(nouvelleDate.getDate() + intervalle);
-            break;
-        case 'week1':
-            nouvelleDate.setDate(nouvelleDate.getDate() + (7 * intervalle));
-            break;
-        case 'month1':
-            nouvelleDate.setMonth(nouvelleDate.getMonth() + intervalle);
-            break;
-        case 'year1':
-            nouvelleDate.setFullYear(nouvelleDate.getFullYear() + intervalle);
-            break;
-        default:
-            return null; 
-    }
-    return nouvelleDate;
 }

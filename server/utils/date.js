@@ -106,6 +106,35 @@ export function shiftDate(date, days) {
     return addDays(date, days);
 }
 
+
+/**
+ * Fonction qui pemet d'avoir la nouvelle date d'un rdv récurrent
+ * @param {La date à modifier} date 
+ * @param {Fréquence de la récurrence} frequence 
+ * @param {Intervalle de la récurrence} intervalle 
+ * @returns 
+ */
+export function avanceDate(date, frequence, intervalle) {
+    const nouvelleDate = new Date(date.getTime());   
+    switch(frequence) {
+        case 'day1':
+            nouvelleDate.setDate(nouvelleDate.getDate() + intervalle);
+            break;
+        case 'week1':
+            nouvelleDate.setDate(nouvelleDate.getDate() + (7 * intervalle));
+            break;
+        case 'month1':
+            nouvelleDate.setMonth(nouvelleDate.getMonth() + intervalle);
+            break;
+        case 'year1':
+            nouvelleDate.setFullYear(nouvelleDate.getFullYear() + intervalle);
+            break;
+        default:
+            return null; 
+    }
+    return nouvelleDate;
+}
+
 /**************************************************************************
  * Fonctions utilitaires pour la gestion des jours
  ***************************************************************************/

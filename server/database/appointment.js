@@ -9,8 +9,8 @@ const Schema = mongoose.Schema;
 const appointmentSchema = new Schema({
     agenda : { type: Schema.Types.ObjectId, ref: "Agenda", required: true },
     nom: { type: String, required: true },
-    date_Debut: { type: Date, required: true },
-    date_Fin: { type: Date, required: true },
+    date_Debut: { type: Date, required: true, index: true },
+    date_Fin: { type: Date, required: true, index: true },
     recurrenceRule: { type: Schema.Types.ObjectId, ref: "RegleOccurrence", required: false },
     exception: [{ type: Schema.Types.ObjectId, ref: "Appointment", required: false }],
     exceptionDate: [{ type: Date, required: false }],
