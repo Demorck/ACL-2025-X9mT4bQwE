@@ -3,17 +3,17 @@
  */
 function renderInvitationCard(invitation) {
     return `
-        <div class="invitation-link-card bg-stone-700 hover:bg-stone-600 rounded-lg p-4 transition-colors group"
+        <div class="invitation-link-card card rounded-lg p-4 transition-colors group"
              data-invitation-id="${invitation._id}">
             
             <div class="flex justify-between items-start mb-3">
                 <div class="flex items-center gap-3 flex-1">
-                    <div class="bg-stone-800 px-3 py-1 rounded font-mono text-sm">
+                    <div class=" card-header px-3 py-1 rounded font-mono text-sm">
                         ...${invitation._id.toString().slice(-8)}
                     </div>
                     
                     <button type="button"
-                            class="cursor-pointer copy-link-btn p-2 bg-stone-800 hover:bg-stone-500 rounded transition-colors"
+                            class="cursor-pointer copy-link-btn p-2 card-header rounded transition-colors"
                             data-invitation-id="${invitation._id}"
                             title="Copier le lien">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -26,15 +26,6 @@ function renderInvitationCard(invitation) {
                 </div>
                 
                 <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button type="button"
-                            class="cursor-pointer edit-invitation-btn p-2 bg-blue-600 hover:bg-blue-700 rounded transition-colors"
-                            data-invitation-id="${invitation._id}"
-                            title="Modifier">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                    </button>
-                    
                     <button type="button"
                             class="cursor-pointer delete-invitation-btn p-2 bg-red-600 hover:bg-red-700 rounded transition-colors"
                             data-invitation-id="${invitation._id}"
@@ -74,7 +65,7 @@ function renderMemberCard(invite, agendaId, userNiveau) {
              data-member-id="${invite.user._id}">
             
             <div class="flex items-center gap-3 flex-1 min-w-0">
-                <div class="w-10 h-10 rounded-full bg-stone-600 flex items-center justify-center shrink-0">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0">
                     <span class="text-sm font-bold">
                         ${invite.user.username.substring(0, 2).toUpperCase()}
                     </span>
@@ -88,7 +79,7 @@ function renderMemberCard(invite, agendaId, userNiveau) {
             
             ${userNiveau >= 3 ? `
                 <div class="flex items-center gap-2 shrink-0">
-                    <select class="role-select px-2 py-1 bg-stone-800 hover:bg-stone-900 rounded text-xs border border-stone-600"
+                    <select class="role-select px-2 py-1 rounded text-xs border border-stone-600"
                             data-agenda-id="${agendaId}"
                             data-user-id="${invite.user._id}"
                             ${invite.niveau === userNiveau ? 'disabled' : ''}>

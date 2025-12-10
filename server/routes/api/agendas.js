@@ -179,46 +179,75 @@ router.post("/import", upload.single('file'), async (req, res, next) => {
             });
         }
 
-        // Créer l'agenda
         const agenda = await creerAgenda(
             res.locals.user,
             nom,
             description || '',
             couleur || 'blue'
         );
-
-        // Parser le fichier .ics
+    
         const data = ical.sync.parseICS(req.file.buffer.toString('utf-8'));
-
         const frequences = { 3: "day1", 2: "week1", 1: "month1" };
-        let importedCount = 0;
 
+        let importedCount = 0;
+    
         for (const i in data) {
             const event = data[i];
-            if (event.type === 'VEVENT') {
+            
+            if (event.type === 'VEVENT' && !event.recurrenceid) {
+                
                 let regle = null;
-
                 if (event.rrule) {
                     const frequence = frequences[event.rrule.options.freq];
-                    if (frequence) {
-                        const regleOccurrence = await creerRegleOccurrence(
+                    if (frequence){
+                        const regleOccurence = await creerRegleOccurrence(
                             frequence,
                             event.rrule.options.until,
                             event.rrule.options.interval
                         );
-                        regle = regleOccurrence._id;
+                        regle = regleOccurence._id;
                     }
                 }
+    
+                const exceptionIds = [];
                 
+                if (event.recurrences) {
+                    for (const key in event.recurrences) {
+                        const recEvent = event.recurrences[key];
+                        
+                        const newException = await createAppointment(
+                            agenda._id,
+                            recEvent.summary || event.summary,
+                            recEvent.start,
+                            recEvent.end,
+                            res.locals.user._id,
+                            null,
+                            [],
+                            [],           
+                            true
+                        );
+                        
+                        exceptionIds.push(newException._id);
+                    }
+                }
+    
+                let exceptionDates = [];
+                if (event.exdate) {
+                    exceptionDates = Object.values(event.exdate);
+                }
+    
                 await createAppointment(
                     agenda._id,
                     event.summary || "Sans titre",
                     event.start,
                     event.end,
                     res.locals.user._id,
-                    regle
+                    regle,
+                    exceptionIds,
+                    exceptionDates,
+                    false
                 );
-                
+
                 importedCount++;
             }
         }

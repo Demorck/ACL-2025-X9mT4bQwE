@@ -116,7 +116,6 @@ export async function modifierInvitation(req, res) {
 
 export async function routeSuppressionInvitation(req, res){
     const invitation = await getInvitation(req.params.idInvitation);
-    console.log(invitation);
     await deleteInvitation(req.params.idInvitation);
     return res.redirect(`/invitation/${invitation.agenda._id}/manage`);
 }

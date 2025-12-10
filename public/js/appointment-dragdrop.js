@@ -59,11 +59,15 @@ function handleDragStart(e) {
     
     // Récupérer toutes les infos du rendez-vous
     // Si c'est sur plusieurs jours, on fait le total
-    let allSegments = document.querySelectorAll(`[data-id="${draggedElement.dataset.id}"]`);
-    let totalDuration = 0;
-    allSegments.forEach(seg => {
-        totalDuration += parseFloat(seg.dataset.duration);
-    });
+    let totalDuration = parseFloat(draggedElement.dataset.duration);
+    if (!draggedElement.recurrent === 'true') {
+        let allSegments = document.querySelectorAll(`[data-id="${draggedElement.dataset.id}"]`);
+        totalDuration = 0;
+        allSegments.forEach(seg => {
+            totalDuration += parseFloat(seg.dataset.duration);
+        });
+    }
+   
     
     draggedAppointment = {
         id: draggedElement.dataset.id,
@@ -75,7 +79,10 @@ function handleDragStart(e) {
         duration: totalDuration,
         nom: draggedElement.querySelector('strong')?.textContent || 'Rendez-vous',
         color: Array.from(draggedElement.classList).find(c => c.startsWith('appointment-color-'))?.replace('appointment-color-', '') || 'white',
-        isRecurrent: draggedElement.dataset.recurrent === 'true' || false
+        isRecurrent: draggedElement.dataset.recurrent === 'true' || false,
+        idRegle: draggedElement.dataset.idRule || '',
+        date_fin: draggedElement.dataset.dateFin || '',
+        date_fin_rec: draggedElement.dataset.dateFin || ''
     };
 
     originalPosition = {
@@ -379,6 +386,10 @@ async function handleDrop(e) {
         return;
     }
 
+    if (draggedAppointment.isRecurrent) {
+        
+    }
+
     // Si c'est un rendez-vous récurrent, demander si on modifie une occurrence ou toutes
     let modifyAllOccurrences = false;
     if (draggedAppointment.isRecurrent) {
@@ -389,6 +400,16 @@ async function handleDrop(e) {
                 draggedElement.style.pointerEvents = "auto";
             }
             return;
+        } else if (recurrentChoice === false) {
+            if (newDay !== originalPosition.day || newMonth !== originalPosition.month || newYear !== originalPosition.year) {
+                await creerToast("Vous ne pouvez pas déplacer une occurrence de rendez-vous récurrent sur un autre jour. Veuillez modifier l'heure uniquement.", "error");
+                if (draggedElement) {
+                    draggedElement.style.opacity = "1";
+                    draggedElement.style.pointerEvents = "auto";
+                }
+
+                return;
+            }
         }
         modifyAllOccurrences = recurrentChoice;
     }
@@ -399,8 +420,6 @@ async function handleDrop(e) {
         false,
         "Déplacer"
     );
-
-    console.log(draggedAppointment);
     
 
     if (confirmed.confirmation) {
@@ -441,6 +460,11 @@ async function updateAppointmentDateTime(appointmentId, agendaId, startDate, end
             return `${h}:${m}`;
         };
 
+
+        let modifyOccurences = draggedAppointment.isRecurrent ? (modifyAllOccurrences ? 'all' : 'only') : '';
+        
+        let datefin = modifyOccurences === 'all' ? (draggedAppointment.date_fin == 'never' ? 'never' : draggedAppointment.date_fin_rec) : 'off';
+
         let data = {
             id: appointmentId,
             agendas: agendaId,
@@ -451,7 +475,12 @@ async function updateAppointmentDateTime(appointmentId, agendaId, startDate, end
             day: day,
             month: month,
             year: year,
-            modifyAllOccurrences: modifyAllOccurrences
+            modifRec: modifyOccurences,
+            fin_rec: draggedAppointment.date_fin == 'never' ? 'never' : 'specificalDate',
+            idRegle: draggedAppointment.idRegle,
+            nom: draggedAppointment.nom,
+            recurrence: draggedAppointment.isRecurrent ? 'on' : '',
+            date_fin_rec: datefin
         };
 
         let response = await fetch(`/api/appointments/${appointmentId}`, {
@@ -478,7 +507,7 @@ async function updateAppointmentDateTime(appointmentId, agendaId, startDate, end
             }
         }
     } catch (error) {
-        await creerToast(result.error, "error");
+        await creerToast(error, "error");
         if (draggedElement) {
             draggedElement.style.opacity = "1";
             draggedElement.style.pointerEvents = "auto";

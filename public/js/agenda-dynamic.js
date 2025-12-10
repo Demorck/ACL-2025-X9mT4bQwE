@@ -5,32 +5,47 @@ function renderAgenda(agenda, userId) {
     const isOwner = userId.toString() === agenda.user.toString();
     
     return `
-        <div class="flex items-center justify-between px-4 py-3" data-agenda="${agenda._id}">
-            <div>
-                <p class="font-semibold">
-                    ${agenda.nom}
-                    ${!isOwner ? '(Partagé avec vous)' : ''}
-                </p>
-                ${agenda.description ? `<p class="text-sm">${agenda.description}</p>` : ''}
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 p-4 rounded-lg  transition-colors"
+            data-agenda="${agenda._id}">
+            <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="inline-block w-3 h-3 rounded-full filter-color-${agenda.couleur}"></span>
+              <p class="font-semibold text-lg">${agenda.nom}</p>
+              ${isOwner ? `` : `
+                <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded">Partagé</span>
+              `}
             </div>
+            ${agenda.description ? `<p class="text-sm opacity-75 ml-5">${agenda.description}</p>` : ''}
+          </div>
 
-            <div class="flex gap-2">
-                <div class="px-3 py-1 rounded cursor-pointer bg-sky-500 text-sm hover:bg-sky-400" data-action="invite">
-                    Invitation
-                </div>
+          <div class="flex flex-wrap gap-2">
+            <button class="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-sm transition-colors font-medium" 
+                    data-action="invite"
+                    title="Gérer les invitations">
+              <i class="fa fa-user-plus"></i>
+              <span class="hidden sm:inline">Invitations</span>
+            </button>
                 ${isOwner ? `
-                    <div class="px-3 py-1 rounded cursor-pointer bg-amber-500 text-sm hover:bg-amber-400" data-action="edit">
-                        Modifier
-                    </div>
-                    <div class="px-3 py-1 rounded cursor-pointer bg-purple-500 text-sm hover:bg-purple-400" data-action="export">
-                        Exporter
-                    </div>
+                    <button class="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer bg-amber-600 hover:bg-amber-700 text-white text-sm transition-colors font-medium" 
+                      data-action="edit"
+                      title="Modifier l'agenda">
+                        <i class="fa fa-edit"></i>
+                        <span class="hidden sm:inline">Modifier</span>
+                    </button>
+                    
+                    <button class="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer bg-purple-600 hover:bg-purple-700 text-white text-sm transition-colors font-medium" 
+                            data-action="export"
+                            title="Exporter l'agenda">
+                        <i class="fa fa-download"></i>
+                        <span class="hidden sm:inline">Exporter</span>
+                    </button>
                 ` : `
-                    <form action="/invitation/${agenda._id}/remove/${userId}" method="GET" class="inline-form">
-                        <button type="submit" class="px-3 py-1 rounded cursor-pointer bg-red-500 text-sm hover:bg-red-400">
-                            Quitter
-                        </button>
-                    </form>
+                    <button class="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer bg-red-600 hover:bg-red-700 text-white text-sm transition-colors font-medium"
+                            data-action="leave"
+                            title="Quitter cet agenda">
+                    <i class="fa fa-sign-out"></i>
+                    <span class="hidden sm:inline">Quitter</span>
+                    </button>
                 `}
             </div>
         </div>
@@ -95,9 +110,8 @@ function attachAgendaEventListeners() {
     });
 
     // Formulaires de quitter un agenda partagé
-    document.querySelectorAll(".inline-form").forEach(form => {
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+    document.querySelectorAll("[data-action='leave']").forEach(el => {
+        el.addEventListener("click", async (e) => {
             
             const confirmed = await showConfirmation(
                 "Voulez-vous vraiment quitter cet agenda partagé ?",
@@ -106,9 +120,10 @@ function attachAgendaEventListeners() {
             );
             
             if (confirmed.confirmation) {
+                let url = `/api/invitations/${e.target.closest("[data-agenda]").dataset.agenda}/leave`;
                 try {
-                    const response = await fetch(form.action, {
-                        method: "GET"
+                    const response = await fetch(url, {
+                        method: "DELETE",
                     });
                     
                     if (response.ok) {

@@ -26,6 +26,10 @@ export async function showNewAgendaForm(req, res) {
  * Liste tous les agendas de l'utilisateurs
  */
 export async function showAgendas(req, res, next) {
+
+    if(!res.locals.user)
+        return res.redirect("/login");
+    
     const agendas = await getAgendasForUser(res.locals.user);
     
     await Promise.all(agendas.map(async (agenda) => {
