@@ -57,9 +57,13 @@ header {
 }
 
 .calendar-header,
-#agenda-filter {
+#agenda-filter, #menu-filtres {
     background-color: var(--bg-calendar-header);
     border-color: var(--border-calendar-header);
+}
+
+#menu-filtres {
+    color: var(--text-calendar);
 }
 
 .calendar-header-button {
@@ -103,6 +107,29 @@ header {
     background-color: --alpha(var(--inner-text)/10%);
 }
 
+.group-list {
+    background-color: var(--btn-bg-hover);
+}
+
+.item-list:hover {
+    background-color: --alpha(var(--btn-bg)/70%);
+}
+
+.card {
+    background-color: var(--btn-bg);
+}
+
+.card:hover {
+    background-color: --alpha(var(--btn-bg)/70%);
+}
+
+.card-header {
+    background-color: var(--btn-bg-hover);
+}
+
+.card-header:hover {
+    filter: brightness(1.3);
+}
 
 /* Modaux */
 #modal-container > div {
@@ -114,16 +141,27 @@ header {
     @apply cursor-pointer bg-red-400 absolute -top-2 -right-2 rounded-full w-8 h-8 text-center flex items-center justify-center
 }
 
-input[type='submit'] {
+input[type='submit'], #clearFiltre {
     background-color: var(--input-submit-bg);
     color: var(--input-submit-text);
 }
 
-input[type='submit']:hover {
+input[type='submit']:hover, #clearFiltre:hover {
     background-color: var(--input-submit-hover-bg);
     color: var(--input-submit-hover-text);
 }
 
+input[type='text'], input[type='number'], input[type='datetime-local'], input[type='date'], input[type='time'], select {
+    background-color: var(--border-calendar-header);
+}
+
+input::placeholder {
+    color: --alpha(var(--text-calendar)/60%);
+}
+
+input[type='text']:hover, input[type='number']:hover, input[type='datetime-local']:hover, input[type='date']:hover, input[type='time']:hover, select:hover {
+    background-color: --alpha(var(--border-calendar-header)/40%);
+}
 
 option {
     background-color: var(--bg-page);

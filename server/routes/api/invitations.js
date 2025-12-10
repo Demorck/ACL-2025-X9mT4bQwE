@@ -162,6 +162,32 @@ router.delete("/:agendaId/members/:userId", async (req, res, next) => {
 });
 
 /**
+ * Quitte un agenda partagé
+ * DELETE /api/invitations/:agendaId/leave
+ */
+router.delete("/:agendaId/leave", async (req, res, next) => {
+    try {
+        if (!res.locals.user) {
+            return res.status(401).json({ success: false, error: "Non authentifié" });
+        }
+
+        await invitationService.removeUserFromAgenda(
+            req.params.agendaId,
+            res.locals.user._id
+        );
+        res.json({
+            success: true,
+            message: "Vous avez quitté l'agenda avec succès"
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message
+        });
+    }
+});
+
+/**
  * Change le rôle d'un utilisateur dans un agenda
  * PATCH /api/invitations/:agendaId/members/:userId/role
  */

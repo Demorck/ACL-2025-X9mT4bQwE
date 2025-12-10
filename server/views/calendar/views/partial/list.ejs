@@ -1,0 +1,55 @@
+<div class="flex flex-col gap-4 p-4">
+    <% if (data.groupedAppointments.length === 0) { %>
+        <div class="text-center py-12 text-stone-400">
+            <i class="fa fa-calendar-xmark text-5xl mb-4 opacity-50"></i>
+            <p class="text-lg">Aucun rendez-vous pour cette période</p>
+        </div>
+    <% } else { %>
+        <% data.groupedAppointments.forEach(group => { %>
+            <div class="inner-container rounded-lg overflow-hidden">
+                <div class="group-list px-4 py-3 border-b">
+                    <h3 class="font-bold text-lg capitalize">
+                        <%= group.dateLabel %>
+                    </h3>
+                </div>
+                
+                <div class="divide-y">
+                    <% group.appointments.forEach(app => { %>
+                        <div class="flex items-center gap-4 px-4 py-3 transition cursor-pointer item-list"
+                             data-appointment
+                             data-agenda="<%= app.agendaId %>"
+                             data-day="<%= app.start.getDate() %>"
+                             data-month="<%= app.start.getMonth() %>"
+                             data-year="<%= app.start.getFullYear() %>"
+                             data-id="<%= app.id %>"
+                             data-recurrent="<%= !!app.recurrenceRule %>">
+                            
+                            <div class="w-1 h-16 rounded-full appointment-color-<%= app.color %> flex-shrink-0"></div>
+                            
+                            <div class="flex flex-col items-center justify-center min-w-[80px] flex-shrink-0">
+                                <span class="text-sm font-bold"><%= app.startLabel %></span>
+                                <span class="text-xs opacity-70">à</span>
+                                <span class="text-sm font-bold"><%= app.endLabel %></span>
+                            </div>
+                            
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h4 class="font-semibold truncate"><%= app.nom %></h4>
+                                    <% if (app.recurrenceRule) { %>
+                                        <i class="fa fa-repeat text-xs opacity-70" title="Rendez-vous récurrent"></i>
+                                    <% } %>
+                                </div>
+                                <p class="text-sm opacity-70 truncate">
+                                    <i class="fa fa-calendar text-xs"></i>
+                                    <%= app.agendaName %>
+                                </p>
+                            </div>
+                            
+                            <i class="fa fa-chevron-right opacity-50 flex-shrink-0"></i>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        <% }) %>
+    <% } %>
+</div>

@@ -114,7 +114,7 @@ export async function rechercheRendezVous(str, agendaIds, filtreDateMin, filtreD
         const debutIndex = (page - 1) * limit;
         const finIndex = page * limit;
         const paginatedResults = resultatsFinaux.slice(debutIndex, finIndex);
-
+        
         return {
             results: paginatedResults,
             hasMore: finIndex < resultatsFinaux.length

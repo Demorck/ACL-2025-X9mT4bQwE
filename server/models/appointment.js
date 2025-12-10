@@ -164,3 +164,44 @@ export function getYearData(year, user) {
 
     return appointments;
 }
+
+/**
+ * Obtient les données pour la vue liste
+ * 
+ * @export
+ * @param {Date} startDate 
+ * @param {Date} endDate 
+ * @param {User} user 
+ * @returns {{groupedAppointments: Array, startDate: Date, endDate: Date}}
+ */
+export function getListData(startDate, endDate, user) {
+    let appointments = getAppointments(user, startDate, endDate).then(app => {
+        let groupedByDate = {};
+        
+        app.forEach(appointment => {
+            let dateKey = formatDate(toLocalDate(appointment.start), "yyyy-MM-dd");
+            
+            if (!groupedByDate[dateKey]) {
+                groupedByDate[dateKey] = {
+                    date: toLocalDate(appointment.start),
+                    dateLabel: formatDate(toLocalDate(appointment.start), "EEEE dd MMMM yyyy"),
+                    appointments: []
+                };
+            }
+            
+            groupedByDate[dateKey].appointments.push(appointment);
+        });
+        
+        let groupedArray = Object.values(groupedByDate).sort((a, b) => a.date - b.date);
+
+        return {
+            startDate,
+            endDate,
+            groupedAppointments: groupedArray
+        };
+    }).catch(err => {
+        throw new Error(err);
+    });
+
+    return appointments;
+}
