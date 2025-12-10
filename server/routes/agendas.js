@@ -146,8 +146,7 @@ export async function routeFormImportAgenda(req, res){
 export async function routeImportAgenda(req, res){
     if (!res.locals.user) return res.redirect("/login");
 
-    if (!req.body.nom)
-    {
+    if (!req.body.nom) {
         return res.redirect("/agendas/list");
     }
 
@@ -159,17 +158,16 @@ export async function routeImportAgenda(req, res){
     );
 
     const data = ical.sync.parseICS(req.file.buffer.toString('utf-8'));
-
     const frequences = { 3: "day1", 2: "week1", 1: "month1" };
 
     for (const i in data) {
         const event = data[i];
-        if (event.type === 'VEVENT') {
-
+        
+        if (event.type === 'VEVENT' && !event.recurrenceid) {
+            
             let regle = null;
-
             if (event.rrule) {
-                const frequence = frequences[event.rrule.options.freq]
+                const frequence = frequences[event.rrule.options.freq];
                 if (frequence){
                     const regleOccurence = await creerRegleOccurrence(
                         frequence,
@@ -179,16 +177,46 @@ export async function routeImportAgenda(req, res){
                     regle = regleOccurence._id;
                 }
             }
+
+            const exceptionIds = [];
+            
+            if (event.recurrences) {
+                for (const key in event.recurrences) {
+                    const recEvent = event.recurrences[key];
+                    
+                    const newException = await createAppointment(
+                        agenda._id,
+                        recEvent.summary || event.summary,
+                        recEvent.start,
+                        recEvent.end,
+                        res.locals.user._id,
+                        null,
+                        [],
+                        [],           
+                        true
+                    );
+                    
+                    exceptionIds.push(newException._id);
+                }
+            }
+
+            let exceptionDates = [];
+            if (event.exdate) {
+                exceptionDates = Object.values(event.exdate);
+            }
+
             await createAppointment(
                 agenda._id,
-                event.summary,
+                event.summary || "Sans titre",
                 event.start,
                 event.end,
                 res.locals.user._id,
-                regle
+                regle,
+                exceptionIds,
+                exceptionDates,
+                false
             );
         }
     }
     return res.redirect("/agendas/list");
 }
-
